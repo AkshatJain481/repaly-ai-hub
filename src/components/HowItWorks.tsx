@@ -40,17 +40,14 @@ const HowItWorks = () => {
         <div className="max-w-5xl mx-auto">
           <div className="relative">
             {/* Connect line between steps */}
-            <div className="absolute left-[28px] top-10 bottom-10 w-[2px] bg-gradient-to-b from-violet-500 to-coral-500 hidden md:block"></div>
+            <div className="absolute left-[28px] top-24 bottom-24 w-[2px] bg-gradient-to-b from-violet-500 to-coral-500 hidden md:block"></div>
             
             <div className="space-y-16 relative">
               {steps.map((step, index) => (
                 <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-10">
-                  <div className="flex flex-row md:flex-col items-center gap-4 md:gap-2">
+                  <div className="flex flex-row md:flex-col items-center justify-center gap-4 md:gap-2">
                     <div className={`w-14 h-14 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center text-white shadow-lg`}>
                       {step.icon}
-                    </div>
-                    <div className="md:h-20 flex items-center">
-                      <span className="text-sm font-medium text-foreground/60">Step {index + 1}</span>
                     </div>
                   </div>
                   
