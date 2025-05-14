@@ -1,8 +1,7 @@
 
 import { useState } from "react";
-import { useAccountStore, SocialAccount } from "@/stores/accountStore";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2, Instagram, Check } from "lucide-react";
+import { PlusCircle, Trash2, Instagram, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { 
   Dialog, 
@@ -15,11 +14,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AccountsPage = () => {
-  const { accounts, addAccount } = useAccountStore();
+  const { user } = useAuth();
   const [username, setUsername] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [accounts, setAccounts] = useState<any[]>([]); // Empty array as you'll handle the backend logic
 
   const handleAddAccount = () => {
     if (!username.trim()) {
@@ -27,25 +29,16 @@ const AccountsPage = () => {
       return;
     }
 
-    // Check if account already exists
-    if (accounts.some(acc => acc.username === username)) {
-      toast.error("This account is already connected");
-      return;
-    }
-
-    // Mock adding a new Instagram account
-    const newAccount: SocialAccount = {
-      id: Date.now().toString(),
-      type: "instagram",
-      username: username,
-      profilePic: `https://api.dicebear.com/7.x/initials/svg?seed=${username}`,
-      isConnected: true
-    };
-
-    addAccount(newAccount);
-    toast.success(`Added @${username} successfully`);
-    setUsername("");
-    setIsDialogOpen(false);
+    setIsLoading(true);
+    
+    // You mentioned you'll handle the backend logic
+    // This is just a placeholder for UI demonstration
+    setTimeout(() => {
+      toast.success(`Ready to connect @${username}`);
+      setUsername("");
+      setIsDialogOpen(false);
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -57,7 +50,7 @@ const AccountsPage = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>Add Account</Button>
+            <Button>Add Instagram Account</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -78,8 +71,17 @@ const AccountsPage = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleAddAccount}>Connect</Button>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isLoading}>Cancel</Button>
+              <Button onClick={handleAddAccount} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Connecting...
+                  </>
+                ) : (
+                  'Connect'
+                )}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -91,26 +93,6 @@ const AccountsPage = () => {
         </div>
         
         <div className="divide-y">
-          {accounts.map(account => (
-            <div key={account.id} className="p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded">
-                  <Instagram className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-medium">@{account.username}</h3>
-                  <div className="flex items-center gap-1 text-xs text-green-500">
-                    <Check className="h-3 w-3" />
-                    <span>Connected</span>
-                  </div>
-                </div>
-              </div>
-              <Button variant="ghost" size="icon">
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </div>
-          ))}
-
           {accounts.length === 0 && (
             <div className="p-8 flex flex-col items-center justify-center text-center text-muted-foreground">
               <PlusCircle className="h-10 w-10 mb-2" />

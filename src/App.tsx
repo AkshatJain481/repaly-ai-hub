@@ -13,35 +13,38 @@ import AccountsPage from "./pages/dashboard/AccountsPage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import InstagramPostsPage from "./pages/dashboard/instagram/InstagramPostsPage";
 import InstagramStoriesPage from "./pages/dashboard/instagram/InstagramStoriesPage";
-import { useAccountStore } from "./stores/accountStore";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { isAuthenticated } = useAccountStore();
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            
-            {/* Dashboard Routes */}
-            <Route path="/dashboard" element={<DashboardLayout />}>
-              <Route index element={<DashboardHome />} />
-              <Route path="accounts" element={<AccountsPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="instagram/:id/posts" element={<InstagramPostsPage />} />
-              <Route path="instagram/:id/stories" element={<InstagramStoriesPage />} />
-            </Route>
-            
-            {/* Catch-all route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <AuthDrawer />
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              
+              {/* Protected Dashboard Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                  <Route index element={<DashboardHome />} />
+                  <Route path="accounts" element={<AccountsPage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="instagram/:id/posts" element={<InstagramPostsPage />} />
+                  <Route path="instagram/:id/stories" element={<InstagramStoriesPage />} />
+                </Route>
+              </Route>
+              
+              {/* Catch-all route */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <AuthDrawer />
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

@@ -14,28 +14,29 @@ import {
   SidebarMenuButton,
   SidebarSeparator
 } from "@/components/ui/sidebar";
-import { useAccountStore } from "@/stores/accountStore";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Home, 
   Instagram, 
   LogOut, 
   Settings, 
-  User 
+  User,
+  PlusCircle
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const DashboardSidebar = () => {
-  const { user, logout, accounts } = useAccountStore();
+  const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [accounts, setAccounts] = useState<any[]>([]); // We're not using accountStore since you mentioned you have your own backend
 
-  const handleLogout = () => {
-    logout();
-    toast.success("Logged out successfully");
-    navigate("/");
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (
@@ -90,7 +91,7 @@ const DashboardSidebar = () => {
                   {accounts.map(account => (
                     <SidebarMenuItem key={account.id}>
                       <SidebarMenuButton asChild isActive={location.pathname.includes(`/dashboard/instagram/${account.id}`)}>
-                        <Link to={`/dashboard/instagram/${account.id}`}>
+                        <Link to={`/dashboard/instagram/${account.id}/posts`}>
                           <Instagram />
                           <span>{account.username}</span>
                         </Link>
@@ -101,6 +102,22 @@ const DashboardSidebar = () => {
               </SidebarGroupContent>
             </SidebarGroup>
           )}
+          
+          <SidebarGroup>
+            <SidebarGroupLabel>Actions</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/dashboard/accounts">
+                      <PlusCircle />
+                      <span>Add Instagram Account</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>
@@ -109,11 +126,11 @@ const DashboardSidebar = () => {
               {user && (
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email || ''} />
+                    <AvatarFallback>{user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">{user.name}</p>
+                    <p className="text-sm font-medium">{user.user_metadata?.full_name || user.email}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
                   </div>
                 </div>

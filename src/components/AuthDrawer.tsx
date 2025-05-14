@@ -11,31 +11,34 @@ import {
 } from "@/components/ui/drawer";
 import { Facebook, GoogleIcon } from "@/components/icons/SocialIcons";
 import { useAuthDrawerStore } from "@/stores/authDrawerStore";
-import { useAccountStore } from "@/stores/accountStore";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 const AuthDrawer = () => {
   const { isOpen, closeDrawer } = useAuthDrawerStore();
-  const { setUser, setAuthenticated } = useAccountStore();
-  const navigate = useNavigate();
+  const { signInWithGoogle, signInWithFacebook } = useAuth();
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
 
-  const handleSignIn = (provider: 'google' | 'facebook') => {
-    // Mock authentication for now
-    // In a real app, this would connect to your auth provider
-    const mockUser = {
-      name: provider === 'google' ? 'John Doe' : 'Jane Smith',
-      email: provider === 'google' ? 'john@example.com' : 'jane@example.com',
-      avatar: `https://api.dicebear.com/7.x/notionists/svg?seed=${provider === 'google' ? 'john' : 'jane'}`
-    };
-    
-    setUser(mockUser);
-    setAuthenticated(true);
-    
-    // Close drawer and redirect to dashboard
-    closeDrawer();
-    toast.success(`Signed in as ${mockUser.name}`);
-    navigate('/dashboard');
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+      closeDrawer();
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    setIsFacebookLoading(true);
+    try {
+      await signInWithFacebook();
+      closeDrawer();
+    } finally {
+      setIsFacebookLoading(false);
+    }
   };
 
   return (
@@ -52,17 +55,27 @@ const AuthDrawer = () => {
           <div className="p-4 space-y-4 pb-8">
             <Button 
               className="w-full flex items-center justify-center gap-2 bg-white text-slate-800 hover:bg-slate-100 border border-slate-200"
-              onClick={() => handleSignIn('google')}
+              onClick={handleGoogleSignIn}
+              disabled={isGoogleLoading}
             >
-              <GoogleIcon className="h-5 w-5" />
+              {isGoogleLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <GoogleIcon className="h-5 w-5" />
+              )}
               Sign in with Google
             </Button>
             
             <Button 
               className="w-full flex items-center justify-center gap-2 bg-[#1877F2] hover:bg-[#1865D1] text-white"
-              onClick={() => handleSignIn('facebook')}
+              onClick={handleFacebookSignIn}
+              disabled={isFacebookLoading}
             >
-              <Facebook className="h-5 w-5" />
+              {isFacebookLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Facebook className="h-5 w-5" />
+              )}
               Sign in with Facebook
             </Button>
             
