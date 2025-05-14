@@ -4,6 +4,7 @@ import { Instagram, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const DashboardHome = () => {
   const { user } = useAuth();
@@ -27,15 +28,31 @@ const DashboardHome = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {accounts.length === 0 && (
-              <Link to="/dashboard/accounts" className="border border-dashed rounded-lg p-8 flex flex-col items-center justify-center text-center text-muted-foreground hover:bg-secondary/40 transition-colors">
-                <PlusCircle className="h-10 w-10 mb-2" />
-                <h3 className="font-medium text-foreground">Connect Instagram Account</h3>
-                <p className="text-sm mt-1">Add your first Instagram account to get started</p>
-              </Link>
-            )}
-          </div>
+          {accounts.length === 0 ? (
+            <Card className="border-dashed">
+              <CardHeader>
+                <CardTitle className="text-center">No Social Media Accounts Connected</CardTitle>
+                <CardDescription className="text-center">
+                  Connect your Instagram account to start automating your social media engagement
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col items-center">
+                <div className="rounded-full bg-violet-100 p-6 mb-4">
+                  <Instagram size={48} className="text-violet-600" />
+                </div>
+                <Link to="/dashboard/accounts">
+                  <Button size="lg" className="gap-2">
+                    <PlusCircle size={18} />
+                    Connect Instagram Account
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* This will render connected accounts when you implement the backend */}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AccountsPage = () => {
   const { user } = useAuth();
@@ -87,22 +88,38 @@ const AccountsPage = () => {
         </Dialog>
       </div>
 
-      <div className="bg-card rounded-lg border shadow-sm">
-        <div className="p-4 border-b">
-          <h2 className="font-medium">Connected Accounts</h2>
-        </div>
-        
-        <div className="divide-y">
-          {accounts.length === 0 && (
-            <div className="p-8 flex flex-col items-center justify-center text-center text-muted-foreground">
-              <PlusCircle className="h-10 w-10 mb-2" />
-              <h3 className="font-medium text-foreground">No accounts connected</h3>
-              <p className="text-sm mt-1">Add your first Instagram account to get started</p>
-              <Button onClick={() => setIsDialogOpen(true)} className="mt-4">Add Instagram Account</Button>
+      {accounts.length === 0 ? (
+        <Card className="border-dashed">
+          <CardHeader>
+            <CardTitle className="text-center">No Social Media Accounts Connected</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center py-8">
+            <div className="rounded-full bg-violet-100 p-6 mb-6">
+              <Instagram size={48} className="text-violet-600" />
             </div>
-          )}
+            <p className="text-center text-muted-foreground max-w-md mb-6">
+              Connect your Instagram account to start automating your responses and increasing your engagement.
+            </p>
+            <Button 
+              onClick={() => setIsDialogOpen(true)} 
+              size="lg"
+              className="gap-2"
+            >
+              <PlusCircle size={18} />
+              Connect Instagram Account
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="bg-card rounded-lg border shadow-sm">
+          <div className="p-4 border-b">
+            <h2 className="font-medium">Connected Accounts</h2>
+          </div>
+          <div className="divide-y">
+            {/* This will render connected accounts when you implement the backend */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

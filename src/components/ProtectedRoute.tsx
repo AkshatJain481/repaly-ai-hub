@@ -23,6 +23,7 @@ const ProtectedRoute = () => {
     );
   }
   
+  // Only render the outlet (dashboard) if the user is logged in
   return user ? <Outlet /> : null;
 };
 
