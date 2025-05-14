@@ -1,8 +1,12 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-scroll";
+import { useAuthDrawerStore } from "@/stores/authDrawerStore";
 
 const Hero = () => {
+  const { openDrawer } = useAuthDrawerStore();
+
   return (
     <section className="relative pt-32 pb-24 min-h-[90vh] flex items-center overflow-hidden">
       {/* Background Effects */}
@@ -20,12 +24,24 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <Button size="lg" className="bg-violet-600 hover:bg-violet-700 text-white px-8 py-6">
+            <Button 
+              size="lg" 
+              className="bg-violet-600 hover:bg-violet-700 text-white px-8 py-6"
+              onClick={openDrawer}
+            >
               Get Started Free
             </Button>
-            <Button variant="outline" size="lg" className="flex items-center gap-2">
-              See How It Works <ArrowRight size={16} />
-            </Button>
+            <Link
+              to="how-it-works"
+              spy={true}
+              smooth={true}
+              offset={-70}
+              duration={500}
+            >
+              <Button variant="outline" size="lg" className="flex items-center gap-2">
+                See How It Works <ArrowRight size={16} />
+              </Button>
+            </Link>
           </div>
           
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-foreground/60 animate-fade-up" style={{ animationDelay: "0.3s" }}>

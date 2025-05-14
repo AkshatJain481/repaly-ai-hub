@@ -2,10 +2,13 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-scroll";
+import { useAuthDrawerStore } from "@/stores/authDrawerStore";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { openDrawer } = useAuthDrawerStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,13 +36,53 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#features" className="text-sm text-foreground/80 hover:text-foreground transition-colors">Features</a>
-          <a href="#how-it-works" className="text-sm text-foreground/80 hover:text-foreground transition-colors">How It Works</a>
-          <a href="#roadmap" className="text-sm text-foreground/80 hover:text-foreground transition-colors">Roadmap</a>
-          <a href="#testimonials" className="text-sm text-foreground/80 hover:text-foreground transition-colors">Testimonials</a>
+          <Link 
+            to="features" 
+            spy={true} 
+            smooth={true} 
+            offset={-70} 
+            duration={500} 
+            className="text-sm text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+          >
+            Features
+          </Link>
+          <Link 
+            to="how-it-works" 
+            spy={true} 
+            smooth={true} 
+            offset={-70} 
+            duration={500} 
+            className="text-sm text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+          >
+            How It Works
+          </Link>
+          <Link 
+            to="roadmap" 
+            spy={true} 
+            smooth={true} 
+            offset={-70} 
+            duration={500} 
+            className="text-sm text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+          >
+            Roadmap
+          </Link>
+          <Link 
+            to="testimonials" 
+            spy={true} 
+            smooth={true} 
+            offset={-70} 
+            duration={500} 
+            className="text-sm text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+          >
+            Testimonials
+          </Link>
           <div className="flex items-center space-x-4">
-            <a href="#" className="text-sm text-foreground/80 hover:text-foreground transition-colors">Login</a>
-            <Button className="bg-violet-600 hover:bg-violet-700 text-white">Get Started Free</Button>
+            <Button 
+              className="bg-violet-600 hover:bg-violet-700 text-white"
+              onClick={openDrawer}
+            >
+              Get Started Free
+            </Button>
           </div>
         </nav>
         
@@ -56,42 +99,58 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg shadow-lg py-4 border-t border-border/50 animate-fade-in">
           <nav className="container flex flex-col space-y-4">
-            <a 
-              href="#features" 
-              className="text-foreground/80 hover:text-foreground py-2 transition-colors"
+            <Link 
+              to="features" 
+              spy={true} 
+              smooth={true} 
+              offset={-70} 
+              duration={500}
+              className="text-foreground/80 hover:text-foreground py-2 transition-colors cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
               Features
-            </a>
-            <a 
-              href="#how-it-works" 
-              className="text-foreground/80 hover:text-foreground py-2 transition-colors"
+            </Link>
+            <Link 
+              to="how-it-works" 
+              spy={true} 
+              smooth={true} 
+              offset={-70} 
+              duration={500}
+              className="text-foreground/80 hover:text-foreground py-2 transition-colors cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
               How It Works
-            </a>
-            <a 
-              href="#roadmap" 
-              className="text-foreground/80 hover:text-foreground py-2 transition-colors"
+            </Link>
+            <Link 
+              to="roadmap" 
+              spy={true} 
+              smooth={true} 
+              offset={-70} 
+              duration={500}
+              className="text-foreground/80 hover:text-foreground py-2 transition-colors cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
               Roadmap
-            </a>
-            <a 
-              href="#testimonials" 
-              className="text-foreground/80 hover:text-foreground py-2 transition-colors"
+            </Link>
+            <Link 
+              to="testimonials" 
+              spy={true} 
+              smooth={true} 
+              offset={-70} 
+              duration={500}
+              className="text-foreground/80 hover:text-foreground py-2 transition-colors cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
               Testimonials
-            </a>
+            </Link>
             <div className="flex flex-col space-y-3 pt-3 border-t border-border/50">
-              <a 
-                href="#" 
-                className="text-foreground/80 hover:text-foreground py-2 transition-colors"
+              <Button 
+                className="bg-violet-600 hover:bg-violet-700 text-white w-full"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  openDrawer();
+                }}
               >
-                Login
-              </a>
-              <Button className="bg-violet-600 hover:bg-violet-700 text-white w-full">
                 Get Started Free
               </Button>
             </div>
