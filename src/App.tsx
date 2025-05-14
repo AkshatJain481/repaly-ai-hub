@@ -1,10 +1,9 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./pages/Index";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import AuthDrawer from "./components/AuthDrawer";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
@@ -30,20 +29,26 @@ const App = () => {
             <Routes>
               {/* Public Routes - only accessible when NOT logged in */}
               <Route element={<PublicRoute />}>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<HomePage />} />
               </Route>
-              
+
               {/* Protected Dashboard Routes - only accessible when logged in */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<DashboardLayout />}>
                   <Route index element={<DashboardHome />} />
                   <Route path="accounts" element={<AccountsPage />} />
                   <Route path="settings" element={<SettingsPage />} />
-                  <Route path="instagram/:id/posts" element={<InstagramPostsPage />} />
-                  <Route path="instagram/:id/stories" element={<InstagramStoriesPage />} />
+                  <Route
+                    path="instagram/:id/posts"
+                    element={<InstagramPostsPage />}
+                  />
+                  <Route
+                    path="instagram/:id/stories"
+                    element={<InstagramStoriesPage />}
+                  />
                 </Route>
               </Route>
-              
+
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>

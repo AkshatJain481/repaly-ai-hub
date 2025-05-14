@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Roadmap from "@/components/Roadmap";
 import Footer from "@/components/Footer";
 
-const Index = () => {
+const HomePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       <Header />
@@ -23,4 +23,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default HomePage;
