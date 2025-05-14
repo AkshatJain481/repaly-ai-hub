@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { 
   SidebarProvider, 
@@ -25,7 +24,6 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -44,7 +42,9 @@ const DashboardSidebar = () => {
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-2 px-2">
-            <Link to="/dashboard" className="text-xl font-bold text-gradient">repaly.ai</Link>
+            <Link to="/dashboard" className="text-xl font-bold text-gradient">
+              repaly.ai
+            </Link>
           </div>
         </SidebarHeader>
 
@@ -54,7 +54,10 @@ const DashboardSidebar = () => {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={location.pathname === "/dashboard"}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === "/dashboard"}
+                  >
                     <Link to="/dashboard">
                       <Home />
                       <span>Dashboard</span>
@@ -62,7 +65,10 @@ const DashboardSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={location.pathname === "/dashboard/accounts"}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === "/dashboard/accounts"}
+                  >
                     <Link to="/dashboard/accounts">
                       <User />
                       <span>Accounts</span>
@@ -70,7 +76,10 @@ const DashboardSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={location.pathname === "/dashboard/settings"}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === "/dashboard/settings"}
+                  >
                     <Link to="/dashboard/settings">
                       <Settings />
                       <span>Settings</span>
@@ -88,9 +97,14 @@ const DashboardSidebar = () => {
               <SidebarGroupLabel>Instagram Accounts</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {accounts.map(account => (
+                  {accounts.map((account) => (
                     <SidebarMenuItem key={account.id}>
-                      <SidebarMenuButton asChild isActive={location.pathname.includes(`/dashboard/instagram/${account.id}`)}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={location.pathname.includes(
+                          `/dashboard/instagram/${account.id}`
+                        )}
+                      >
                         <Link to={`/dashboard/instagram/${account.id}/posts`}>
                           <Instagram />
                           <span>{account.username}</span>
@@ -102,7 +116,7 @@ const DashboardSidebar = () => {
               </SidebarGroupContent>
             </SidebarGroup>
           )}
-          
+
           <SidebarGroup>
             <SidebarGroupLabel>Actions</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -121,24 +135,33 @@ const DashboardSidebar = () => {
         </SidebarContent>
 
         <SidebarFooter>
-          <div className="p-2">
-            <div className="flex items-center justify-between p-2">
-              {user && (
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email || ''} />
-                    <AvatarFallback>{user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{user.user_metadata?.full_name || user.email}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
-                  </div>
+          <div className="flex items-center justify-between gap-2 w-full overflow-hidden">
+            {user && (
+              <div className="flex items-center gap-2 min-w-0">
+                <Avatar className="h-8 w-8 shrink-0">
+                  <AvatarImage
+                    src={user.user_metadata?.avatar_url}
+                    alt={user.user_metadata?.full_name || user.email || ""}
+                  />
+                  <AvatarFallback>
+                    {user.user_metadata?.full_name?.charAt(0) ||
+                      user.email?.charAt(0) ||
+                      "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">
+                    {user.user_metadata?.full_name || user.email}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
                 </div>
-              )}
-              <Button variant="ghost" size="icon" onClick={handleLogout}>
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </div>
+              </div>
+            )}
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
+            </Button>
           </div>
         </SidebarFooter>
       </Sidebar>

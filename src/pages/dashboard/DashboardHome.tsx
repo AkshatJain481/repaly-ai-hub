@@ -1,10 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { Instagram, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const DashboardHome = () => {
   const { user } = useAuth();
@@ -14,8 +19,15 @@ const DashboardHome = () => {
     <div className="container py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Welcome, {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}</h1>
-          <p className="text-muted-foreground">Manage your social media automation</p>
+          <h1 className="text-3xl font-bold">
+            Welcome,{" "}
+            {user?.user_metadata?.full_name ||
+              user?.email?.split("@")[0] ||
+              "User"}
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your social media automation
+          </p>
         </div>
       </div>
 
@@ -24,16 +36,21 @@ const DashboardHome = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">Connected Accounts</h2>
             <Link to="/dashboard/accounts">
-              <Button variant="outline" size="sm">Manage Accounts</Button>
+              <Button variant="outline" size="sm">
+                Manage Accounts
+              </Button>
             </Link>
           </div>
 
           {accounts.length === 0 ? (
             <Card className="border-dashed">
               <CardHeader>
-                <CardTitle className="text-center">No Social Media Accounts Connected</CardTitle>
+                <CardTitle className="text-center">
+                  No Social Media Accounts Connected
+                </CardTitle>
                 <CardDescription className="text-center">
-                  Connect your Instagram account to start automating your social media engagement
+                  Connect your Instagram account to start automating your social
+                  media engagement
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center">
