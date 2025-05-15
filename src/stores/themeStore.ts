@@ -7,6 +7,7 @@ interface ThemeState {
   setMode: (mode: 'light' | 'dark' | 'system') => void;
 }
 
+// Create the store with safer initialization
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
@@ -15,6 +16,8 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'theme-storage',
+      // Make sure we skip hydration if window is not available
+      skipHydration: true,
     }
   )
 );

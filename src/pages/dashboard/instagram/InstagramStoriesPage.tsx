@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAccountStore } from "@/stores/accountStore";
@@ -104,7 +103,7 @@ const InstagramStoriesPage = () => {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             Instagram Stories
-            <Badge variant="outline" className="ml-2 text-xs font-normal">
+            <Badge variant="outline" className="ml-2">
               {stories.length} stories
             </Badge>
           </h1>
@@ -205,7 +204,7 @@ const InstagramStoriesPage = () => {
                       <div className="flex items-center gap-2">
                         <p className="font-medium">@{account.username}</p>
                         {!story.viewed && (
-                          <Badge variant="default" size="sm" className="text-[10px]">New</Badge>
+                          <Badge variant="default" className="text-[10px]">New</Badge>
                         )}
                       </div>
                       <div className="flex items-center text-xs text-muted-foreground">

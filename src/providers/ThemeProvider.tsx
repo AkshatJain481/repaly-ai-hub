@@ -15,7 +15,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const { mode, setMode } = useThemeStore();
-  const [theme, setThemeState] = useState<string>(mode);
+  const [theme, setThemeState] = useState<string>(mode || 'system');
 
   const setTheme = (mode: 'light' | 'dark' | 'system') => {
     setMode(mode);
