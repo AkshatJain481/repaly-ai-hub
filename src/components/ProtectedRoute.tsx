@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -7,7 +6,7 @@ import { Loader2 } from "lucide-react";
 const ProtectedRoute = () => {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!isLoading && !user) {
       navigate("/");
@@ -22,7 +21,7 @@ const ProtectedRoute = () => {
       </div>
     );
   }
-  
+
   // Only render the outlet (dashboard) if the user is logged in
   return user ? <Outlet /> : null;
 };

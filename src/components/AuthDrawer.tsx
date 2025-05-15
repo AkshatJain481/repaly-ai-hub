@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -46,14 +45,16 @@ const AuthDrawer = () => {
       <DrawerContent className="max-w-md mx-auto">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="text-center text-2xl">Welcome to repaly.ai</DrawerTitle>
+            <DrawerTitle className="text-center text-2xl">
+              Welcome to repaly.ai
+            </DrawerTitle>
             <DrawerDescription className="text-center">
               Sign in to manage your social media automation
             </DrawerDescription>
           </DrawerHeader>
-          
+
           <div className="p-4 space-y-4 pb-8">
-            <Button 
+            <Button
               className="w-full flex items-center justify-center gap-2 bg-white text-slate-800 hover:bg-slate-100 border border-slate-200"
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
@@ -65,8 +66,8 @@ const AuthDrawer = () => {
               )}
               Sign in with Google
             </Button>
-            
-            <Button 
+
+            <Button
               className="w-full flex items-center justify-center gap-2 bg-[#1877F2] hover:bg-[#1865D1] text-white"
               onClick={handleFacebookSignIn}
               disabled={isFacebookLoading}
@@ -78,12 +79,13 @@ const AuthDrawer = () => {
               )}
               Sign in with Facebook
             </Button>
-            
+
             <p className="text-center text-sm text-muted-foreground mt-6">
-              By continuing, you agree to our Terms of Service and Privacy Policy.
+              By continuing, you agree to our Terms of Service and Privacy
+              Policy.
             </p>
           </div>
-          
+
           <DrawerFooter>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>

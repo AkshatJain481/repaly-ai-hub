@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -6,7 +5,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 const PublicRoute = () => {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!isLoading && user) {
       navigate("/dashboard");
