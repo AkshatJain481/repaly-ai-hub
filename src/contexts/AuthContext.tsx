@@ -90,10 +90,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       cleanupAuthState();
       await supabase.auth.signOut({ scope: 'global' });
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
+        provider: "facebook",
         options: {
-          redirectTo: window.location.origin
-        }
+          scopes: "email,instagram_basic,pages_show_list,pages_read_engagement",
+          redirectTo: window.location.origin,
+        },
       });
       if (error) throw error;
     } catch (error: any) {
