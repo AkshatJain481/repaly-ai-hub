@@ -1,5 +1,10 @@
-
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
@@ -24,21 +29,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (event === 'SIGNED_OUT') {
-          navigate('/');
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (event === "SIGNED_OUT") {
+        navigate("/");
       }
-    );
+    });
 
     // THEN check for existing session
     const initializeAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
       } catch (error) {
@@ -58,12 +65,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Clean up authentication state
   const cleanupAuthState = () => {
     Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+      if (key.startsWith("supabase.auth.") || key.includes("sb-")) {
         localStorage.removeItem(key);
       }
     });
     Object.keys(sessionStorage || {}).forEach((key) => {
-      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+      if (key.startsWith("supabase.auth.") || key.includes("sb-")) {
         sessionStorage.removeItem(key);
       }
     });
@@ -72,12 +79,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithGoogle = async () => {
     try {
       cleanupAuthState();
-      await supabase.auth.signOut({ scope: 'global' });
+      await supabase.auth.signOut({ scope: "global" });
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
-          redirectTo: window.location.origin
-        }
+          redirectTo: window.location.origin,
+        },
       });
       if (error) throw error;
     } catch (error: any) {
@@ -88,12 +95,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithFacebook = async () => {
     try {
       cleanupAuthState();
-      await supabase.auth.signOut({ scope: 'global' });
+      await supabase.auth.signOut({ scope: "global" });
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
+        provider: "facebook",
         options: {
-          redirectTo: window.location.origin
-        }
+          queryParams: {
+            extras: encodeURIComponent(
+              JSON.stringify({
+                setup: { config_id: "1117094546845705" },
+              })
+            ),
+          },
+          redirectTo: window.location.origin,
+        },
       });
       if (error) throw error;
     } catch (error: any) {
@@ -104,23 +118,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     try {
       cleanupAuthState();
-      await supabase.auth.signOut({ scope: 'global' });
+      await supabase.auth.signOut({ scope: "global" });
       toast.success("Signed out successfully");
-      navigate('/');
+      navigate("/");
     } catch (error: any) {
       toast.error(error.message || "Failed to sign out");
     }
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      session,
-      user,
-      isLoading,
-      signInWithGoogle,
-      signInWithFacebook,
-      signOut
-    }}>
+    <AuthContext.Provider
+      value={{
+        session,
+        user,
+        isLoading,
+        signInWithGoogle,
+        signInWithFacebook,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -129,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
