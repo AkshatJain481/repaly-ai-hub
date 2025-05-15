@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,18 +27,26 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useThemeStore } from "@/stores/themeStore";
 
 const SettingsPage = () => {
+  const { mode, setMode } = useThemeStore();
+
   const form = useForm({
     defaultValues: {
       name: "John Doe",
       email: "john@example.com",
       notifications: true,
-      theme: "system",
+      theme: mode,
     },
   });
 
   const onSubmit = (data: any) => {
+    // Update theme if changed
+    if (data.theme !== mode) {
+      setMode(data.theme as 'light' | 'dark' | 'system');
+    }
+    
     console.log(data);
     toast.success("Settings updated successfully");
   };
@@ -134,6 +143,9 @@ const SettingsPage = () => {
                           <SelectItem value="system">System</SelectItem>
                         </SelectContent>
                       </Select>
+                      <FormDescription>
+                        Choose your preferred theme mode
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
