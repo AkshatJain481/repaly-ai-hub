@@ -38,7 +38,7 @@ const DashboardSidebar = () => {
   };
 
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider defaultOpen className="max-w-64">
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-2 px-2">
