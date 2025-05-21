@@ -1,4 +1,5 @@
-import { Progress } from "@chakra-ui/react";
+
+import { Progress } from "@/components/ui/progress";
 
 const ProgressBar = ({
   completePercentage,
@@ -6,17 +7,10 @@ const ProgressBar = ({
   completePercentage: number;
 }) => {
   return (
-    <Progress.Root
-      value={completePercentage}
-      size={"xs"}
-      minW={"200px"}
-      colorPalette={"purple"}
-      variant={"subtle"}
-    >
-      <Progress.Track>
-        <Progress.Range />
-      </Progress.Track>
-    </Progress.Root>
+    <Progress 
+      value={completePercentage} 
+      className="w-[200px] min-w-[200px]"
+    />
   );
 };
 

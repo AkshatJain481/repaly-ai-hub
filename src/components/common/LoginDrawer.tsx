@@ -1,125 +1,102 @@
-import { useState, useEffect } from "react";
-import {
-  DrawerBackdrop,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerRoot,
-  DrawerTrigger,
-} from "@/components/ui/Drawer";
-import { Button, VStack, Heading, Text } from "@chakra-ui/react";
-import { OAuthPlatform } from "@/utils/enums";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getOAuthLink } from "@/apis/oauthLink";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
+import { useLoginMutation } from "@/apis/auth";
+import { setCredentials } from "@/redux/slices/auth.slice";
+import { FaSpinner } from "react-icons/fa";
 
-const LoginDrawer = ({ triggerButton }: { triggerButton: any }) => {
-  // OAuth login handler
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+interface LoginDrawerProps {
+  triggerButton: React.ReactNode;
+}
 
-  const oauthLink = (provider: string) => {
-    window.location.href = getOAuthLink(provider);
-  };
+const LoginDrawer = ({ triggerButton }: LoginDrawerProps) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("user-token"); // Adjust key as needed
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const handleTriggerClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard"); // Redirect if authenticated
+  const handleLogin = async () => {
+    try {
+      const userData = await login({ email, password }).unwrap();
+      dispatch(setCredentials(userData));
+      navigate("/dashboard");
+      toast.success("Logged in successfully!");
+    } catch (error: any) {
+      toast.error(error?.data || "Something went wrong");
     }
   };
 
   return (
-    <DrawerRoot>
-      <DrawerBackdrop />
-      <DrawerTrigger asChild onClick={handleTriggerClick}>
+    <Drawer>
+      <DrawerTrigger asChild>
         {triggerButton}
       </DrawerTrigger>
-      <DrawerContent overflow="hidden" maxWidth="400px">
-        <DrawerHeader bg="gray.50" py={6} display={"block"}>
-          <Heading size="xl" textAlign={"center"} color="gray.800" mb={2}>
-            Welcome Back
-          </Heading>
-          <Text color="gray.500" fontSize="md" textAlign={"center"}>
-            Sign in to continue to your account
-          </Text>
+      <DrawerContent className="max-w-md mx-auto overflow-hidden">
+        <DrawerHeader>
+          <DrawerTitle className="text-2xl">Welcome to Repaly</DrawerTitle>
+          <DrawerDescription>
+            Log in to your account to access all features
+          </DrawerDescription>
         </DrawerHeader>
-        <DrawerBody bg="white" p={8} display={"flex"} alignItems={"center"}>
-          <VStack gap={4} width="full">
-            <Button
-              variant="outline"
-              bgColor={"red.500"}
-              colorScheme="gray"
-              size="lg"
-              width="full"
-              borderWidth={2}
-              borderColor="red.500"
-              color="white"
-              fontWeight="semibold"
-              py={6}
-              _hover={{
-                bg: "red.400",
-                borderColor: "red.400",
-                transform: "scale(1.02)",
-              }}
-              transition="all 0.2s ease"
-              onClick={() => oauthLink(OAuthPlatform.google)}
-            >
-              <FaGoogle />
-              Sign In with Google
-            </Button>
-            <Button
-              variant="outline"
-              bgColor={"blue.500"}
-              colorScheme="gray"
-              size="lg"
-              width="full"
-              borderWidth={2}
-              borderColor="blue.500"
-              color="white"
-              fontWeight="semibold"
-              py={6}
-              _hover={{
-                bg: "blue.400",
-                borderColor: "blue.400",
-                transform: "scale(1.02)",
-              }}
-              transition="all 0.2s ease"
-              onClick={() => oauthLink(OAuthPlatform.facebook)}
-            >
-              <FaFacebook />
-              Sign In with Facebook
-            </Button>
-            <Text color="gray.500" textAlign="center" fontSize="sm" px={4}>
-              By continuing, you agree to our{" "}
-              <Text
-                as="span"
-                color="blue.500"
-                cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
-              >
-                Terms of Service
-              </Text>{" "}
-              and{" "}
-              <Text
-                as="span"
-                color="blue.500"
-                cursor="pointer"
-                _hover={{ textDecoration: "underline" }}
-              >
-                Privacy Policy
-              </Text>
-            </Text>
-          </VStack>
-        </DrawerBody>
+        <div className="p-4 flex flex-col gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </div>
+        <DrawerFooter>
+          <Button 
+            onClick={handleLogin}
+            disabled={isLoading || !email || !password}
+            className="w-full"
+          >
+            {isLoading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> 
+                Please wait
+              </>
+            ) : (
+              "Login"
+            )}
+          </Button>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
-    </DrawerRoot>
+    </Drawer>
   );
 };
 

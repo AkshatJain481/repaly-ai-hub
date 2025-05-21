@@ -1,17 +1,11 @@
-import { Box } from "@chakra-ui/react";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import { primaryColor } from "@/utils/constants";
+
+import { Loader } from "lucide-react";
 
 const Loading = () => {
   return (
-    <Box
-      height={"100vh"}
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"center"}
-    >
-      <PropagateLoader size={26} color={primaryColor} />
-    </Box>
+    <div className="flex h-full w-full items-center justify-center p-8">
+      <Loader className="h-8 w-8 animate-spin text-primary" />
+    </div>
   );
 };
 

@@ -1,107 +1,70 @@
-import { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
-import {
-  Box,
-  Input,
-  Tag,
-  HStack,
-  IconButton,
-} from "@chakra-ui/react";
-import { CiCirclePlus } from "react-icons/ci";
 
-const TagsInput = ({
-  tags,
-  setTags,
-}: {
+import { useState, useRef, useEffect } from "react";
+import { X } from "lucide-react";
+
+interface TagsInputProps {
   tags: string[];
   setTags: (tags: string[]) => void;
-}) => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
+}
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+const TagsInput = ({ tags, setTags }: TagsInputProps) => {
+  const [input, setInput] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
   };
 
-  const addTag = () => {
-    if (inputValue.trim() !== "" && !tags.includes(inputValue.trim())) {
-      const newTags = [...tags, inputValue.trim()];
-      setTags(newTags);
-      setInputValue("");
-    }
-    inputRef.current?.focus();
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && input) {
       e.preventDefault();
-      addTag();
-    } else if (e.key === "Backspace" && inputValue === "" && tags.length > 0) {
-      const newTags = tags.slice(0, -1);
-      setTags(newTags);
+      if (!tags.includes(input.trim()) && input.trim() !== "") {
+        setTags([...tags, input.trim()]);
+        setInput("");
+      }
     }
   };
 
-  const removeTag = (index: number) => {
-    const newTags = tags.filter((_, i) => i !== index);
-    setTags(newTags);
+  const handleRemove = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   return (
-    <Box w="full">
-      <HStack
-        wrap="wrap"
-        p={2}
-        gap={2}
-        border="1px solid"
-        borderColor="gray.300"
-        borderRadius="md"
-        _focusWithin={{ borderColor: "gray.400" }}
-        onClick={() => inputRef.current?.focus()}
-      >
-        {tags.map((tag, index) => (
-          <Tag.Root
-            key={index}
-            color={"gray.600"}
-            borderRadius="full"
-            borderStyle={"solid"}
-            borderWidth={1}
-            borderColor={"gray.300"}
-            bgColor={"gray.100"}
-            variant={"solid"}
-            px={3}
-            py={1}
+    <div
+      className="flex flex-wrap gap-2 rounded-md border border-input p-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+      onClick={focusInput}
+    >
+      {tags.map((tag) => (
+        <div
+          key={tag}
+          className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-primary"
+        >
+          <span>{tag}</span>
+          <button 
+            type="button" 
+            onClick={() => handleRemove(tag)}
+            className="ml-1 rounded-full hover:bg-primary/20 p-1"
           >
-            <Tag.Label fontSize={"md"}>{tag}</Tag.Label>
-            <Tag.EndElement>
-              <Tag.CloseTrigger onClick={() => removeTag(index)} />
-            </Tag.EndElement>
-          </Tag.Root>
-        ))}
-
-        <HStack flex="1" minW="150px">
-          <Input
-            ref={inputRef}
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder={tags.length === 0 ? "Add Tags..." : ""}
-            border="none"
-            _focus={{ outline: "none" }}
-          />
-          <IconButton
-            bgColor={"transparent"}
-            fontWeight={"bold"}
-            size="xl"
-            color={"black"}
-            boxSize={8}
-            as={CiCirclePlus}
-            onClick={addTag}
-            disabled={!inputValue.trim()}
-          />
-        </HStack>
-      </HStack>
-    </Box>
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ))}
+      <input
+        ref={inputRef}
+        type="text"
+        value={input}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder={tags.length ? "Add more tags..." : "Add tags..."}
+        className="flex-grow border-none bg-transparent outline-none placeholder:text-muted-foreground"
+      />
+    </div>
   );
 };
 
