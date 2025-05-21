@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { Loader } from "lucide-react";
+import { AiOutlineLoading } from "react-icons/ai";
 
 interface ConfirmationPopupProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ const ConfirmationPopup = ({
           >
             {loading ? (
               <>
-                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
                 Processing...
               </>
             ) : (

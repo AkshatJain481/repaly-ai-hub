@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { BiChevronLeft } from "react-icons/bi";
 import InstagramMediaAnalyticsTab from "@/components/ui/InstagramMediaAnalyticsTab";
 import InstagramMediaAutomateTab from "../../../components/ui/InstagramMediaAutomateTab";
 import { useParams, Link, useSearchParams } from "react-router-dom";
@@ -12,7 +12,8 @@ import InstagramMediaContent from "@/components/ui/InstagramMediaContent";
 import { useState, useEffect } from "react";
 import { RootState } from "@/redux/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, BarChart2 } from "lucide-react";
+import { HiOutlineLightningBolt } from "react-icons/hi";
+import { IoStatsChart } from "react-icons/io5";
 
 const InstagramMediaDetailPage = () => {
   const { mediaId } = useParams();
@@ -54,7 +55,7 @@ const InstagramMediaDetailPage = () => {
           variant="ghost"
           className="text-gray-600 text-md w-fit font-normal px-0"
         >
-          <ChevronLeft className="h-5 w-5 mr-1" />
+          <BiChevronLeft className="h-5 w-5 mr-1" />
           Back to all posts
         </Button>
       </Link>
@@ -95,11 +96,11 @@ const InstagramMediaDetailPage = () => {
               >
                 <TabsList className="w-full grid grid-cols-2">
                   <TabsTrigger value="automate" className="flex items-center gap-2 font-bold">
-                    <Zap className="h-5 w-5" />
+                    <HiOutlineLightningBolt className="h-5 w-5" />
                     Automate
                   </TabsTrigger>
                   <TabsTrigger value="analytics" className="flex items-center gap-2 font-bold">
-                    <BarChart2 className="h-5 w-5" />
+                    <IoStatsChart className="h-5 w-5" />
                     Analytics
                   </TabsTrigger>
                 </TabsList>

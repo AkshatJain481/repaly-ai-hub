@@ -4,7 +4,7 @@ import Loading from "@/components/common/Loading";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import AccountDropdown from "@/components/ui/AccountDropdown";
-import { RefreshCw } from "lucide-react";
+import { FiRefreshCw } from "react-icons/fi";
 import { useGetRecentStoriesQuery } from "@/apis/instagram";
 import StoryCard from "@/components/instagramComponents/StoryCard";
 import { Navigate } from "react-router-dom";
@@ -45,7 +45,7 @@ const InstagramStoryPage = () => {
               onClick={() => refetch()}
               className="font-bold border-2 border-gray-300 bg-white"
             >
-              <RefreshCw
+              <FiRefreshCw
                 className={`h-7 w-7 mr-2 ${isFetching ? "animate-spin" : ""}`}
                 style={{
                   transition: "transform 0.7s ease-in-out",

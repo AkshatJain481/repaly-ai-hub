@@ -2,8 +2,9 @@
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Heart, HeartFilled, MessageCircle, Send, Volume2, VolumeX, UserCircle2 } from "lucide-react";
-import { Avatar } from "./avatar";
+import { BiMessageRoundedDetail, BiSend, BiUserCircle } from "react-icons/bi";
+import { BsHeart, BsHeartFill, BsVolumeUp, BsVolumeMute } from "react-icons/bs";
+import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
 
 const InstagramPhoneStoryContent = () => {
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -69,9 +70,9 @@ const InstagramPhoneStoryContent = () => {
       {/* Mute Icon */}
       <div className="absolute top-10 right-2 flex flex-col items-center cursor-pointer z-20" onClick={() => setIsMuted(!isMuted)}>
         {isMuted ? (
-          <VolumeX className="h-4 w-4 text-white cursor-pointer" />
+          <BsVolumeMute className="h-4 w-4 text-white cursor-pointer" />
         ) : (
-          <Volume2 className="h-4 w-4 text-white cursor-pointer" />
+          <BsVolumeUp className="h-4 w-4 text-white cursor-pointer" />
         )}
       </div>
 
@@ -85,7 +86,7 @@ const InstagramPhoneStoryContent = () => {
 
       <div className="py-2 bg-gray-900 flex justify-center items-center flex-row gap-4 z-20">
         <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}>
-          <MessageCircle className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <BiMessageRoundedDetail className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
         </div>
         <div 
           className="flex flex-col cursor-pointer px-4 py-2 text-white border border-gray-400 rounded-full w-[180px] text-center"
@@ -95,13 +96,13 @@ const InstagramPhoneStoryContent = () => {
         </div>
         <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsLiked(!isLiked)}>
           {isLiked ? (
-            <HeartFilled className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
+            <BsHeartFill className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
           ) : (
-            <Heart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
+            <BsHeart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
           )}
         </div>
         <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}>
-          <Send className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <BiSend className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
         </div>
       </div>
     </>

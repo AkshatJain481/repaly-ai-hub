@@ -1,5 +1,6 @@
 
-import { MessageCircle, Reply } from "lucide-react";
+import { BiMessageRoundedDetail, BiReply } from "react-icons/bi";
+import { BsHeart } from "react-icons/bs";
 
 interface CommentCardProps {
   username?: string;
@@ -21,7 +22,7 @@ const CommentCard = ({
   return (
     <div className="border border-solid rounded-md p-4 bg-white shadow-sm">
       <div className="flex items-center mb-2">
-        <MessageCircle className="text-primary mr-4 h-6 w-6" />
+        <BiMessageRoundedDetail className="text-primary mr-4 h-6 w-6" />
         <p className="font-medium text-gray-700">
           @{username}
         </p>
@@ -40,7 +41,7 @@ const CommentCard = ({
         <div className="rounded-md bg-gray-50 p-3 border-l-4 border-l-primary">
           <div className="flex items-center mb-2 justify-between">
             <div className="flex items-center">
-              <Reply className="text-primary mr-3 h-4 w-4" />
+              <BiReply className="text-primary mr-3 h-4 w-4" />
               <p className="text-sm text-primary">
                 Reply sent
               </p>

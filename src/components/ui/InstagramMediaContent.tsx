@@ -5,12 +5,11 @@ import { RootState } from "@/redux/store";
 import { getFormattedDate } from "@/utils/commonFunctions";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Heart, MessageCircle, Send, Bookmark,
-  Volume2, VolumeX, ArrowLeft, UserCircle2 
-} from "lucide-react";
+  BsHeart, BsHeartFill, BsBookmark, BsVolumeUp, BsVolumeMute 
+} from "react-icons/bs";
+import { BiMessageRoundedDetail, BiSend, BiArrowBack, BiUserCircle } from "react-icons/bi";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import HeartFilled from "@/components/icons/HeartFilled";
 
 const MessageBubble = ({
   content,
@@ -53,7 +52,7 @@ const CommentItem = ({
     <div className="flex gap-3 w-full px-4 py-2 items-center">
       <Avatar className="h-12 w-12">
         <AvatarImage src={userImgUrl} alt={username} />
-        <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
+        <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
       </Avatar>
       <div className="flex-1">
         <div className="flex items-center gap-2">
@@ -75,7 +74,7 @@ const CommentItem = ({
           </div>
         )}
       </div>
-      <Heart className="text-white/60 cursor-pointer h-5 w-5" />
+      <BsHeart className="text-white/60 cursor-pointer h-5 w-5" />
     </div>
   );
 };
@@ -98,16 +97,16 @@ const InstagramDMPopup = () => {
         {/* Header */}
         <div className="py-3 px-4 border-b border-gray-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <ArrowLeft className="text-white h-5 w-5 cursor-pointer" />
+            <BiArrowBack className="text-white h-5 w-5 cursor-pointer" />
             <Avatar className="h-10 w-10">
-              <AvatarFallback><UserCircle2 className="h-10 w-10" /></AvatarFallback>
+              <AvatarFallback><BiUserCircle className="h-10 w-10" /></AvatarFallback>
             </Avatar>
             <div>
               <p className="text-white font-semibold">Test User</p>
               <p className="text-white/70 text-xs">Active 2h ago</p>
             </div>
           </div>
-          <Send className="text-white h-5 w-5 cursor-pointer" />
+          <BiSend className="text-white h-5 w-5 cursor-pointer" />
         </div>
 
         {/* Messages Section */}
@@ -138,7 +137,7 @@ const InstagramDMPopup = () => {
               className="bg-white/10 border-none rounded-full text-white placeholder:text-white/60 focus:shadow-none"
             />
           </div>
-          <Send className="text-blue-500 cursor-pointer h-5 w-5" />
+          <BiSend className="text-blue-500 cursor-pointer h-5 w-5" />
         </div>
       </MotionDiv>
     </AnimatePresence>
@@ -197,7 +196,7 @@ const InstagramCommentPopup = () => {
         <div className="p-3 border-t border-white/20 flex items-center gap-3">
           <Avatar className="h-12 w-12">
             <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Your avatar"} />
-            <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
+            <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
           </Avatar>
 
           <div className="flex-1 p-2 rounded-full bg-white/10">
@@ -263,37 +262,37 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
       <div className="absolute bottom-12 right-10px flex flex-col gap-4 z-20">
         <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsLiked(!isLiked)}>
           {isLiked ? (
-            <HeartFilled className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
+            <BsHeartFill className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
           ) : (
-            <Heart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
+            <BsHeart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
           )}
           <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.like_count}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <MessageCircle className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <BiMessageRoundedDetail className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
           <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.comments_count}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <Send className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <BiSend className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
           <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.shares}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <Bookmark className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <BsBookmark className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
           <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.saved}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsMuted(!isMuted)}>
           {isMuted ? (
-            <VolumeX className="h-4 w-4 text-white cursor-pointer" />
+            <BsVolumeMute className="h-4 w-4 text-white cursor-pointer" />
           ) : (
-            <Volume2 className="h-4 w-4 text-white cursor-pointer" />
+            <BsVolumeUp className="h-4 w-4 text-white cursor-pointer" />
           )}
         </div>
       </div>
@@ -302,7 +301,7 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
       <div className="absolute bottom-12 left-5 flex items-center gap-2 z-10">
         <Avatar className="h-12 w-12">
           <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Profile"} />
-          <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
+          <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col">

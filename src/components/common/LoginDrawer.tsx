@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "@/apis/auth";
 import { setCredentials } from "@/redux/slices/auth.slice";
-import { FaSpinner } from "react-icons/fa";
+import { AiOutlineLoading } from "react-icons/ai";
 
 interface LoginDrawerProps {
   triggerButton: React.ReactNode;
@@ -84,7 +84,7 @@ const LoginDrawer = ({ triggerButton }: LoginDrawerProps) => {
           >
             {isLoading ? (
               <>
-                <FaSpinner className="animate-spin mr-2" /> 
+                <AiOutlineLoading className="animate-spin mr-2" /> 
                 Please wait
               </>
             ) : (

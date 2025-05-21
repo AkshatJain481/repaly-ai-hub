@@ -8,6 +8,7 @@ import {
   FiThumbsDown,
   FiTag,
 } from "react-icons/fi";
+import { BiRefresh } from "react-icons/bi";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { AnalyticsReplyItem } from "@/utils/interfaces";
@@ -15,7 +16,6 @@ import InstagramMediaReplyAnalytics from "./InstagramMediaReplyAnalytics";
 import PieChart from "../common/PieChart";
 import LineChart from "../common/LineChart";
 import IgCommentSection from "../instagramComponents/IgCommentSection";
-import { BiRefresh } from "react-icons/bi";
 
 const InstagramMediaAnalyticsTab = () => {
   const { mediaDetails } = useSelector((state: RootState) => state.automation);
