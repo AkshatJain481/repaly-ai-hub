@@ -1,0 +1,66 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  GetAccessTokenURL,
+  ExchangeCodeURL,
+  ValidateTokenURL,
+} from "@/utils/backend_urls";
+import { setToken } from "@/redux/slices/user.slice";
+
+export const authAPI = createApi({
+  reducerPath: "authAPI",
+  baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("user-token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    getAccessToken: builder.query<any, { platformName: string; code: string }>({
+      query: ({ platformName, code }) => ({
+        url: GetAccessTokenURL,
+        method: "POST",
+        body: { platformName, code },
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setToken(data?.token));
+          if (data?.userId) {
+            localStorage.setItem("userId", data.userId);
+          }
+        } catch (error) {
+          console.error("Failed to set token in localStorage:", error);
+        }
+      },
+    }),
+
+    exchangeCodeForToken: builder.mutation<
+      any,
+      { platformName: string; code: string }
+    >({
+      query: ({ platformName, code }) => ({
+        url: ExchangeCodeURL,
+        method: "POST",
+        body: {
+          platformName,
+          code,
+        },
+      }),
+    }),
+
+    validateToken: builder.mutation<any, void>({
+      query: () => ({
+        url: ValidateTokenURL,
+        method: "POST",
+        body: {},
+      }),
+    }),
+  }),
+});
+
+export const {
+  useGetAccessTokenQuery,
+  useExchangeCodeForTokenMutation,
+  useValidateTokenMutation,
+} = authAPI;
