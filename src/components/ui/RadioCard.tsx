@@ -3,23 +3,21 @@ import * as React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 
-interface RadioCardItemProps extends React.ComponentPropsWithoutRef<"input"> {
+interface RadioCardItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupItem> {
   icon?: React.ReactElement;
   label?: React.ReactNode;
   description?: React.ReactNode;
   addon?: React.ReactNode;
   indicator?: React.ReactNode | null;
   indicatorPlacement?: "start" | "end" | "inside";
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
 export const RadioCardItem = React.forwardRef<
-  HTMLInputElement,
+  React.ElementRef<typeof RadioGroupItem>,
   RadioCardItemProps
 >(function RadioCardItem(props, ref) {
   const {
     id,
-    inputProps,
     label,
     description,
     addon,
@@ -34,7 +32,7 @@ export const RadioCardItem = React.forwardRef<
 
   return (
     <div className={cn("flex items-center space-x-2", className)}>
-      <RadioGroupItem id={id} ref={ref} {...rest} {...inputProps} />
+      <RadioGroupItem id={id} ref={ref} {...rest} />
       <label 
         htmlFor={id} 
         className="flex w-full cursor-pointer items-center justify-between rounded-md border border-input p-4 hover:bg-accent"

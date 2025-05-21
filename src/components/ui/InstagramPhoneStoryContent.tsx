@@ -1,11 +1,9 @@
+
 import { useState, useRef } from "react";
-import { Box, Icon, Image } from "@chakra-ui/react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { BiComment } from "react-icons/bi";
-import { FiSend } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { MdVolumeUp, MdVolumeOff } from "react-icons/md";
+import { Heart, HeartFilled, MessageCircle, Send, Volume2, VolumeX, UserCircle2 } from "lucide-react";
+import { Avatar } from "./avatar";
 
 const InstagramPhoneStoryContent = () => {
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -25,28 +23,30 @@ const InstagramPhoneStoryContent = () => {
       }
     }
   };
+  
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.currentTarget;
+    target.src = "https://placehold.co/400x400?text=Story+Image"; // Set the placeholder
+  };
+  
   const renderMediaContent = () => {
     switch (storyDetails?.media_type) {
       case "IMAGE":
         return (
-          <Image
+          <img
             src={
               storyDetails?.media_url ||
               "https://placehold.co/400x400?text=Story+Image"
             }
             alt={"story image"}
-            objectFit="cover"
-            width="full"
+            className="object-cover w-full"
             onDoubleClick={() => setIsLiked(!isLiked)}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement; // Cast to HTMLImageElement
-              target.src = "https://placehold.co/400x400?text=Story+Image"; // Set the placeholder
-            }}
+            onError={handleImageError}
           />
         );
       case "VIDEO":
         return (
-          <Box overflow="hidden">
+          <div className="overflow-hidden">
             <video
               ref={videoRef}
               src={storyDetails?.media_url}
@@ -55,134 +55,55 @@ const InstagramPhoneStoryContent = () => {
               muted={isMuted}
               playsInline
               onClick={handleVideoClick} // Add onClick handler
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "530px",
-                objectFit: "cover",
-                zIndex: 1,
-              }}
+              className="absolute top-0 left-0 w-full h-[530px] object-cover z-1"
             />
-          </Box>
+          </div>
         );
       default:
         return null;
     }
   };
+  
   return (
     <>
       {/* Mute Icon */}
-      <Box
-        position={"absolute"}
-        top="10"
-        right={"2"}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        cursor="pointer"
-        zIndex={20}
-        onClick={() => setIsMuted(!isMuted)}
-      >
-        <Icon
-          as={isMuted ? MdVolumeOff : MdVolumeUp}
-          boxSize={4}
-          color="white"
-          cursor="pointer"
-        />
-      </Box>
+      <div className="absolute top-10 right-2 flex flex-col items-center cursor-pointer z-20" onClick={() => setIsMuted(!isMuted)}>
+        {isMuted ? (
+          <VolumeX className="h-4 w-4 text-white cursor-pointer" />
+        ) : (
+          <Volume2 className="h-4 w-4 text-white cursor-pointer" />
+        )}
+      </div>
 
       {/* Story Content Area */}
-      <Box
-        display={"flex"}
-        alignItems={"center"}
-        bgColor={"gray.900"}
-        justifyContent={"center"}
-        width={"100%"}
-        h={"530px"}
-        position="relative"
+      <div
+        className="flex items-center bg-gray-900 justify-center w-full h-[530px] relative"
         onDoubleClick={() => setIsLiked(!isLiked)}
       >
         {renderMediaContent()}
-      </Box>
+      </div>
 
-      <Box
-        py={2}
-        bg={"gray.900"}
-        display="flex"
-        justifyContent={"center"}
-        alignItems={"center"}
-        flexDirection="row"
-        gap="1rem"
-        zIndex={20}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
+      <div className="py-2 bg-gray-900 flex justify-center items-center flex-row gap-4 z-20">
+        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}>
+          <MessageCircle className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+        </div>
+        <div 
+          className="flex flex-col cursor-pointer px-4 py-2 text-white border border-gray-400 rounded-full w-[180px] text-center"
           onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}
-        >
-          <BiComment
-            size="1.5rem"
-            color="white"
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          cursor="pointer"
-          onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}
-          color={"white"}
-          border={1}
-          borderRadius={"full"}
-          borderColor={"gray.400"}
-          borderStyle={"solid"}
-          py={2}
-          px={4}
-          width={"180px"}
         >
           Message
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-          onClick={() => setIsLiked(!isLiked)}
-        >
-          <Icon
-            as={isLiked ? AiFillHeart : AiOutlineHeart}
-            boxSize={"1.75rem"}
-            color={isLiked ? "red.500" : "white"}
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-          onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}
-        >
-          <FiSend
-            size="1.5rem"
-            color="white"
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-        </Box>
-      </Box>
+        </div>
+        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsLiked(!isLiked)}>
+          {isLiked ? (
+            <HeartFilled className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
+          ) : (
+            <Heart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
+          )}
+        </div>
+        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}>
+          <Send className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+        </div>
+      </div>
     </>
   );
 };

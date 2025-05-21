@@ -1,16 +1,15 @@
+
 import { useState } from "react";
-import { Box, Flex, Text, Icon, Avatar, Image, Input } from "@chakra-ui/react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { BiComment } from "react-icons/bi";
-import { PiUserCircleDuotone } from "react-icons/pi";
-import { FiSend } from "react-icons/fi";
-import { FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { getFormattedDate } from "@/utils/commonFunctions";
-import { MdVolumeUp, MdVolumeOff } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import { BsArrowLeft } from "react-icons/bs";
+import { 
+  Heart, HeartFilled, MessageCircle, Send, Bookmark,
+  Volume2, VolumeX, ArrowLeft, UserCircle2 
+} from "lucide-react";
+import { Avatar } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 
 const MessageBubble = ({
   content,
@@ -22,26 +21,16 @@ const MessageBubble = ({
   timestamp?: string;
 }) => {
   return (
-    <Flex
-      justifyContent={isSent ? "flex-end" : "flex-start"}
-      mb={2}
-      width="100%"
-    >
-      <Box
-        maxW="70%"
-        bg={isSent ? "blue.500" : "gray.700"}
-        color="white"
-        px={3}
-        py={2}
-        borderRadius="xl"
-        position="relative"
+    <div className={`flex ${isSent ? "justify-end" : "justify-start"} mb-2 w-full`}>
+      <div 
+        className={`max-w-[70%] ${isSent ? "bg-blue-500" : "bg-gray-700"} text-white px-3 py-2 rounded-xl relative`}
       >
-        <Text fontSize="sm">{content}</Text>
-        <Text fontSize="xs" color="whiteAlpha.700" textAlign="right" mt={1}>
+        <p className="text-sm">{content}</p>
+        <p className="text-xs text-white/70 text-right mt-1">
           {timestamp}
-        </Text>
-      </Box>
-    </Flex>
+        </p>
+      </div>
+    </div>
   );
 };
 
@@ -60,106 +49,69 @@ const CommentItem = ({
   userImgUrl?: string;
 }) => {
   return (
-    <Flex gap={3} width="100%" px={4} py={2} alignItems="center">
-      <Avatar.Root size="lg">
-        <Avatar.Fallback boxSize={12} as={PiUserCircleDuotone} />
-        <Avatar.Image src={userImgUrl} />
-      </Avatar.Root>
-      <Box flex={1}>
-        <Flex alignItems="center" gap={2}>
-          <Text
-            fontWeight="bold"
-            fontSize="sm"
-            color="whiteAlpha.900"
-            truncate
-            maxW={"120px"}
-          >
+    <div className="flex gap-3 w-full px-4 py-2 items-center">
+      <Avatar className="h-12 w-12">
+        <Avatar.Image src={userImgUrl} alt={username} />
+        <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+      </Avatar>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <p className="font-bold text-sm text-white/90 truncate max-w-[120px]">
             {username}
-          </Text>
-          <Text fontSize="xs" color="whiteAlpha.600" whiteSpace="nowrap">
+          </p>
+          <p className="text-xs text-white/60 whitespace-nowrap">
             {timestamp}
-          </Text>
-        </Flex>
+          </p>
+        </div>
 
-        <Text fontSize="sm" color="whiteAlpha.900" mt={0.5}>
+        <p className="text-sm text-white/90 mt-0.5">
           {content}
-        </Text>
+        </p>
         {!isReply && (
-          <Flex gap={4} mt={1}>
-            <Text fontSize="xs" color="whiteAlpha.600" cursor="pointer">
-              Reply
-            </Text>
-            <Text fontSize="xs" color="whiteAlpha.600" cursor="pointer">
-              See translation
-            </Text>
-          </Flex>
+          <div className="flex gap-4 mt-1">
+            <p className="text-xs text-white/60 cursor-pointer">Reply</p>
+            <p className="text-xs text-white/60 cursor-pointer">See translation</p>
+          </div>
         )}
-      </Box>
-      <Icon
-        as={AiOutlineHeart}
-        color="whiteAlpha.600"
-        cursor="pointer"
-        boxSize={5}
-      />
-    </Flex>
+      </div>
+      <Heart className="text-white/60 cursor-pointer h-5 w-5" />
+    </div>
   );
 };
 
 // Comment Popup Component
-const MotionBox = motion(Box);
+const MotionDiv = motion.div;
+
 const InstagramDMPopup = () => {
   const { responseDM } = useSelector((state: RootState) => state.automation);
 
   return (
     <AnimatePresence>
-      <MotionBox
-        position="absolute"
-        top={8}
-        bottom={0}
-        left={0}
-        right={0}
-        bgColor="black"
-        zIndex={1000}
+      <MotionDiv
+        className="absolute top-8 bottom-0 left-0 right-0 bg-black z-[1000]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
         {/* Header */}
-        <Flex
-          py={3}
-          px={4}
-          borderBottom="1px solid"
-          borderColor="gray.800"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Flex alignItems="center" gap={3}>
-            <Icon as={BsArrowLeft} color="white" boxSize={5} cursor="pointer" />
-            <Avatar.Root size="md">
-              <Avatar.Fallback boxSize={10} as={PiUserCircleDuotone} />
-            </Avatar.Root>
-            <Box>
-              <Text color="white" fontWeight="semibold">
-                Test User
-              </Text>
-              <Text color="whiteAlpha.700" fontSize="xs">
-                Active 2h ago
-              </Text>
-            </Box>
-          </Flex>
-          <Icon as={FiSend} color="white" boxSize={5} cursor="pointer" />
-        </Flex>
+        <div className="py-3 px-4 border-b border-gray-800 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <ArrowLeft className="text-white h-5 w-5 cursor-pointer" />
+            <Avatar className="h-10 w-10">
+              <Avatar.Fallback><UserCircle2 className="h-10 w-10" /></Avatar.Fallback>
+            </Avatar>
+            <div>
+              <p className="text-white font-semibold">Test User</p>
+              <p className="text-white/70 text-xs">Active 2h ago</p>
+            </div>
+          </div>
+          <Send className="text-white h-5 w-5 cursor-pointer" />
+        </div>
 
         {/* Messages Section */}
-        <Box
-          height="calc(100% - 128px)"
-          overflowY="auto"
-          p={4}
-          display="flex"
-          flexDirection="column"
-        >
-          <Flex direction="column" width="100%">
+        <div className="h-[calc(100%-128px)] overflow-y-auto p-4 flex flex-col">
+          <div className="flex flex-col w-full">
             {responseDM ? (
               <MessageBubble
                 content={responseDM}
@@ -173,42 +125,21 @@ const InstagramDMPopup = () => {
                 timestamp="5m ago"
               />
             )}
-          </Flex>
-        </Box>
+          </div>
+        </div>
 
         {/* Message Input Section - Simplified */}
-        <Flex
-          p={4}
-          borderTop="1px solid"
-          borderColor="whiteAlpha.200"
-          alignItems="center"
-          gap={3}
-          position="absolute"
-          bottom={0}
-          width="100%"
-        >
-          <Box flex={1} position="relative">
+        <div className="p-4 border-t border-white/20 flex items-center gap-3 absolute bottom-0 w-full">
+          <div className="flex-1 relative">
             <Input
               readOnly={true}
               placeholder="Message..."
-              bg="whiteAlpha.100"
-              border="none"
-              borderRadius="full"
-              color="white"
-              _placeholder={{ color: "whiteAlpha.600" }}
-              _focus={{ boxShadow: "none" }}
+              className="bg-white/10 border-none rounded-full text-white placeholder:text-white/60 focus:shadow-none"
             />
-          </Box>
-          <Box>
-            <Icon
-              as={FiSend}
-              color={"blue.500"}
-              cursor={"pointer"}
-              boxSize={5}
-            />
-          </Box>
-        </Flex>
-      </MotionBox>
+          </div>
+          <Send className="text-blue-500 cursor-pointer h-5 w-5" />
+        </div>
+      </MotionDiv>
     </AnimatePresence>
   );
 };
@@ -223,37 +154,21 @@ const InstagramCommentPopup = () => {
 
   return (
     <AnimatePresence>
-      <MotionBox
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
-        bgColor="black"
-        borderTopRadius="3xl"
-        zIndex={1000}
+      <MotionDiv
+        className="absolute bottom-0 left-0 right-0 bg-black rounded-t-3xl z-[1000]"
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
       >
         {/* Header */}
-        <Flex
-          py={3}
-          borderBottom="1px solid"
-          borderColor="gray.800"
-          alignItems="center"
-          justifyContent={"center"}
-          flexDir={"column"}
-          gap={2}
-        >
-          <Box w={"40px"} h={"2px"} bgColor={"gray.400"}></Box>
-          <Text color="white" fontWeight="semibold">
-            Comments
-          </Text>
-        </Flex>
+        <div className="py-3 border-b border-gray-800 flex items-center justify-center flex-col gap-2">
+          <div className="w-[40px] h-[2px] bg-gray-400"></div>
+          <p className="text-white font-semibold">Comments</p>
+        </div>
 
         {/* Comment List Section */}
-        <Box maxH="60vh" overflowY="auto" py={2}>
+        <div className="max-h-[60vh] overflow-y-auto py-2">
           {/* Original comment using the first tag */}
           {latestTag && (
             <CommentItem
@@ -265,7 +180,7 @@ const InstagramCommentPopup = () => {
 
           {/* Reply comment */}
           {responseComment && (
-            <Box pl={6} mt={1}>
+            <div className="pl-6 mt-1">
               <CommentItem
                 username={activeAccount?.username || "You"}
                 content={responseComment}
@@ -273,38 +188,23 @@ const InstagramCommentPopup = () => {
                 timestamp="Just now"
                 userImgUrl={activeAccount?.profile_picture_url}
               />
-            </Box>
+            </div>
           )}
-        </Box>
+        </div>
 
         {/* Comment Input Section */}
-        <Flex
-          p={3}
-          borderTop="1px solid"
-          borderColor="whiteAlpha.200"
-          alignItems="center"
-          gap={3}
-        >
-          <Avatar.Root size="lg">
-            <Avatar.Fallback boxSize={12} as={PiUserCircleDuotone} />
-            <Avatar.Image src={activeAccount?.profile_picture_url} />
-          </Avatar.Root>
+        <div className="p-3 border-t border-white/20 flex items-center gap-3">
+          <Avatar className="h-12 w-12">
+            <Avatar.Image src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Your avatar"} />
+            <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+          </Avatar>
 
-          <Box flex={1} p={2} borderRadius="full" bgColor="whiteAlpha.100">
-            <Text color="whiteAlpha.600" fontSize="sm">
-              Start the conversation...
-            </Text>
-          </Box>
-          <Text
-            color="blue.400"
-            fontWeight="semibold"
-            fontSize="sm"
-            cursor="pointer"
-          >
-            Send
-          </Text>
-        </Flex>
-      </MotionBox>
+          <div className="flex-1 p-2 rounded-full bg-white/10">
+            <p className="text-white/60 text-sm">Start the conversation...</p>
+          </div>
+          <p className="text-blue-400 font-semibold text-sm cursor-pointer">Send</p>
+        </div>
+      </MotionDiv>
     </AnimatePresence>
   );
 };
@@ -321,29 +221,25 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
     switch (mediaDetails?.media_type) {
       case "IMAGE":
         return (
-          <Image
+          <img
             src={mediaDetails?.media_url}
-            alt={mediaDetails?.caption}
-            objectFit="cover"
-            width="full"
-            maxH={"586px"}
+            alt={mediaDetails?.caption || "Instagram post"}
+            className="object-cover w-full max-h-[586px]"
             onDoubleClick={() => setIsLiked(!isLiked)}
           />
         );
       case "VIDEO":
         return (
-          <Box
-            position="relative"
+          <div 
+            className="relative rounded-lg"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            borderRadius="lg"
             onDoubleClick={() => setIsLiked(!isLiked)}
           >
-            <Image
+            <img
               src={mediaDetails?.thumbnail_url || mediaDetails?.media_url}
-              alt={mediaDetails?.caption}
-              objectFit="cover"
-              width="full"
+              alt={mediaDetails?.caption || "Instagram video"}
+              className="object-cover w-full"
             />
             {isHovering && (
               <video
@@ -351,15 +247,10 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
                 autoPlay
                 loop
                 muted={isMuted}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                }}
+                className="absolute top-0 left-0 w-full"
               />
             )}
-          </Box>
+          </div>
         );
       default:
         return null;
@@ -368,205 +259,91 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
 
   return (
     <>
-      <Box
-        position="absolute"
-        bottom="12"
-        right="10px"
-        display="flex"
-        flexDirection="column"
-        gap="1rem"
-        zIndex={20}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-          onClick={() => setIsLiked(!isLiked)}
-        >
-          <Icon
-            as={isLiked ? AiFillHeart : AiOutlineHeart}
-            boxSize={"1.75rem"}
-            color={isLiked ? "red.500" : "white"}
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-          <Text
-            color="white"
-            fontSize="xs"
-            mt="1"
-            textShadow="0 1px 2px rgba(0,0,0,0.5)"
-          >
+      <div className="absolute bottom-12 right-10px flex flex-col gap-4 z-20">
+        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsLiked(!isLiked)}>
+          {isLiked ? (
+            <HeartFilled className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
+          ) : (
+            <Heart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
+          )}
+          <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.like_count}
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-        >
-          <BiComment
-            size="1.5rem"
-            color="white"
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-
-          <Text
-            color="white"
-            fontSize="xs"
-            mt="1"
-            textShadow="0 1px 2px rgba(0,0,0,0.5)"
-          >
+          </p>
+        </div>
+        <div className="flex flex-col items-center cursor-pointer">
+          <MessageCircle className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.comments_count}
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-        >
-          <FiSend
-            size="1.5rem"
-            color="white"
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-
-          <Text
-            color="white"
-            fontSize="xs"
-            mt="1"
-            textShadow="0 1px 2px rgba(0,0,0,0.5)"
-          >
+          </p>
+        </div>
+        <div className="flex flex-col items-center cursor-pointer">
+          <Send className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.shares}
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-        >
-          <FaRegBookmark
-            size="1.5rem"
-            color="white"
-            style={{
-              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
-              transition: "all 0.2s ease",
-            }}
-          />
-
-          <Text
-            color="white"
-            fontSize="xs"
-            mt="1"
-            textShadow="0 1px 2px rgba(0,0,0,0.5)"
-          >
+          </p>
+        </div>
+        <div className="flex flex-col items-center cursor-pointer">
+          <Bookmark className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 text-shadow">
             {mediaDetails?.saved}
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          cursor="pointer"
-          onClick={() => setIsMuted(!isMuted)}
-        >
-          <Icon
-            as={isMuted ? MdVolumeOff : MdVolumeUp}
-            boxSize={4}
-            color="white"
-            cursor="pointer"
-          />
-        </Box>
-      </Box>
+          </p>
+        </div>
+        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsMuted(!isMuted)}>
+          {isMuted ? (
+            <VolumeX className="h-4 w-4 text-white cursor-pointer" />
+          ) : (
+            <Volume2 className="h-4 w-4 text-white cursor-pointer" />
+          )}
+        </div>
+      </div>
 
       {/* Post Caption and Account */}
-      <Flex
-        position="absolute"
-        bottom="12"
-        left="5"
-        align="center"
-        gap="2"
-        zIndex="10"
-      >
-        <Avatar.Root size="xl">
-          <Avatar.Fallback boxSize={12} as={PiUserCircleDuotone} />
-          <Avatar.Image src={activeAccount?.profile_picture_url} />
-        </Avatar.Root>
+      <div className="absolute bottom-12 left-5 flex items-center gap-2 z-10">
+        <Avatar className="h-12 w-12">
+          <Avatar.Image src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Profile"} />
+          <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+        </Avatar>
 
-        <Flex direction="column">
-          <Text
-            fontWeight="bold"
-            fontSize="sm"
-            color="white"
-            textShadow="0 1px 2px rgba(0,0,0,0.8)"
-          >
+        <div className="flex flex-col">
+          <p className="font-bold text-sm text-white text-shadow">
             {activeAccount?.username || "User Name"}
-          </Text>
+          </p>
 
-          <Box position="relative" pr={14}>
-            <Box
-              fontSize="xs"
-              color="whiteAlpha.900"
-              textShadow="0 1px 2px rgba(0,0,0,0.8)"
-              position="relative"
-              overflow="hidden"
-              transition={
-                isCaptionExpanded ? "max-height 0.4s ease-in" : "none"
-              }
-              maxH={isCaptionExpanded ? "500px" : "2.8em"}
-              display="-webkit-box"
+          <div className="relative pr-14">
+            <div
+              className={`text-xs text-white/90 text-shadow relative overflow-hidden transition-all ${
+                isCaptionExpanded ? "max-h-[500px]" : "max-h-[2.8em]"
+              }`}
               style={{
                 WebkitLineClamp: isCaptionExpanded ? "unset" : 2,
                 WebkitBoxOrient: "vertical",
+                display: "-webkit-box",
               }}
             >
               {mediaDetails?.caption}
               {isCaptionExpanded && (
-                <Text fontWeight="bold" mt={1}>
+                <p className="font-bold mt-1">
                   Posted on {getFormattedDate(mediaDetails?.timestamp || "")}
-                </Text>
+                </p>
               )}
-            </Box>
+            </div>
 
-            <Text
+            <p
               onClick={() => setIsCaptionExpanded(!isCaptionExpanded)}
-              fontSize="xs"
-              mt={1}
-              textShadow="0 1px 2px rgba(0,0,0,0.8)"
-              color="white"
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
-              transition="color 0.2s"
+              className="text-xs mt-1 text-shadow text-white cursor-pointer hover:underline transition-colors"
             >
               {isCaptionExpanded ? "less" : "more"}
-            </Text>
-          </Box>
-        </Flex>
-      </Flex>
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Post Content Area */}
-      <Box
-        opacity={isCaptionExpanded ? 0.7 : 1}
-        display={"flex"}
-        alignItems={"center"}
-        bgColor={"gray.900"}
-        justifyContent={"center"}
-        width={"100%"}
-        height={"586px"}
+      <div
+        className={`${isCaptionExpanded ? "opacity-70" : "opacity-100"} flex items-center bg-gray-900 justify-center w-full h-[586px]`}
       >
         {renderMediaContent()}
-      </Box>
+      </div>
 
       {/* Live Demo */}
       {tab === "comments" ? (
