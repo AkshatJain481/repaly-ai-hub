@@ -1,10 +1,9 @@
-import { chakra, ChakraProviderProps } from "@chakra-ui/react";
 
-interface InstagramReelIconProps extends ChakraProviderProps {}
+interface InstagramReelIconProps extends React.SVGProps<SVGSVGElement> {}
 
 const InstagramReelIcon = (props: InstagramReelIconProps) => {
   return (
-    <chakra.svg
+    <svg
       viewBox="0 0 122.14 122.88"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +22,7 @@ const InstagramReelIcon = (props: InstagramReelIconProps) => {
           c0-0.77,0.23-1.55,0.7-2.23C46.76,54.15,49.19,53.72,50.95,54.95L50.95,54.95L50.95,54.95z"
         />
       </g>
-    </chakra.svg>
+    </svg>
   );
 };
 

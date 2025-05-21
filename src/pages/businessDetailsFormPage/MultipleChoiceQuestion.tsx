@@ -1,17 +1,14 @@
-import { Button, CheckboxGroup, Grid, Input, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import ProgressBar from "../../components/ui/ProgressBar";
-import { CheckboxCard } from "@/components/common/CheckboxCard";
 import CardIcon from "../../components/common/CardIcon";
-import {
-  addDetails,
-  removeDetails,
-} from "../../redux/slices/businessDetails.slice";
+import { addDetails, removeDetails } from "../../redux/slices/businessDetails.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Query } from "@/utils/interfaces";
 import { useNavigate } from "react-router-dom";
-import { primaryColor, Questions } from "@/utils/constants";
+import { Questions } from "@/utils/constants";
 
 type MultipleChoiceQuestionProps = {
   question: string;
@@ -35,6 +32,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   const [nextButtonFlag, setNextButtonFlag] = useState(false);
   const [isContactDetailsPage, setIsContactDetailsPage] = useState(false);
   const [values, setValues] = useState<{ [key: string]: string }>({});
+  
   const handleChange = (
     key: string,
     event: React.ChangeEvent<HTMLInputElement>
@@ -49,6 +47,15 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   const currentQuestion = useSelector(
     (state: RootState) => state.businessDetails.currentQuestion
   );
+  
+  const toggleOption = (value: string) => {
+    setAnswer(prev => 
+      prev.includes(value) 
+        ? prev.filter(item => item !== value) 
+        : [...prev, value]
+    );
+  };
+
   const nextButtonClick = () => {
     const query: Query = {
       question,
@@ -87,82 +94,80 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     setIsContactDetailsPage(
       question === "Please provide your contact details."
     );
-  }, [answer]);
+  }, [answer, question]);
 
   return (
-    <CheckboxGroup
-      gap={6}
-      p={8}
-      maxW={"3xl"}
-      value={answer}
-      onValueChange={(value) => setAnswer(value)}
-      m={"auto"}
-    >
-      <Text fontSize={"4xl"} color={primaryColor} fontWeight={"bold"}>
+    <div className="flex flex-col gap-6 p-8 max-w-3xl m-auto">
+      <h2 className="text-4xl font-bold text-primary">
         {question}
-      </Text>
-      <Grid
-        templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }}
-        gap={2}
-      >
+      </h2>
+      
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {options.map((item) => (
-          <CheckboxCard
-            color={"purple.600"}
-            colorPalette={"purple"}
+          <div
             key={item.value}
-            value={item.value}
-            label={item.title}
-            icon={<CardIcon icon={item.icon} color={primaryColor} />}
-          />
+            onClick={() => toggleOption(item.value)}
+            className={`flex flex-col items-center justify-center p-4 rounded-md border-2 cursor-pointer transition-colors
+              ${answer.includes(item.value) ? "border-primary bg-primary/10" : "border-border hover:bg-accent"}
+            `}
+          >
+            <div className="mb-2">
+              <CardIcon icon={item.icon} color="hsl(var(--primary))" />
+            </div>
+            <span className="text-center">{item.title}</span>
+          </div>
         ))}
-      </Grid>
+      </div>
+      
       {isContactDetailsPage && (
         <>
-          <Text fontSize={"sm"} color={"red.500"}>
+          <p className="text-sm text-red-500">
             *We WILL share your contact details with your viewers.
-          </Text>
+          </p>
           {/* Contact details */}
           {answer?.map((item) => (
-            <Input
+            <input
               key={item}
               type={item}
               placeholder={item + "..."}
               value={values[item] || ""}
               onChange={(e) => handleChange(item, e)}
+              className="w-full px-4 py-2 border border-input rounded-md"
             />
           ))}
         </>
       )}
-      <Button
-        onClick={backButtonClick}
-        colorPalette={"purple"}
-        variant={"outline"}
-        fontWeight={"bold"}
-      >
-        {currentQuestion ? "Back" : "Cancel"}
-      </Button>
-      {nextButtonFlag && (
+      
+      <div className="flex gap-2">
         <Button
-          onClick={nextButtonClick}
-          colorPalette={"purple"}
-          variant={"solid"}
-          fontWeight={"bold"}
+          variant="outline"
+          onClick={backButtonClick}
+          className="font-bold"
         >
-          {currentQuestion === Questions.length - 1 ? "Finish" : "Next"}
+          {currentQuestion ? "Back" : "Cancel"}
         </Button>
-      )}
-      {skipable && (
-        <Button
-          onClick={skipButtonClick}
-          colorPalette={"purple"}
-          fontWeight={"bold"}
-          variant={"solid"}
-        >
-          Skip
-        </Button>
-      )}
+        
+        {nextButtonFlag && (
+          <Button
+            onClick={nextButtonClick}
+            className="font-bold"
+          >
+            {currentQuestion === Questions.length - 1 ? "Finish" : "Next"}
+          </Button>
+        )}
+        
+        {skipable && (
+          <Button
+            onClick={skipButtonClick}
+            className="font-bold"
+          >
+            Skip
+          </Button>
+        )}
+      </div>
+      
       <ProgressBar completePercentage={completePercentage} />
-    </CheckboxGroup>
+    </div>
   );
 };
 

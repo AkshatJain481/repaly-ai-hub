@@ -1,53 +1,45 @@
-import { Box, Heading, Stack, Text, Button, Icon } from "@chakra-ui/react";
-import { FaHome, FaArrowLeft } from "react-icons/fa";
+
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const ErrorPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      flex="1"
-      width="100vw"
-      height="100vh"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      bgGradient="linear(to-r, purple.500, purple.700)"
-      color="black"
-      textAlign="center"
-      px={4}
-    >
-      <Stack gap={6} align="center">
+    <div className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-purple-500 to-purple-700 text-black px-4">
+      <div className="flex flex-col items-center gap-6">
         {/* Error Heading */}
-        <Heading size="2xl" fontWeight="bold">
-          Oops!! 404 - Page Not Found
-        </Heading>
+        <h1 className="text-4xl font-bold">Oops!! 404 - Page Not Found</h1>
 
         {/* Error Description */}
-        <Text fontSize="lg" maxW="600px">
+        <p className="text-lg max-w-[600px] text-center">
           Sorry, we couldn't find what you're looking for. Please check the URL
           or head back home!
-        </Text>
+        </p>
 
         {/* Action Buttons */}
-        <Stack direction="row" gap={4}>
+        <div className="flex flex-row gap-4">
           <Button
-            colorScheme="purple"
             variant="outline"
-            size="lg"
+            className="bg-white hover:bg-gray-100"
             onClick={() => window.history.back()}
           >
-            <Icon as={FaArrowLeft} />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
             Go Back
           </Button>
-          <Button colorPalette="purple" size="lg" onClick={() => navigate("/")}>
-            <Icon as={FaHome} />
+          <Button
+            onClick={() => navigate("/")}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
             Go Home
           </Button>
-        </Stack>
-      </Stack>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

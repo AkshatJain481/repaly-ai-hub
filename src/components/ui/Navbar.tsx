@@ -1,9 +1,9 @@
-import { Flex, Stack, Button, Image } from "@chakra-ui/react";
-import MenuText from "./NavText";
-import LoginDrawer from "@/components/common/LoginDrawer";
-import { primaryColor } from "@/utils/constants";
-import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+
+import { Link as ScrollLink } from "react-scroll";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./button";
+import { ThemeToggle } from "./theme-toggle";
+import LoginDrawer from "@/components/common/LoginDrawer";
 
 const Navbar = () => {
   const pages = [
@@ -17,78 +17,55 @@ const Navbar = () => {
 
   const handleLogoClick = () => {
     navigate("/");
-    scroll.scrollToTop({ duration: 500 });
+    // Using react-scroll's scrollToTop function
+    import("react-scroll").then((scroll) => {
+      scroll.animateScroll.scrollToTop({ duration: 500 });
+    });
   };
 
   return (
-    <Flex
-      height="70px"
-      bg="white"
-      px={{ base: 6, sm: 12, md: 24 }}
-      borderBottom="1px"
-      borderStyle="solid"
-      borderColor="gray.100"
-      alignItems="center"
-      position="sticky"
-      top={0}
-      justify="space-between"
-      zIndex={100}
-    >
+    <nav className="h-[70px] bg-background sticky top-0 px-6 sm:px-12 md:px-24 border-b border-border flex items-center justify-between z-50">
       {/* Logo Section */}
-      <Flex alignItems="center" justifyContent="flex-start">
-        <Stack onClick={handleLogoClick} cursor={"pointer"}>
-          <Image
+      <div className="flex items-center justify-start">
+        <div onClick={handleLogoClick} className="cursor-pointer">
+          <img
             src="/repaly-logo.png"
             alt="Logo"
-            width={{ base: "100px", md: "120px", lg: "200px" }}
-            borderRadius={"full"}
+            className="w-[100px] md:w-[120px] lg:w-[200px] rounded-full"
           />
-        </Stack>
-      </Flex>
+        </div>
+      </div>
 
       {/* Menu Items */}
-      <Flex
-        justifyContent="center"
-        gap={{ base: 4, md: 12 }}
-        display={{ base: "none", lg: "flex" }}
-      >
+      <div className="hidden lg:flex justify-center gap-4 md:gap-12">
         {pages.map((page) => (
           <ScrollLink
             key={page.name}
             to={page.section}
             smooth={true}
             duration={500}
-            offset={-70} // Optional for header offset
+            offset={-70}
+            className="text-foreground hover:text-primary cursor-pointer font-medium"
           >
-            <MenuText name={page.name} />
+            {page.name}
           </ScrollLink>
         ))}
-      </Flex>
+      </div>
 
-      {/* Login Button */}
-      <Flex alignItems="center" justifyContent="flex-end">
+      {/* Right section: Theme toggle and Login Button */}
+      <div className="flex items-center gap-4">
+        <ThemeToggle />
         <LoginDrawer
           triggerButton={
             <Button
-              bg={primaryColor}
-              color="white"
-              size={{ base: "sm", xl: "lg" }}
-              px={{ base: 4, xl: 8 }}
-              py={4}
-              borderRadius="full"
-              fontWeight="bold"
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: `0 10px 15px -3px ${primaryColor}20`,
-              }}
-              transition="all 0.3s"
+              className="px-4 xl:px-8 py-4 rounded-full font-bold transition-all hover:translate-y-[-2px] hover:shadow-lg"
             >
               Get Started
             </Button>
           }
         />
-      </Flex>
-    </Flex>
+      </div>
+    </nav>
   );
 };
 

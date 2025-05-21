@@ -1,69 +1,44 @@
-import {
-  VStack,
-  Badge,
-  Heading,
-  Text,
-  Stack,
-  SimpleGrid,
-} from "@chakra-ui/react";
-import {
-  accentColor,
-  primaryColor,
-  textColor,
-  secondaryTextColor,
-  bgColor,
-} from "@/utils/constants";
+
 import StatCard from "../../components/common/StatCard";
+import { Button } from "@/components/ui/button";
 
 const TestimonialSection = () => {
   return (
-    <Stack py={{ base: 10, md: 20 }} bgColor={bgColor} px={1}>
-      <VStack gap={6} mb={16} textAlign="center">
-        <Badge
-          bg={`${accentColor}20`}
-          color={primaryColor}
-          fontSize="sm"
-          fontWeight="bold"
-          py={2}
-          px={4}
-          borderRadius="full"
-        >
+    <div className="py-10 md:py-20 bg-background px-1">
+      <div className="flex flex-col items-center gap-6 mb-16 text-center">
+        <span className="bg-primary/20 text-primary text-sm font-bold py-2 px-4 rounded-full">
           Testimonials
-        </Badge>
+        </span>
 
-        <Heading
-          as="h2"
-          fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
-          fontWeight="bold"
-          color={textColor}
-          lineHeight={"1.2"}
-        >
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
           Loved by Creators and Brands
-        </Heading>
+        </h2>
 
-        <Text fontSize="lg" color={secondaryTextColor} maxW="3xl">
+        <p className="text-lg text-muted-foreground max-w-3xl">
           See what our users have to say about how repaly has transformed their
           social media presence
-        </Text>
-      </VStack>
-      <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3 }}
-        gap={8}
-        maxW="7xl"
-        width={"100%"}
-        mx="auto"
-        px={4}
-        textAlign="center"
-      >
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-7xl w-full mx-auto px-4 text-center">
         {[
           { value: "2,000+", label: "Active Users" },
           { value: "5M+", label: "Comments Managed" },
           { value: "42%", label: "Avg. Engagement Increase" },
         ].map((stat, index) => (
-          <StatCard key={index} value={stat.value} label={stat.label} />
+          <div key={index} className="bg-card p-6 rounded-lg shadow-sm text-center transition-all hover:-translate-y-1 hover:shadow-md">
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-3xl md:text-4xl font-bold text-primary leading-none">
+                {stat.value}
+              </p>
+              <p className="text-md text-muted-foreground">
+                {stat.label}
+              </p>
+            </div>
+          </div>
         ))}
-      </SimpleGrid>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

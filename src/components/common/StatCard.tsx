@@ -1,6 +1,5 @@
+
 import React from "react";
-import { Box, VStack, Text } from "@chakra-ui/react";
-import { primaryColor, secondaryTextColor } from "@/utils/constants";
 
 interface StatCardProps {
   value: string;
@@ -13,40 +12,28 @@ const StatCard: React.FC<StatCardProps> = ({
   value,
   label,
   icon,
-  valueColor = primaryColor,
+  valueColor = "text-primary",
 }) => {
   return (
-    <Box
-      bg="white"
-      p={6}
-      borderRadius="lg"
-      shadow="sm"
-      textAlign="center"
-      transition="all 0.3s"
-      _hover={{
-        transform: "translateY(-4px)",
-        shadow: "md",
-      }}
+    <div
+      className="bg-card p-6 rounded-lg shadow-sm text-center transition-all hover:-translate-y-1 hover:shadow-md"
     >
-      <VStack gap={2}>
+      <div className="flex flex-col items-center gap-2">
         {icon && (
-          <Box color={primaryColor} mb={2}>
+          <div className="text-primary mb-2">
             {icon}
-          </Box>
+          </div>
         )}
-        <Text
-          fontSize={{ base: "3xl", md: "4xl" }}
-          fontWeight="bold"
-          color={valueColor}
-          lineHeight="1"
+        <p
+          className={`text-3xl md:text-4xl font-bold ${valueColor} leading-none`}
         >
           {value}
-        </Text>
-        <Text fontSize="md" color={secondaryTextColor}>
+        </p>
+        <p className="text-md text-muted-foreground">
           {label}
-        </Text>
-      </VStack>
-    </Box>
+        </p>
+      </div>
+    </div>
   );
 };
 

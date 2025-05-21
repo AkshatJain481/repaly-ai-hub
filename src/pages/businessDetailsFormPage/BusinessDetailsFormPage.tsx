@@ -1,4 +1,5 @@
-import { HStack, Image, Stack, Text } from "@chakra-ui/react";
+
+import { useState, useEffect } from "react";
 import SingleChoiceQuestion from "./SingleChoiceQuestion";
 import { Questions } from "@/utils/constants";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
@@ -7,7 +8,6 @@ import { RootState } from "@/redux/store";
 import { updateNumberOfQuestion } from "../../redux/slices/businessDetails.slice";
 import { useNavigate } from "react-router-dom";
 import { useSetBusinessDetailMutation } from "@/apis/user";
-import { useEffect } from "react";
 import { UserBusinessDetails } from "../../utils/interfaces";
 import { getDynamicContent } from "@/utils/commonFunctions";
 import { toast } from "react-toastify";
@@ -49,28 +49,16 @@ const BusinessDetailsFormPage = () => {
       submitForm();
     }
   }, [numberOfQuestions, currentQuestionNumber, queries, navigate]);
+  
   return (
-    <HStack height={"100vh"} gap={0} bg="white">
-      <Stack
-        height="100vh"
-        p="4"
-        gap={1}
-        display={{ base: "none", lg: "flex" }}
-        width={{ base: "1/2", xl: "2/5" }}
-        bg="purple.200"
-      >
-        <Text pb="24" fontSize={"4xl"}>
-          REPALY
-        </Text>
-        <Image maxH="400px" src={image} fit="contain" />
-        <Text pt="6" px="4" fontSize={"3xl"} fontWeight={"bold"}>
-          {message}
-        </Text>
-        <Text px="4" color={"gray"} textJustify={"auto"}>
-          {description}
-        </Text>
-      </Stack>
-      <Stack flex="1" height={"100vh"} width={{ base: "1/2", xl: "3/5" }}>
+    <div className="flex h-screen gap-0 bg-background">
+      <div className="hidden lg:flex flex-col h-screen p-4 gap-1 w-1/2 xl:w-2/5 bg-purple-200">
+        <div className="pb-24 text-4xl">REPALY</div>
+        <img className="max-h-[400px] object-contain" src={image} alt="Illustration" />
+        <h2 className="pt-6 px-4 text-3xl font-bold">{message}</h2>
+        <p className="px-4 text-gray-700 text-justify">{description}</p>
+      </div>
+      <div className="flex-1 h-screen w-1/2 xl:w-3/5">
         {currentQuestion.type === "single-choice" && (
           <SingleChoiceQuestion
             skipable={currentQuestion.skipable}
@@ -87,8 +75,8 @@ const BusinessDetailsFormPage = () => {
             completePercentage={currentQuestion.completePercentage}
           />
         )}
-      </Stack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 
