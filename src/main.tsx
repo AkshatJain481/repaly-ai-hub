@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ReduxProvider store={repalyStore}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider defaultTheme="system">
+        <ThemeProvider defaultTheme="system" storageKey="ui-theme">
           <AppRouter />
           <ToastContainer
             theme="colored"
