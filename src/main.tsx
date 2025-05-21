@@ -1,20 +1,20 @@
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import ChakraUIProvider from "./chakraUI/ChakraUIProvider.tsx";
+import "./styles/globals.css";
 import { Provider as ReduxProvider } from "react-redux";
 import repalyStore, { persistor } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
 import AppRouter from "./AppRouter.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "./components/ui/theme-provider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ReduxProvider store={repalyStore}>
       <PersistGate loading={null} persistor={persistor}>
-        <ChakraUIProvider>
+        <ThemeProvider defaultTheme="system">
           <AppRouter />
           <ToastContainer
             theme="colored"
@@ -24,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
             pauseOnFocusLoss
             pauseOnHover
           />
-        </ChakraUIProvider>
+        </ThemeProvider>
       </PersistGate>
     </ReduxProvider>
   </StrictMode>
