@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { BiMessageRoundedDetail, BiSend } from "react-icons/bi";
 import { BsHeart, BsHeartFill, BsVolumeUp, BsVolumeMute } from "react-icons/bs";
-import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
 
 const InstagramPhoneStoryContent = () => {
   const [isMuted, setIsMuted] = useState<boolean>(true);
