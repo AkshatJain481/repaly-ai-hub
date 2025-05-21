@@ -1,4 +1,3 @@
-import { Box, Image, Text, HStack, Badge, Button } from "@chakra-ui/react";
 import { FaHeart, FaRegCommentAlt } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { BsLightning } from "react-icons/bs";
@@ -24,127 +23,84 @@ const MediaCardGrid = ({
   };
 
   return (
-    <Box
-      borderRadius="xl"
-      bgColor="white"
-      border="1px solid"
-      borderColor="gray.200"
-      cursor="pointer"
+    <div
+      className="rounded-xl bg-white border border-gray-200 cursor-pointer"
       onClick={() => handleNavigate()}
     >
-      <Box
-        position="relative"
-        aspectRatio={1}
-        borderTopRadius="xl"
-        overflow="hidden"
-        boxShadow="md"
-      >
+      <div className="relative aspect-square rounded-t-xl overflow-hidden shadow-md">
         {/* Unattended Comments Badge */}
         {unattendedComments > 0 && (
-          <Badge
-            position="absolute"
-            bg="#f04f4d"
-            width="100%"
-            color="white"
-            fontSize="sm"
-            px={2}
-            py={1}
-            zIndex={10}
-            borderRadius="none"
-            display="flex"
-            fontWeight={700}
-            justifyContent="center"
-          >
+          <div className="absolute top-0 w-full bg-[#f04f4d] text-white text-sm px-2 py-1 font-bold flex justify-center z-10">
             {unattendedComments} Unattended Comments
-          </Badge>
+          </div>
         )}
 
         {/* Image */}
-        <Image
+        <img
           src={
             mediaData?.media_type === "IMAGE"
               ? mediaData?.media_url
               : mediaData?.thumbnail_url
           }
           alt="Media"
-          width="100%"
-          height="100%"
-          objectFit="cover"
+          className="w-full h-full object-cover"
         />
 
         {/* Hover Overlay */}
-        <Box className="text-white absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-10">
-          <HStack gap={3}>
-            <HStack>
+        <div className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-10">
+          <div className="flex gap-3">
+            <div className="flex items-center gap-1">
               <FaHeart size={20} />
-              <Text fontSize="sm">{mediaData?.like_count}</Text>
-            </HStack>
-            <HStack>
+              <span className="text-sm">{mediaData?.like_count}</span>
+            </div>
+            <div className="flex items-center gap-1">
               <FaRegCommentAlt size={20} />
-              <Text fontSize="sm">{mediaData?.comments_count}</Text>
-            </HStack>
-            <HStack>
+              <span className="text-sm">{mediaData?.comments_count}</span>
+            </div>
+            <div className="flex items-center gap-1">
               <FaRegBookmark size={20} />
-              <Text fontSize="sm">{mediaData?.saved}</Text>
-            </HStack>
-          </HStack>
-          <HStack gap={3} mt={2}>
+              <span className="text-sm">{mediaData?.saved}</span>
+            </div>
+          </div>
+          <div className="flex gap-3 mt-2 text-sm">
             Total Engagements: {mediaData?.reach}
-          </HStack>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
 
       {/* Caption & Buttons */}
-      <Box p={4}>
-        <Text fontSize="lg" fontWeight={700} lineClamp={1}>
+      <div className="p-4">
+        <p className="text-lg font-bold line-clamp-1">
           {mediaData?.caption || "No Caption"}
-        </Text>
-        <Text fontSize="sm" color="gray.500">
+        </p>
+        <p className="text-sm text-gray-500">
           {getFormattedDate(mediaData?.timestamp)}
-        </Text>
+        </p>
 
-        <HStack mt={2} gap={2} justifyContent="space-around">
-          <Button
-            bgColor="gray.100"
-            color="black"
-            border="1px solid"
-            borderColor="gray.200"
-            flex="1"
-            px={2}
-            fontSize="sm"
-            display="flex"
-            alignItems="center"
-            gap={1}
+        <div className="flex justify-around gap-2 mt-2">
+          <button
+            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 text-sm flex items-center gap-1 py-1.5 rounded"
             onClick={(e) => {
               e.stopPropagation();
               handleNavigate("automate");
             }}
           >
             <BsLightning color={primaryColor} />
-            <Text fontSize="sm">Automate</Text>
-          </Button>
-          <Button
-            bgColor="gray.100"
-            color="black"
-            border="1px solid"
-            borderColor="gray.200"
-            flex="1"
-            px={2}
-            fontSize="sm"
-            display="flex"
-            alignItems="center"
-            gap={1}
+            <span className="text-sm">Automate</span>
+          </button>
+          <button
+            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 text-sm flex items-center gap-1 py-1.5 rounded"
             onClick={(e) => {
               e.stopPropagation();
               handleNavigate("analytics");
             }}
           >
             <BiBarChart color={primaryColor} />
-            <Text fontSize="sm">Analytics</Text>
-          </Button>
-        </HStack>
-      </Box>
-    </Box>
+            <span className="text-sm">Analytics</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

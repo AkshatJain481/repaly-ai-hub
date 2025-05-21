@@ -1,19 +1,7 @@
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Flex,
-  Heading,
-  VStack,
-  Card,
-  Table,
-  Textarea,
-  Tag,
-  HStack,
-  Text,
-} from "@chakra-ui/react";
 import { FiTrash2, FiPlus } from "react-icons/fi";
-import { toast } from "react-toastify";
 import { FaRegEdit } from "react-icons/fa";
+import { toast } from "react-toastify";
 import TagsInput from "../common/TagsInput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -103,137 +91,91 @@ const StoryTagManagement = () => {
         message={popupMessage}
         onConfirm={handleConfirmEdit}
       />
-      <Flex gap={4} flexDir={{ base: "column", md: "row" }} width="full">
+      <div className="flex flex-col md:flex-row gap-4 w-full">
         {/* Add/Edit Tag Form */}
-        <Card.Root
-          borderRadius="md"
-          boxShadow="md"
-          width={{ base: "100%", md: "1/2", xl: "2/3" }}
-        >
-          <Card.Header display={"flex"} justifyContent={"space-between"}>
-            <Heading size="lg">
+        <div className="bg-white rounded-lg shadow-md w-full md:w-1/2 xl:w-2/3 p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold">
               {editingId !== null
                 ? "Edit Tag and Response"
                 : "Add New Tag and Response"}
-            </Heading>
-          </Card.Header>
-          <Card.Body>
-            <VStack width="full" gap={0} align="start">
+            </h2>
+          </div>
+          <div className="mt-4">
+            <div className="flex flex-col gap-2">
               <TagsInput
                 tags={tags}
                 setTags={(payload) => dispatch(setTags(payload))}
               />
-
-              <Text mt={4} mb={2}>
-                DM Response
-              </Text>
-              <Textarea
-                _focusWithin={{ borderColor: "gray.400" }}
-                outline="none"
+              <p className="mt-4 mb-2 text-gray-700">DM Response</p>
+              <textarea
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-y min-h-[60px]"
                 placeholder="Write your response for the DM here..."
-                variant="outline"
                 value={responseDM}
                 onChange={(e) => dispatch(setResponse(e.target.value))}
-                minHeight="60px"
-                resize="vertical"
               />
-            </VStack>
-
-            <Button
-              width={"100%"}
-              mt={4}
-              bg={"gray.100"}
-              color={"gray.600"}
-              px={4}
-              py={2}
-              rounded="4px"
-              border="2px"
-              borderStyle="solid"
-              fontWeight={550}
-              borderColor="gray.200"
-              _hover={{ bg: "gray.200" }}
-              type="submit"
-              onClick={() => handleAddOrUpdate()}
-            >
-              <FiPlus size={20} />
-              {editingId ? "Update Tag/Value" : "Add Tag/Value"}
-            </Button>
-          </Card.Body>
-        </Card.Root>
+              <button
+                className="mt-4 w-full bg-gray-100 text-gray-600 px-4 py-2 rounded-md border-2 border-gray-200 font-medium hover:bg-gray-200 flex items-center justify-center gap-2"
+                onClick={handleAddOrUpdate}
+              >
+                <FiPlus size={20} />
+                {editingId ? "Update Tag/Value" : "Add Tag/Value"}
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Tags List */}
-        <Card.Root
-          borderRadius="md"
-          boxShadow="md"
-          width={{ base: "100%", md: "1/2", xl: "1/3" }}
-        >
-          <Card.Header>
-            <Heading size="lg">Tags List</Heading>
-          </Card.Header>
-          <Card.Body>
-            <Table.Root size="sm">
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeader
-                    color={"gray.500"}
-                    fontSize={"md"}
-                    width={"2/3"}
-                  >
+        <div className="bg-white rounded-lg shadow-md w-full md:w-1/2 xl:w-1/3 p-6">
+          <h2 className="text-2xl font-bold">Tags List</h2>
+          <div className="mt-4">
+            <table className="w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left p-3 text-gray-500 font-medium w-2/3">
                     Tags
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader
-                    color={"gray.500"}
-                    fontSize={"md"}
-                    width={"1/3"}
-                  >
+                  </th>
+                  <th className="text-left p-3 text-gray-500 font-medium w-1/3">
                     Actions
-                  </Table.ColumnHeader>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
                 {fields?.map((tag, index) => (
-                  <Table.Row key={index}>
-                    <Table.Cell p={3} fontWeight={"bold"} width={"2/3"}>
-                      <HStack wrap="wrap" gap={2}>
-                        {tag?.tags?.map((tag, index) => (
-                          <Tag.Root
-                            key={index}
-                            color={"gray.600"}
-                            borderRadius="full"
-                            borderStyle={"solid"}
-                            borderWidth={1}
-                            borderColor={"gray.300"}
-                            bgColor={"gray.100"}
-                            variant={"solid"}
-                            px={2}
-                            py={1}
+                  <tr key={index} className="border-t">
+                    <td className="p-3 font-bold w-2/3">
+                      <div className="flex flex-wrap gap-2">
+                        {tag?.tags?.map((tag, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-full"
                           >
-                            <Tag.Label fontSize={"xs"}>{tag}</Tag.Label>
-                          </Tag.Root>
+                            {tag}
+                          </span>
                         ))}
-                      </HStack>
-                    </Table.Cell>
-                    <Table.Cell p={6} width={"1/3"}>
-                      <Flex gap={4}>
+                      </div>
+                    </td>
+                    <td className="p-6 w-1/3">
+                      <div className="flex gap-4">
                         <FaRegEdit
                           onClick={() => startEditing(tag, index)}
                           size={20}
-                          cursor={"pointer"}
+                          className="cursor-pointer text-gray-600 hover:text-gray-800"
                         />
                         <FiTrash2
                           size={20}
                           onClick={() => dispatch(removeField(index))}
-                          cursor={"pointer"}
+                          className="cursor-pointer text-gray-600 hover:text-gray-800"
                         />
-                      </Flex>
-                    </Table.Cell>
-                  </Table.Row>
+                      </div>
+                    </td>
+                  </tr>
                 ))}
-              </Table.Body>
-            </Table.Root>
-          </Card.Body>
-        </Card.Root>
-      </Flex>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

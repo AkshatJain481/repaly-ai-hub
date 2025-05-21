@@ -1,13 +1,12 @@
-
-import { Box, Tabs, Text, Stack, Flex } from "@chakra-ui/react";
-import { useGetMediaCommentsQuery } from "@/apis/instagram";
+import * as Tabs from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import { primaryColor } from "@/utils/constants";
+import { useGetMediaCommentsQuery } from "@/apis/instagram";
 import CommentCard from "../common/CommentCard";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { CommentData } from "@/utils/interfaces";
+import { primaryColor } from "@/utils/constants";
 
 // Format UNIX timestamp (seconds) to "Apr 19, 1:25 PM"
 const formatTimestamp = (timestamp: number) => {
@@ -69,33 +68,22 @@ const IgCommentSection = () => {
   ] as const;
 
   return (
-    <Box>
+    <div className="w-full">
       <Tabs.Root
-        lazyMount
-        unmountOnExit
-        defaultValue="positive"
-        variant="plain"
+        value={commentType}
+        onValueChange={(val) => setCommentType(val as typeof commentType)}
       >
-        <Tabs.List
-          display="flex"
-          bg="bg.muted"
-          rounded="l3"
-          p="1"
-          overflowX="auto"
-          whiteSpace="nowrap"
-          gap={2}
-        >
+        {/* Tabs Header */}
+        <Tabs.List className="flex overflow-x-auto bg-gray-100 p-1 rounded-lg gap-2">
           {tabs.map((type) => (
             <Tabs.Trigger
-              flex={1}
               key={type}
-              onClick={() => setCommentType(type)}
-              minW="150px"
-              px={4}
-              py={2}
-              flexShrink={0}
-              justifyContent="center"
               value={type}
+              className={`min-w-[150px] px-4 py-2 text-sm font-medium text-center rounded-lg flex-shrink-0 transition-all duration-150 ${
+                commentType === type
+                  ? "bg-[var(--primaryColor)] text-white"
+                  : "bg-white text-gray-700 border border-gray-200"
+              }`}
             >
               {type
                 .split("_")
@@ -103,28 +91,22 @@ const IgCommentSection = () => {
                 .join(" ")}
             </Tabs.Trigger>
           ))}
-          <Tabs.Indicator rounded="l2" />
         </Tabs.List>
 
-        <Tabs.Content value={commentType}>
+        {/* Tabs Content */}
+        <Tabs.Content value={commentType} className="mt-6">
           {isFetching ? (
-            <Flex alignItems={"center"} justifyContent={"center"} h={"30vh"}>
+            <div className="flex items-center justify-center h-[30vh]">
               <ClimbingBoxLoader size={16} color={primaryColor} />
-            </Flex>
+            </div>
           ) : commentsData.length === 0 ? (
-            <Flex alignItems={"center"} justifyContent={"center"} h={"30vh"}>
-              <Text
-                textAlign="center"
-                mt={4}
-                fontWeight="bold"
-                fontSize="lg"
-                color="gray.500"
-              >
+            <div className="flex items-center justify-center h-[30vh]">
+              <p className="text-lg font-bold text-gray-500 text-center">
                 No data available
-              </Text>
-            </Flex>
+              </p>
+            </div>
           ) : (
-            <Stack gap={4} mt={4}>
+            <div className="flex flex-col gap-4 mt-4">
               {commentsData.map((comment, idx) => (
                 <CommentCard
                   key={idx}
@@ -136,11 +118,11 @@ const IgCommentSection = () => {
                   replyTimestamp={formatTimestamp(comment.repliedTimestamp)}
                 />
               ))}
-            </Stack>
+            </div>
           )}
         </Tabs.Content>
       </Tabs.Root>
-    </Box>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
-
+// components/AIEnabledInteractions.tsx
 import { useState } from "react";
+import * as Switch from "@radix-ui/react-switch";
 import CustomResponseSection from "./CustomResponseSection";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -9,8 +10,12 @@ import {
   setPositiveEnabled,
   setInquiryDetails,
 } from "@/redux/slices/automation.slice";
-import { FaCheck, FaExclamationTriangle, FaUserTag, FaQuestionCircle } from "react-icons/fa";
-import { Switch } from "@chakra-ui/react";
+import {
+  FaCheck,
+  FaExclamationTriangle,
+  FaUserTag,
+  FaQuestionCircle,
+} from "react-icons/fa";
 
 const FormField = ({
   label,
@@ -67,6 +72,16 @@ const InquiriesForm = ({
   setMode: (mode: "leave_comment" | "custom") => void;
 }) => {
   const [isOpen, setIsOpen] = useState(mode === "custom");
+
+  const toggleSwitch = () => {
+    setProductDetails("");
+    setMobileNumber("");
+    setWebsiteUrl("");
+    const newMode = isOpen ? "leave_comment" : "custom";
+    setMode(newMode);
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="p-4 bg-white rounded-md shadow-sm border border-purple-200">
       <div className="flex items-center justify-between mb-4">
@@ -74,31 +89,13 @@ const InquiriesForm = ({
           <FaQuestionCircle />
           Inquiries
         </p>
-        <div className="relative inline-flex items-center">
-          <input
-            type="checkbox"
-            checked={isOpen}
-            onChange={() => {
-              setProductDetails("");
-              setMobileNumber("");
-              setWebsiteUrl("");
-              setMode(isOpen ? "leave_comment" : "custom");
-              setIsOpen(!isOpen);
-            }}
-            className="sr-only"
-          />
-          <div
-            className={`block w-14 h-8 rounded-full ${
-              isOpen ? "bg-purple-600" : "bg-gray-300"
-            } transition-colors duration-200`}
-          >
-            <div
-              className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ${
-                isOpen ? "transform translate-x-6" : ""
-              }`}
-            ></div>
-          </div>
-        </div>
+        <Switch.Root
+          checked={isOpen}
+          onCheckedChange={toggleSwitch}
+          className="w-[44px] h-[24px] bg-gray-300 data-[state=checked]:bg-purple-600 rounded-full relative transition-colors duration-200"
+        >
+          <Switch.Thumb className="block w-[20px] h-[20px] bg-white rounded-full transition-transform duration-200 translate-x-1 data-[state=checked]:translate-x-[20px]" />
+        </Switch.Root>
       </div>
 
       {isOpen && (
@@ -164,27 +161,25 @@ const AIEnabledInteractions = () => {
 
         <InquiriesForm
           websiteUrl={inquiryDetails.websiteUrl}
-          setWebsiteUrl={(payload) =>
-            dispatch(
-              setInquiryDetails({ ...inquiryDetails, websiteUrl: payload })
-            )
+          setWebsiteUrl={(url) =>
+            dispatch(setInquiryDetails({ ...inquiryDetails, websiteUrl: url }))
           }
           mobileNumber={inquiryDetails.mobileNumber}
-          setMobileNumber={(payload) =>
+          setMobileNumber={(num) =>
             dispatch(
-              setInquiryDetails({ ...inquiryDetails, mobileNumber: payload })
+              setInquiryDetails({ ...inquiryDetails, mobileNumber: num })
             )
           }
           productDetails={inquiryDetails.productDetails}
-          setProductDetails={(payload) =>
+          setProductDetails={(details) =>
             dispatch(
-              setInquiryDetails({ ...inquiryDetails, productDetails: payload })
+              setInquiryDetails({ ...inquiryDetails, productDetails: details })
             )
           }
           mode={inquiryDetails.responseMode}
-          setMode={(payload) =>
+          setMode={(mode) =>
             dispatch(
-              setInquiryDetails({ ...inquiryDetails, responseMode: payload })
+              setInquiryDetails({ ...inquiryDetails, responseMode: mode })
             )
           }
         />
