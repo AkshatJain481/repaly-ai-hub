@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { secondaryTextColor } from "@/utils/constants";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import PhoneContainer from "@/components/common/PhoneContainer";
 import InstagramStoryAutomateTab from "@/components/ui/InstagramStoryAutomateTab";
@@ -10,7 +9,7 @@ import { useGetStoryDetailsQuery } from "@/apis/instagram";
 import Loading from "@/components/common/Loading";
 import InstagramStoryAnalyticsTab from "@/components/ui/InstagramStoryAnalyticsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LightningBolt, BarChart2 } from "lucide-react";
+import { Zap, BarChart2 } from "lucide-react";
 
 const InstagramStoryDetailPage = () => {
   const { storyId } = useParams();
@@ -60,7 +59,7 @@ const InstagramStoryDetailPage = () => {
               >
                 <TabsList className="w-full grid grid-cols-2">
                   <TabsTrigger value="automate" className="flex items-center gap-2 font-bold">
-                    <LightningBolt className="h-5 w-5" />
+                    <Zap className="h-5 w-5" />
                     Automate
                   </TabsTrigger>
                   <TabsTrigger value="analytics" className="flex items-center gap-2 font-bold">

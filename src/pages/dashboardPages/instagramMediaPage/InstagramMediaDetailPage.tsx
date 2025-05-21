@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { secondaryTextColor } from "@/utils/constants";
 import InstagramMediaAnalyticsTab from "@/components/ui/InstagramMediaAnalyticsTab";
 import InstagramMediaAutomateTab from "../../../components/ui/InstagramMediaAutomateTab";
 import { useParams, Link, useSearchParams } from "react-router-dom";
@@ -13,7 +12,7 @@ import InstagramMediaContent from "@/components/ui/InstagramMediaContent";
 import { useState, useEffect } from "react";
 import { RootState } from "@/redux/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LightningBolt, BarChart2 } from "lucide-react";
+import { Zap, BarChart2 } from "lucide-react";
 
 const InstagramMediaDetailPage = () => {
   const { mediaId } = useParams();
@@ -96,7 +95,7 @@ const InstagramMediaDetailPage = () => {
               >
                 <TabsList className="w-full grid grid-cols-2">
                   <TabsTrigger value="automate" className="flex items-center gap-2 font-bold">
-                    <LightningBolt className="h-5 w-5" />
+                    <Zap className="h-5 w-5" />
                     Automate
                   </TabsTrigger>
                   <TabsTrigger value="analytics" className="flex items-center gap-2 font-bold">

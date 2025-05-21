@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
-import { LightningBolt } from "lucide-react";
+import { Zap } from "lucide-react";
 import StoryTagManagement from "./StoryTagManagement";
 
 const InstagramStoryAutomateTab = () => {
@@ -50,7 +50,7 @@ const InstagramStoryAutomateTab = () => {
           onClick={applyAutomation}
           disabled={isLoading}
         >
-          <LightningBolt className="h-5 w-5 mr-2" />
+          <Zap className="h-5 w-5 mr-2" />
           {isLoading ? "Applying..." : "Apply Automation"}
         </Button>
       </div>
