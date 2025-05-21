@@ -1,13 +1,14 @@
 
 "use client";
 
-import { ChakraProvider, extendBaseTheme } from "@chakra-ui/react";
+import { ChakraProvider, theme as baseTheme } from "@chakra-ui/react";
 import ColorModeProvider, { type ColorModeProviderProps } from "./ColorMode";
 
 // Create a base theme with minimal configuration
-const theme = extendBaseTheme({
+const theme = {
+  ...baseTheme,
   components: {},
-});
+};
 
 export default function ChakraUIProvider(props: ColorModeProviderProps) {
   return (

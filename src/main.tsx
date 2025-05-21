@@ -9,7 +9,6 @@ import AppRouter from "./AppRouter.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./components/ui/theme-provider";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import ChakraUIProvider from "./chakraUI/ChakraUIProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(

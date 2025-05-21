@@ -1,6 +1,6 @@
 
-import StatCard from "../../components/common/StatCard";
-import { Button } from "@/components/ui/button";
+import React from "react";
+// Remove unused imports
 
 const TestimonialSection = () => {
   return (
