@@ -1,7 +1,3 @@
-
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   Drawer,
   DrawerClose,
@@ -13,86 +9,55 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "react-toastify";
-import { useLoginMutation } from "@/apis/auth";
-import { setCredentials } from "@/redux/slices/auth.slice";
-import { AiOutlineLoading } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { getOAuthLink } from "@/apis/oauthLink";
 
 interface LoginDrawerProps {
   triggerButton: React.ReactNode;
 }
 
 const LoginDrawer = ({ triggerButton }: LoginDrawerProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // Placeholder handlers for button clicks (to be implemented by you)
+  const handleGoogleSignIn = () => {
+    window.location.href = getOAuthLink("google");
+  };
 
-  const handleLogin = async () => {
-    try {
-      const userData = await login({ email, password }).unwrap();
-      dispatch(setCredentials(userData));
-      navigate("/dashboard");
-      toast.success("Logged in successfully!");
-    } catch (error: any) {
-      toast.error(error?.data || "Something went wrong");
-    }
+  const handleFacebookSignIn = () => {
+    window.location.href = getOAuthLink("facebook");
   };
 
   return (
     <Drawer>
-      <DrawerTrigger asChild>
-        {triggerButton}
-      </DrawerTrigger>
+      <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
       <DrawerContent className="max-w-md mx-auto overflow-hidden">
         <DrawerHeader>
           <DrawerTitle className="text-2xl">Welcome to Repaly</DrawerTitle>
           <DrawerDescription>
-            Log in to your account to access all features
+            Sign in with your Google or Facebook account to access all features
           </DrawerDescription>
         </DrawerHeader>
         <div className="p-4 flex flex-col gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <Button
+            onClick={handleGoogleSignIn}
+            className="w-full bg-white text-gray-900 border border-gray-300 hover:bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-lg"
+          >
+            <FcGoogle size={24} />
+            Sign in with Google
+          </Button>
+          <Button
+            onClick={handleFacebookSignIn}
+            className="w-full bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2 py-3 rounded-lg"
+          >
+            <FaFacebook size={24} />
+            Sign in with Facebook
+          </Button>
         </div>
         <DrawerFooter>
-          <Button 
-            onClick={handleLogin}
-            disabled={isLoading || !email || !password}
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <AiOutlineLoading className="animate-spin mr-2" /> 
-                Please wait
-              </>
-            ) : (
-              "Login"
-            )}
-          </Button>
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="w-full">
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

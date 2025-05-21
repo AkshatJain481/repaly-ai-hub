@@ -1,4 +1,3 @@
-
 import { FiArrowRight } from "react-icons/fi";
 import LoginDrawer from "@/components/common/LoginDrawer";
 import { Link } from "react-router-dom";
@@ -16,9 +15,9 @@ const HeroSection = () => {
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               Your{" "}
-                <p className="bg-gradient-to-r from-[#9b87f5] to-[#3e83f6] bg-clip-text text-transparent">
-                  AI Assistant
-                </p>
+              <p className="bg-gradient-to-r from-[#9b87f5] to-[#3e83f6] bg-clip-text text-transparent">
+                AI Assistant
+              </p>
               for Social Media
             </h1>
 
@@ -30,18 +29,14 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-4">
               <LoginDrawer
                 triggerButton={
-                  <button
-                    className="bg-primary text-white text-lg px-6 py-6 rounded-full font-bold hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
-                  >
+                  <button className="bg-primary text-white text-lg px-6 py-3 rounded-full font-bold hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                     Get Started for Free
                     <FiArrowRight className="inline ml-2" />
                   </button>
                 }
               />
               <Link to="/demo">
-                <button
-                  className="bg-white text-primary text-lg px-6 py-6 rounded-full font-bold border border-solid border-primary hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
-                >
+                <button className="bg-white text-primary text-lg px-6 py-3 rounded-full font-bold border border-solid border-primary hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                   Watch Demo
                 </button>
               </Link>
@@ -49,19 +44,19 @@ const HeroSection = () => {
 
             <div className="flex items-center gap-3 pt-4">
               <div className="flex -space-x-4">
-                <img 
-                  src="https://bit.ly/sage-adebayo" 
-                  alt="User" 
+                <img
+                  src="https://bit.ly/sage-adebayo"
+                  alt="User"
                   className="w-10 h-10 rounded-full border-2 border-white"
                 />
-                <img 
-                  src="https://bit.ly/sage-adebayo" 
-                  alt="User" 
+                <img
+                  src="https://bit.ly/sage-adebayo"
+                  alt="User"
                   className="w-10 h-10 rounded-full border-2 border-white"
                 />
-                <img 
-                  src="https://bit.ly/sage-adebayo" 
-                  alt="User" 
+                <img
+                  src="https://bit.ly/sage-adebayo"
+                  alt="User"
                   className="w-10 h-10 rounded-full border-2 border-white"
                 />
               </div>
@@ -69,9 +64,7 @@ const HeroSection = () => {
                 <p className="text-md font-bold text-muted-foreground">
                   Trusted by 2,000+ creators
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  Join them today
-                </p>
+                <p className="text-sm text-muted-foreground">Join them today</p>
               </div>
             </div>
           </div>

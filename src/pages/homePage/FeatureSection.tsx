@@ -1,4 +1,3 @@
-
 import { BsChatDots, BsAt, BsBarChart } from "react-icons/bs";
 
 const FeatureCard = ({
@@ -11,7 +10,7 @@ const FeatureCard = ({
   description: string;
 }) => {
   return (
-    <div className="bg-white rounded-xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:cursor-pointer">
+    <div className="bg-white dark:bg-black dark:border-white dark:border dark:border-solid rounded-xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:cursor-pointer">
       <div className="mb-4 w-12 h-12 rounded-md flex items-center justify-center bg-primary/20">
         {icon}
       </div>

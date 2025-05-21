@@ -1,6 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import LoginDrawer from "@/components/common/LoginDrawer";
+import { FiArrowRight } from "react-icons/fi";
 
 const GetStartedSection = () => {
   return (
@@ -18,13 +18,9 @@ const GetStartedSection = () => {
 
           <LoginDrawer
             triggerButton={
-              <Button
-                className="bg-white text-primary px-6 py-6 rounded-full font-bold hover:translate-y-[-2px] hover:shadow-lg transition-all"
-              >
+              <Button className="bg-white hover:bg-slate-200 text-primary px-6 py-3 rounded-full font-bold hover:translate-y-[-2px] hover:shadow-lg transition-all">
                 Get Started for Free
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
+                <FiArrowRight className="inline ml-2" />
               </Button>
             }
           />

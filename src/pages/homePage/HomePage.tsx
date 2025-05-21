@@ -1,4 +1,3 @@
-
 import { Element } from "react-scroll";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeatureSection";
