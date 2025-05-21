@@ -5,11 +5,12 @@ import { RootState } from "@/redux/store";
 import { getFormattedDate } from "@/utils/commonFunctions";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Heart, HeartFilled, MessageCircle, Send, Bookmark,
+  Heart, MessageCircle, Send, Bookmark,
   Volume2, VolumeX, ArrowLeft, UserCircle2 
 } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import HeartFilled from "@/components/icons/HeartFilled";
 
 const MessageBubble = ({
   content,
@@ -51,8 +52,8 @@ const CommentItem = ({
   return (
     <div className="flex gap-3 w-full px-4 py-2 items-center">
       <Avatar className="h-12 w-12">
-        <Avatar.Image src={userImgUrl} alt={username} />
-        <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+        <AvatarImage src={userImgUrl} alt={username} />
+        <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
       </Avatar>
       <div className="flex-1">
         <div className="flex items-center gap-2">
@@ -99,7 +100,7 @@ const InstagramDMPopup = () => {
           <div className="flex items-center gap-3">
             <ArrowLeft className="text-white h-5 w-5 cursor-pointer" />
             <Avatar className="h-10 w-10">
-              <Avatar.Fallback><UserCircle2 className="h-10 w-10" /></Avatar.Fallback>
+              <AvatarFallback><UserCircle2 className="h-10 w-10" /></AvatarFallback>
             </Avatar>
             <div>
               <p className="text-white font-semibold">Test User</p>
@@ -195,8 +196,8 @@ const InstagramCommentPopup = () => {
         {/* Comment Input Section */}
         <div className="p-3 border-t border-white/20 flex items-center gap-3">
           <Avatar className="h-12 w-12">
-            <Avatar.Image src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Your avatar"} />
-            <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+            <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Your avatar"} />
+            <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
           </Avatar>
 
           <div className="flex-1 p-2 rounded-full bg-white/10">
@@ -300,8 +301,8 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
       {/* Post Caption and Account */}
       <div className="absolute bottom-12 left-5 flex items-center gap-2 z-10">
         <Avatar className="h-12 w-12">
-          <Avatar.Image src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Profile"} />
-          <Avatar.Fallback><UserCircle2 className="h-12 w-12" /></Avatar.Fallback>
+          <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Profile"} />
+          <AvatarFallback><UserCircle2 className="h-12 w-12" /></AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col">

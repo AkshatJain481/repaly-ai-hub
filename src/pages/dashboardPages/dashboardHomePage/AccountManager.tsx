@@ -1,22 +1,4 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Avatar,
-  Text,
-  VStack,
-  HStack,
-  Card,
-  CardBody,
-  Icon,
-  Wrap,
-  WrapItem,
-  Separator,
-  Stack,
-} from "@chakra-ui/react";
-import { FaCheck, FaUsers } from "react-icons/fa";
+
 import { getFormattedDate } from "@/utils/commonFunctions";
 import { PlatformAccount } from "@/utils/interfaces";
 import { getOAuthLink } from "@/apis/oauthLink";
@@ -25,11 +7,15 @@ import { socialMediaPlatforms } from "@/utils/constants";
 import { setActiveAccount } from "@/redux/slices/user.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { MdDeleteOutline } from "react-icons/md";
+import { Trash2, Check, Users } from "lucide-react";
 import ConfirmationPopup from "@/components/common/ConfirmationPopup";
 import { useState } from "react";
 import { useDeleteInstagramAccountMutation } from "@/apis/instagram";
 import { useLazyGetUserAccountsQuery } from "@/apis/user";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const AccountManager = () => {
   const userAccounts = useSelector(
@@ -46,19 +32,19 @@ const AccountManager = () => {
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const cardBg = "white";
-  const cardShadow = "sm";
-  const borderColor = "gray.200";
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountIndex, setAccountIndex] = useState<number | null>(null);
+  
   const OpenConfirmationPopup = (accountIndex: number) => {
     setIsOpen(true);
     setAccountIndex(accountIndex);
   };
+  
   const ClosePopup = () => {
     setIsOpen(false);
     setAccountIndex(null);
   };
+  
   const DeleteAccount = async () => {
     if (accountIndex === null) return;
     try {
@@ -83,36 +69,28 @@ const AccountManager = () => {
     return (
       <>
         {socialMediaPlatforms.map((platform) => (
-          <WrapItem key={platform.name}>
-            <Box
+          <div key={platform.name} className="flex-shrink-0">
+            <div
               onClick={() =>
                 platform.name === "Instagram" && handleAddAccount(platform.name)
               }
-              cursor="pointer"
-              w="60px"
-              h="60px"
-              borderRadius="lg"
-              bg={`rgba(${parseInt(platform.color.slice(1, 3), 16)}, ${parseInt(platform.color.slice(3, 5), 16)}, ${parseInt(platform.color.slice(5, 7), 16)}, 0.1)`}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              transition="all 0.3s"
-              _hover={{
-                transform: "scale(1.05)",
-                bg: `rgba(${parseInt(platform.color.slice(1, 3), 16)}, ${parseInt(platform.color.slice(3, 5), 16)}, ${parseInt(platform.color.slice(5, 7), 16)}, 0.2)`,
+              className={`w-[60px] h-[60px] rounded-lg flex flex-col items-center justify-center transition-all duration-300 cursor-pointer hover:scale-105 p-3`}
+              style={{
+                backgroundColor: `rgba(${parseInt(platform.color.slice(1, 3), 16)}, ${parseInt(platform.color.slice(3, 5), 16)}, ${parseInt(platform.color.slice(5, 7), 16)}, 0.1)`,
+                borderColor: platform.color
               }}
-              p={3}
             >
-              <Icon
-                as={platform.icon}
-                color={platform.color}
-                boxSize={8}
-                mb={1}
-                filter={platform.name === "Instagram" ? "none" : "blur(4px)"}
-              />
-            </Box>
-          </WrapItem>
+              <div
+                className={`text-3xl mb-1`}
+                style={{ 
+                  color: platform.color,
+                  filter: platform.name === "Instagram" ? "none" : "blur(4px)"
+                }}
+              >
+                {platform.icon && <platform.icon />}
+              </div>
+            </div>
+          </div>
         ))}
       </>
     );
@@ -120,54 +98,29 @@ const AccountManager = () => {
 
   if (!userAccounts.length) {
     return (
-      <Flex
-        minHeight="60vh"
-        alignItems="center"
-        justifyContent="center"
-        p={4}
-        direction="column"
-      >
-        <Box
-          p={8}
-          borderRadius="xl"
-          bg={cardBg}
-          borderWidth="1px"
-          borderColor={borderColor}
-          boxShadow={cardShadow}
-          transition="all 0.3s"
-        >
-          <Box
-            w={40}
-            h={40}
-            mx="auto"
-            mb={6}
-            borderRadius="full"
-            bg="#c9c1f9"
-            opacity={0.2}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <FaUsers size="5rem" color="#9b87f5" style={{ opacity: 0.8 }} />
-          </Box>
-          <Heading as="h2" size="lg" textAlign="center" mb={2}>
+      <div className="flex min-h-[60vh] items-center justify-center p-4 flex-col">
+        <div className="p-8 rounded-xl bg-white border border-gray-200 shadow-sm transition-all duration-300">
+          <div className="w-40 h-40 mx-auto mb-6 rounded-full bg-[#c9c1f9] opacity-20 flex items-center justify-center">
+            <Users size="5rem" className="text-[#9b87f5] opacity-80" />
+          </div>
+          <h2 className="text-lg font-bold text-center mb-2">
             Connect your accounts
-          </Heading>
-          <Text textAlign="center" mb={8} color="#6B7280">
+          </h2>
+          <p className="text-center mb-8 text-gray-600">
             Link your social media accounts to start automating your content and
             engagement.
-          </Text>
+          </p>
 
-          <Wrap gap={4} justify="center" mb={6}>
+          <div className="flex flex-wrap gap-4 justify-center mb-6">
             {renderSocialMediaIcons()}
-          </Wrap>
-        </Box>
-      </Flex>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Container maxW="6xl" py={8} px={4} overflow={"auto"} maxH={"90vh"}>
+    <div className="container py-8 px-4 overflow-auto max-h-[90vh]">
       <ConfirmationPopup
         loading={isDeleteAccountLoading || isGetAccountsLoading}
         isOpen={isOpen}
@@ -175,161 +128,101 @@ const AccountManager = () => {
         message="Are you sure you want to delete your account?"
         onConfirm={DeleteAccount}
       />
-      <Box
-        mb={8}
-        p={6}
-        borderRadius="lg"
-        bg={cardBg}
-        boxShadow={cardShadow}
-        borderWidth="1px"
-        borderColor={borderColor}
-      >
-        <Wrap gap={5} justify="center">
+      <div className="mb-8 p-6 rounded-lg bg-white shadow-sm border border-gray-200">
+        <div className="flex flex-wrap gap-5 justify-center">
           {renderSocialMediaIcons()}
-        </Wrap>
-      </Box>
+        </div>
+      </div>
 
-      <Grid templateColumns="repeat(auto-fill, minmax(280px, 1fr))" gap={6}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {userAccounts.map((account: PlatformAccount, index: number) => {
           const platform = socialMediaPlatforms.find(
             (p) =>
               p?.name?.toLowerCase() === account?.platformName?.toLowerCase()
           );
           return (
-            <Card.Root
+            <Card
               key={`${account.platformName}-${account.id}`}
-              position="relative"
-              overflow="hidden"
-              bg={cardBg}
-              borderRadius="xl"
-              borderWidth="2px"
-              borderColor={
-                activeAccount?.id === account.id ? platform?.color : borderColor
-              }
-              boxShadow={activeAccount?.id === account.id ? "md" : cardShadow}
-              transition="all 0.3s"
-              _hover={{
-                boxShadow: "md",
-                transform: "translateY(-4px)",
-              }}
-              cursor="pointer"
+              className={`relative overflow-hidden bg-white rounded-xl border-2 transition-all duration-300 hover:shadow-md hover:translate-y-[-4px] cursor-pointer mb-4 h-full ${
+                activeAccount?.id === account.id ? `border-[${platform?.color}]` : 'border-gray-200'
+              }`}
               onClick={() => {
                 handleSelectAccount(account);
-
                 setTimeout(() => {
                   navigate("/dashboard/instagram/media");
                 }, 500);
               }}
-              mb={4}
-              h="100%"
             >
-              <Box
-                position="absolute"
-                top={0}
-                left={0}
-                w="full"
-                h="10px"
-                bg={platform?.color || "#9b87f5"}
+              <div 
+                className="absolute top-0 left-0 w-full h-[10px]"
+                style={{ backgroundColor: platform?.color || "#9b87f5" }}
               />
 
-              <HStack position="absolute" top={4} left={4} gap={2}>
+              <div className="absolute top-4 left-4 flex gap-2">
                 {platform && (
-                  <Icon as={platform.icon} color={platform.color} boxSize={5} />
+                  <>
+                    <platform.icon style={{ color: platform.color }} className="h-5 w-5" />
+                    <span style={{ color: platform.color }} className="font-bold">
+                      {platform?.name}
+                    </span>
+                  </>
                 )}
-                <Text fontWeight="bold" color={platform?.color || "#9b87f5"}>
-                  {platform?.name}
-                </Text>
-              </HStack>
+              </div>
 
               {activeAccount?.id === account.id && (
-                <Box
-                  position="absolute"
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  top={4}
-                  right={4}
-                  bg={"blue.500"}
-                  borderRadius="full"
-                  p={1.5}
-                  h={6}
-                  w={6}
-                  boxShadow="md"
-                  zIndex={1}
-                >
-                  <Icon as={FaCheck} color="white" boxSize={3} />
-                </Box>
+                <div className="absolute flex justify-center items-center top-4 right-4 bg-blue-500 rounded-full p-1.5 h-6 w-6 shadow-md z-10">
+                  <Check className="text-white h-3 w-3" />
+                </div>
               )}
 
-              <CardBody pt={16} px={6} pb={3}>
-                <VStack gap={3} align="center">
-                  <Box
-                    position="relative"
-                    mt={6}
-                    mx="auto"
-                    w={24}
-                    h={24}
-                    borderRadius="full"
-                    borderWidth={3}
-                    borderColor="white"
-                    bg="white"
-                    boxShadow="md"
-                    overflow="hidden"
-                  >
-                    <Avatar.Root size="full">
-                      <Avatar.Fallback name={account?.name} />
-                      <Avatar.Image src={account?.profile_picture_url} />
-                    </Avatar.Root>
-                  </Box>
+              <CardContent className="pt-16 px-6 pb-3">
+                <div className="flex flex-col gap-3 items-center">
+                  <div className="relative mt-6 mx-auto w-24 h-24 rounded-full border-3 border-white bg-white shadow-md overflow-hidden">
+                    <Avatar className="w-full h-full">
+                      <AvatarFallback>{account?.name}</AvatarFallback>
+                      <AvatarImage src={account?.profile_picture_url} alt={account?.name} />
+                    </Avatar>
+                  </div>
 
-                  <Box textAlign="center" w="full">
-                    <Heading
-                      as="h3"
-                      size="md"
-                      fontWeight="semibold"
-                      lineClamp={1}
-                      mb={1}
-                    >
+                  <div className="text-center w-full">
+                    <h3 className="text-md font-semibold line-clamp-1 mb-1">
                       {account.name || account.username}
-                    </Heading>
-                    <Text
-                      color="#6B7280"
-                      fontSize="sm"
-                      mb={3}
-                      fontStyle="italic"
-                    >
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-3 italic">
                       @{account.username}
-                    </Text>
-                  </Box>
+                    </p>
+                  </div>
 
                   <Separator />
 
-                  <Flex w="full" justifyContent="space-between">
-                    <Stack fontSize="xs" color="#6B7280">
-                      <HStack>
-                        <Text fontWeight="medium">Posts:</Text>
-                        <Text>{account.media_count}</Text>
-                      </HStack>
-                      <HStack>
-                        <Text fontWeight="medium">Updated:</Text>
-                        <Text>{getFormattedDate(account.updated_time)}</Text>
-                      </HStack>
-                    </Stack>
-                    <Stack onClick={(e) => e.stopPropagation()}>
-                      <MdDeleteOutline
-                        color="red"
-                        size={26}
+                  <div className="w-full flex justify-between">
+                    <div className="text-xs text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">Posts:</span>
+                        <span>{account.media_count}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">Updated:</span>
+                        <span>{getFormattedDate(account.updated_time)}</span>
+                      </div>
+                    </div>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <Button 
+                        variant="ghost" 
+                        className="p-1 h-auto text-red-500 hover:text-red-700"
                         onClick={() => OpenConfirmationPopup(index)}
-                      />
-                    </Stack>
-                  </Flex>
-                </VStack>
-              </CardBody>
-            </Card.Root>
+                      >
+                        <Trash2 size={26} />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           );
         })}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 

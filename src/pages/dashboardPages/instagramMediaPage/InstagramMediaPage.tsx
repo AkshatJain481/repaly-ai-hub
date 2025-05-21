@@ -1,14 +1,15 @@
+
 import { useMemo } from "react";
-import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 import MediaCardGrid from "@/components/common/MediaCardGrid";
 import { MediaCardProp } from "@/utils/interfaces";
 import Loading from "@/components/common/Loading";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import AccountDropdown from "@/components/ui/AccountDropdown";
-import { BiRefresh } from "react-icons/bi";
+import { RefreshCw } from "lucide-react";
 import { useGetRecentMediaQuery } from "@/apis/instagram";
 import { Navigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const InstagramMediaPage = () => {
   const activeAccount = useSelector(
@@ -37,43 +38,24 @@ const InstagramMediaPage = () => {
   const renderMedia = () => {
     return (
       <>
-        <Flex
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          wrap={"wrap"}
-          gap={4}
-        >
-          <Stack gap={0}>
-            <Text fontSize={30} fontWeight={700}>
+        <div className="flex justify-between items-center flex-wrap gap-4">
+          <div className="flex flex-col gap-0">
+            <h1 className="text-3xl font-bold">
               Instagram Posts
-            </Text>
-            <Text color={"gray.500"}>
+            </h1>
+            <p className="text-gray-500">
               Automate your Instagram posts with ease
-            </Text>
-          </Stack>
-          <Flex
-            alignItems={{ sm: "end" }}
-            flexDir={{ base: "column", sm: "row" }}
-            gap={4}
-            width={{ base: "100%", sm: "auto" }}
-          >
+            </p>
+          </div>
+          <div className="flex items-end flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <Button
-              aria-label="Refresh"
+              variant="outline"
               onClick={() => refetch()}
-              size="xl"
-              bg="transparent"
-              color="gray.600"
-              _hover={{ color: "gray.800" }}
-              transition="all 0.2s ease"
-              fontWeight={"bold"}
-              borderStyle={"solid"}
-              borderWidth={2}
-              borderColor={"gray.300"}
-              bgColor={"white"}
+              className="font-bold border-2 border-gray-300 bg-white"
             >
-              <BiRefresh
+              <RefreshCw
+                className={`h-7 w-7 mr-2 ${isFetching ? "animate-spin" : ""}`}
                 style={{
-                  animation: isFetching ? "spin 1s linear infinite" : "none",
                   transition: "transform 0.7s ease-in-out",
                   height: "30px",
                   width: "30px",
@@ -82,21 +64,12 @@ const InstagramMediaPage = () => {
               Refresh
             </Button>
             <AccountDropdown />
-          </Flex>
-        </Flex>
+          </div>
+        </div>
         {isLoading ? (
           <Loading />
         ) : (
-          <Stack
-            display={"grid"}
-            gridTemplateColumns={{
-              base: "repeat(auto-fit, minmax(250px, 400px))", // Auto-adjusting columns
-              lg: "repeat(auto-fit, minmax(300px, 350px))", // Larger min-size on large screens
-            }}
-            gap={4}
-            overflow={"auto"}
-            className="hide-scrollbar"
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-auto hide-scrollbar">
             {mediaData
               ?.slice(0)
               .map((data: MediaCardProp) => (
@@ -106,22 +79,16 @@ const InstagramMediaPage = () => {
                   unattendedComments={0}
                 />
               ))}
-          </Stack>
+          </div>
         )}
       </>
     );
   };
 
   return (
-    <Stack
-      p={2}
-      gap={6}
-      height="90vh"
-      overflow={"hidden"}
-      className="hide-scrollbar"
-    >
+    <div className="p-2 flex flex-col gap-6 h-[90vh] overflow-hidden hide-scrollbar">
       {renderMedia()}
-    </Stack>
+    </div>
   );
 };
 

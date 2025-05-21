@@ -1,8 +1,7 @@
-import { Stack, Button, Flex, Tabs, Box } from "@chakra-ui/react";
-import { IoChevronBack } from "react-icons/io5";
+
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
 import { secondaryTextColor } from "@/utils/constants";
-import { BsLightning } from "react-icons/bs";
-import { BiBarChart } from "react-icons/bi";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import PhoneContainer from "@/components/common/PhoneContainer";
 import InstagramStoryAutomateTab from "@/components/ui/InstagramStoryAutomateTab";
@@ -10,6 +9,8 @@ import InstagramPhoneStoryContent from "@/components/ui/InstagramPhoneStoryConte
 import { useGetStoryDetailsQuery } from "@/apis/instagram";
 import Loading from "@/components/common/Loading";
 import InstagramStoryAnalyticsTab from "@/components/ui/InstagramStoryAnalyticsTab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LightningBolt, BarChart2 } from "lucide-react";
 
 const InstagramStoryDetailPage = () => {
   const { storyId } = useParams();
@@ -26,116 +27,59 @@ const InstagramStoryDetailPage = () => {
   }
 
   return (
-    <Stack gap={0} height={"100%"} p={2}>
+    <div className="flex flex-col gap-0 h-full p-2">
       {/* Back button */}
       <Link to={"/dashboard/instagram/story"}>
         <Button
-          color={secondaryTextColor}
-          bg="transparent"
-          fontSize={"md"}
-          width="fit-content"
-          fontWeight="normal"
-          px={0}
+          variant="ghost"
+          className="text-gray-600 text-md w-fit font-normal px-0"
         >
-          <IoChevronBack />
+          <ChevronLeft className="h-5 w-5 mr-1" />
           Back to all posts
         </Button>
       </Link>
 
-      <Stack overflow={"auto"} mx={{ base: "none", xl: "5%" }}>
-        <Flex direction={{ base: "column", lg: "row" }} gap={32} width={"100%"}>
+      <div className="overflow-auto mx-0 xl:mx-[5%]">
+        <div className="flex flex-col lg:flex-row gap-8 xl:gap-32 w-full">
           {/* Left column - Post image and engagement */}
-          <Box mx={{ base: "none", xl: "3%" }} my={"5%"}>
+          <div className="mx-auto xl:mx-[3%] my-[5%]">
             <PhoneContainer>
               <InstagramPhoneStoryContent />
             </PhoneContainer>
-          </Box>
+          </div>
           {/* Right column - Analytics and stats */}
-          <Stack
-            gap={6}
-            overflow={"auto"}
-            maxH={{ base: "100%", xl: "90vh" }}
-            width={"100%"}
-          >
+          <div className="flex flex-col gap-6 overflow-auto max-h-full xl:max-h-[90vh] w-full">
             {/* Post title section */}
-            <Stack gap={2}>
-              <Tabs.Root
-                lazyMount
-                unmountOnExit
+            <div className="flex flex-col gap-2">
+              <Tabs
                 defaultValue={
                   ["automate", "analytics"].includes(tab || "")
                     ? tab
                     : "automate"
                 }
-                size={"lg"}
-                variant={"plain"}
-                w="full"
               >
-                <Tabs.List
-                  bg="bg.muted"
-                  rounded="l3"
-                  p="2"
-                  w="full"
-                  display="flex" // Use flexbox
-                >
-                  <Tabs.Trigger
-                    value="automate"
-                    fontWeight={"bold"}
-                    flex="1" // This makes the trigger expand to fill available space equally
-                    justifyContent={"center"}
-                    _selected={{
-                      color: "black",
-                    }}
-                  >
-                    <BsLightning size={24} />
+                <TabsList className="w-full grid grid-cols-2">
+                  <TabsTrigger value="automate" className="flex items-center gap-2 font-bold">
+                    <LightningBolt className="h-5 w-5" />
                     Automate
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    value="analytics"
-                    fontWeight={"bold"}
-                    flex="1" // This makes the trigger expand to fill available space equally
-                    justifyContent={"center"}
-                    _selected={{
-                      color: "black",
-                    }}
-                  >
-                    <BiBarChart size={24} />
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="flex items-center gap-2 font-bold">
+                    <BarChart2 className="h-5 w-5" />
                     Analytics
-                  </Tabs.Trigger>
-                  <Tabs.Indicator rounded="l2" bgColor={"gray.200"} />
-                </Tabs.List>
-                <Tabs.Content
-                  value="automate"
-                  _open={{
-                    animationName: "fade-in, scale-in",
-                    animationDuration: "300ms",
-                  }}
-                  _closed={{
-                    animationName: "fade-out, scale-out",
-                    animationDuration: "120ms",
-                  }}
-                >
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="automate">
                   <InstagramStoryAutomateTab />
-                </Tabs.Content>
-                <Tabs.Content
-                  value="analytics"
-                  _open={{
-                    animationName: "fade-in, scale-in",
-                    animationDuration: "300ms",
-                  }}
-                  _closed={{
-                    animationName: "fade-out, scale-out",
-                    animationDuration: "120ms",
-                  }}
-                >
+                </TabsContent>
+                <TabsContent value="analytics">
                   <InstagramStoryAnalyticsTab />
-                </Tabs.Content>
-              </Tabs.Root>
-            </Stack>
-          </Stack>
-        </Flex>
-      </Stack>
-    </Stack>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
