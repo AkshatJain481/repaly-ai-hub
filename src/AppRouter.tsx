@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InstagramExchangeCode from "@/pages/redirectionPages/exchangeCodePages/InstagramExchangeCode";
 import DefaultLayout from "@/components/layouts/DefaultLayout";
