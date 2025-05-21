@@ -1,14 +1,11 @@
-
 import { useState, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { AiFillHome } from "react-icons/ai";
-import { secondaryTextColor, primaryColor } from "@/utils/constants";
+import { AiFillHome, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { IoLogOutOutline, IoPersonCircleOutline } from "react-icons/io5";
 import { logout } from "@/redux/slices/user.slice";
-import { IoLogOutOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { platformNavConfig } from "@/utils/constants";
-import { PiUserCircleDuotone } from "react-icons/pi";
 import * as React from "react";
 
 interface NavItemProps {
@@ -32,32 +29,40 @@ const NavItem = ({
   return (
     <div
       ref={itemRef}
-      className={`flex items-center p-2 rounded-lg cursor-pointer relative hover:bg-gray-100 ${
-        isActive ? "text-primary" : "text-gray-600"
+      className={`flex items-center p-3 rounded-lg cursor-pointer relative transition-all duration-200 
+      ${
+        isActive
+          ? "bg-purple-50 dark:bg-purple-900/20"
+          : "hover:bg-gray-100 dark:hover:bg-gray-700"
       }`}
       onClick={onClick}
     >
       {isActive && (
-        <div
-          className="absolute left-0 h-0 w-1 bg-primary rounded-full"
-          style={{animation: isActive ? "expandVertical 0.3s forwards" : "none"}}
-        />
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 dark:bg-purple-400 rounded-r" />
       )}
-      {React.createElement(icon, { 
-        size: 32, 
-        color: isActive ? primaryColor : secondaryTextColor 
-      })}
-      <span
-        className={`ml-4 font-${isActive ? "bold" : "normal"} text-${
-          isActive ? "primary" : "gray-600"
-        } opacity-${isExpanded ? "100" : "0"} transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap text-lg`}
-        style={{
-          width: isExpanded ? "400px" : "0",
-          color: isActive ? primaryColor : secondaryTextColor
-        }}
+      <div
+        className={`flex items-center justify-center ${isExpanded ? "w-6" : "w-full"}`}
       >
-        {label}
-      </span>
+        {React.createElement(icon, {
+          size: 22,
+          className: `transition-colors ${
+            isActive
+              ? "text-purple-600 dark:text-purple-400"
+              : "text-gray-600 dark:text-gray-300"
+          }`,
+        })}
+      </div>
+      {isExpanded && (
+        <span
+          className={`ml-3 font-medium text-base transition-all overflow-hidden whitespace-nowrap ${
+            isActive
+              ? "text-purple-600 dark:text-purple-400"
+              : "text-gray-600 dark:text-gray-300"
+          }`}
+        >
+          {label}
+        </span>
+      )}
     </div>
   );
 };
@@ -76,6 +81,10 @@ const DashboardSidebar = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const renderDynamicNavItems = (isMobile: boolean) => {
     if (!activeAccount?.platformName) return null;
@@ -105,46 +114,79 @@ const DashboardSidebar = ({
 
   return (
     <>
-      {/* Sidebar Container For Desktop*/}
+      {/* Sidebar Container For Desktop */}
       <div
-        className={`h-screen bg-white border-r-2 border-gray-200 border-solid hidden md:block transition-all duration-300 ease-in-out relative ${
-          isExpanded ? "w-64" : "w-20"
+        className={`h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600 shadow-sm hidden md:block transition-all duration-300 ease-in-out ${
+          isExpanded ? "w-60" : "w-16"
         }`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
       >
-        <div className="flex flex-col h-full p-4 gap-8">
-          {/* Profile Section */}
-          <Link to={"/dashboard"}>
-            {isExpanded ? (
-              <img src="/repaly-logo.png" className="rounded-full" alt="Repaly Logo" />
-            ) : (
-              <img src="/logo.png" className="rounded-full h-[50px]" alt="Repaly Logo Icon" />
+        <div className="flex flex-col h-full py-4 gap-6">
+          {/* Toggle Button */}
+          <div
+            className={`flex items-center px-3 ${isExpanded ? "justify-between" : "justify-center"}`}
+          >
+            {isExpanded && (
+              <Link to="/dashboard" className="flex items-center">
+                <span className="ml-2 font-semibold text-gray-800 dark:text-white text-nowrap">
+                  Repaly AI
+                </span>
+              </Link>
             )}
-          </Link>
-          <div className={`flex items-center ${isExpanded ? "" : "justify-center"} gap-3`}>
-            <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
-              {userProfile?.picture ? (
-                <img src={userProfile.picture} alt={userProfile.name} className="w-full h-full object-cover" />
+            <button
+              onClick={toggleSidebar}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
+            >
+              {isExpanded ? (
+                <AiOutlineClose
+                  size={18}
+                  className="text-gray-600 dark:text-gray-300"
+                />
               ) : (
-                <PiUserCircleDuotone size={40} />
+                <AiOutlineMenu
+                  size={18}
+                  className="text-gray-600 dark:text-gray-300"
+                />
+              )}
+            </button>
+          </div>
+
+          {/* Profile Section */}
+          <div
+            className={`px-3 ${isExpanded ? "flex items-center" : "flex justify-center"}`}
+          >
+            <div className="relative flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full flex-shrink-0">
+              {userProfile?.picture ? (
+                <img
+                  src={userProfile.picture}
+                  alt={userProfile.name || "User"}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <IoPersonCircleOutline
+                  size={24}
+                  className="text-gray-600 dark:text-gray-300"
+                />
               )}
             </div>
             {isExpanded && (
-              <div className="flex flex-col gap-0">
-                <p className="text-sm font-medium text-gray-700 overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out">
+              <div className="ml-3 overflow-hidden">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">
                   {userProfile?.name || "UserName"}
                 </p>
-                <p className="text-xs font-medium text-gray-500 overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out">
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {userProfile?.email || "username@email.com"}
                 </p>
               </div>
             )}
           </div>
-          <hr className="border-t border-gray-200" />
+
+          <div className="px-2">
+            <hr className="border-t border-gray-200 dark:border-gray-600" />
+          </div>
 
           {/* Navigation Items */}
-          <div className="flex flex-col gap-4 relative">
+          <div className="flex-1 px-2 space-y-1 overflow-y-auto">
             <NavItem
               icon={AiFillHome}
               label="Home"
@@ -155,76 +197,108 @@ const DashboardSidebar = ({
             {renderDynamicNavItems(false)}
           </div>
 
-          <div className="flex-grow"></div>
-
-          <button
-            onClick={() => dispatch(logout())}
-            className="bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-purple-700"
-          >
-            <IoLogOutOutline size={24} />
-            {isExpanded && "Logout"}
-          </button>
+          {/* Logout Button */}
+          <div className="px-3 mb-2">
+            <button
+              onClick={() => dispatch(logout())}
+              className={`w-full bg-purple-600 dark:bg-purple-500 text-white font-medium py-2 rounded flex items-center ${
+                isExpanded ? "justify-center px-3" : "justify-center"
+              } gap-2 hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors`}
+            >
+              <IoLogOutOutline size={20} />
+              {isExpanded && <span>Logout</span>}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed md:hidden top-0 left-0 w-screen h-screen bg-black/60 z-50"
+          className="fixed md:hidden inset-0 bg-black bg-opacity-50 z-40"
           onClick={onClose}
-        ></div>
+        />
       )}
 
-      {/* Sidebar Container For Mobile*/}
+      {/* Mobile Sidebar */}
       <div
         className={`fixed top-0 ${
-          isOpen ? "right-0" : "-right-64"
-        } h-screen bg-white border-l-2 border-gray-200 w-64 z-[100] transition-right duration-300 ease-in-out md:hidden`}
+          isOpen ? "right-0" : "-right-72"
+        } h-screen w-72 bg-white dark:bg-gray-800 shadow-lg z-50 transition-all duration-300 md:hidden`}
       >
-        <div className="flex flex-col h-full p-4 gap-8">
-          {/* Profile Section */}
-          <Link to={"/dashboard"}>
-            <img src="/repaly-logo.png" className="rounded-full" alt="Repaly Logo" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full">
+        <div className="flex flex-col h-full p-4 gap-6">
+          <div className="flex items-center justify-between">
+            <Link to="/dashboard" className="flex items-center">
+              <img
+                src="/repaly-logo.png"
+                className="h-8 w-8 rounded-full"
+                alt="Repaly Logo"
+              />
+              <span className="ml-2 font-semibold text-gray-800 dark:text-white">
+                Repaly
+              </span>
+            </Link>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <AiOutlineClose
+                size={18}
+                className="text-gray-600 dark:text-gray-300"
+              />
+            </button>
+          </div>
+
+          {/* Mobile Profile Section */}
+          <div className="flex items-center space-x-3">
+            <div className="relative flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full">
               {userProfile?.picture ? (
-                <img src={userProfile.picture} alt={userProfile.name} className="w-full h-full object-cover" />
+                <img
+                  src={userProfile.picture}
+                  alt={userProfile.name || "User"}
+                  className="w-full h-full object-cover"
+                />
               ) : (
-                <PiUserCircleDuotone size={32} />
+                <IoPersonCircleOutline
+                  size={28}
+                  className="text-gray-600 dark:text-gray-300"
+                />
               )}
             </div>
-            <div className="flex flex-col gap-0">
-              <p className="text-sm font-medium text-gray-700 overflow-hidden whitespace-nowrap">
+            <div>
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                 {userProfile?.name || "User Name"}
               </p>
-              <p className="text-xs font-medium text-gray-500 overflow-hidden whitespace-nowrap">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {userProfile?.email || "username@email.com"}
               </p>
             </div>
           </div>
-          <hr className="border-t border-gray-200" />
 
-          {/* Navigation Items */}
-          <div className="flex flex-col gap-4">
+          <hr className="border-t border-gray-200 dark:border-gray-600" />
+
+          {/* Mobile Navigation Items */}
+          <div className="flex-1 space-y-1 overflow-y-auto">
             <NavItem
               icon={AiFillHome}
               label="Home"
               isExpanded={true}
               isActive={isActive("/dashboard")}
-              onClick={() => navigate("/dashboard")}
+              onClick={() => {
+                navigate("/dashboard");
+                onClose();
+              }}
             />
             {renderDynamicNavItems(true)}
           </div>
 
-          <div className="flex-grow"></div>
-
+          {/* Mobile Logout Button */}
           <button
             onClick={() => dispatch(logout())}
-            className="bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-purple-700"
+            className="w-full bg-purple-600 dark:bg-purple-500 text-white font-medium py-3 px-4 rounded flex items-center justify-center gap-2 hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors"
           >
-            <IoLogOutOutline size={24} />
-            Logout
+            <IoLogOutOutline size={20} />
+            <span>Logout</span>
           </button>
         </div>
       </div>

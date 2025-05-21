@@ -7,8 +7,8 @@ import {
   FaTelegram,
   FaFacebookMessenger,
 } from "react-icons/fa";
-import InstagramReelIcon from "@/components/customIcons/InstagramReelIcon";
-import InstagramStoryIcon from "@/components/customIcons/InstagramStoryIcon";
+import { MdOutlineVideoLibrary } from "react-icons/md";
+import { MdSlowMotionVideo } from "react-icons/md";
 
 export const bgColor = "#f7fafc";
 export const accentColor = "#c9c1f9";
@@ -122,12 +122,12 @@ export const platformNavConfig: {
   instagram: [
     {
       label: "Media",
-      icon: InstagramReelIcon,
+      icon: MdOutlineVideoLibrary,
       path: "/dashboard/instagram/media",
     },
     {
       label: "Story",
-      icon: InstagramStoryIcon,
+      icon: MdSlowMotionVideo,
       path: "/dashboard/instagram/story",
     },
   ],
