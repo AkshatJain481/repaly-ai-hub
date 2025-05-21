@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./components/ui/theme-provider";
 
-// Create root with null check and explicit casting
+// Create root with proper null check
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
 

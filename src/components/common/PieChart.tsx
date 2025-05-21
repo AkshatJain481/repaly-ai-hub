@@ -1,7 +1,7 @@
+
 import { useMemo } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { Box, Heading, Text, Stack, Flex, Grid } from "@chakra-ui/react";
 
 interface DataItem {
   label: string;
@@ -56,7 +56,7 @@ const PieChart: React.FC<PieChartProps> = ({
 
   const chartOptions: ApexOptions = {
     chart: {
-      type: "donut", // Change to "donut"
+      type: "donut",
       fontFamily: "Inter, sans-serif",
       toolbar: {
         show: false,
@@ -73,7 +73,7 @@ const PieChart: React.FC<PieChartProps> = ({
     plotOptions: {
       pie: {
         donut: {
-          size: "65%", // This makes it a donut
+          size: "65%",
           labels: {
             show: true,
             total: {
@@ -117,56 +117,47 @@ const PieChart: React.FC<PieChartProps> = ({
   };
 
   return (
-    <Stack align="center" w="full" gap={4}>
-      <Box w="full">
+    <div className="flex flex-col items-center w-full gap-4">
+      <div className="w-full">
         {title && (
-          <Heading size="md" textAlign="center" mb={4}>
+          <h3 className="text-lg font-medium text-center mb-4">
             {title}
-          </Heading>
+          </h3>
         )}
 
-        <Box height={height}>
+        <div style={{ height }}>
           <Chart
             options={chartOptions}
             series={values}
             type="donut"
             height="100%"
           />
-        </Box>
+        </div>
 
         {showTable && (
-          <Grid templateColumns="repeat(2, 1fr)" gap={2} mt={4}>
+          <div className="grid grid-cols-2 gap-2 mt-4">
             {filteredData.map((item, index) => (
-              <Flex
+              <div
                 key={index}
-                justify="space-between"
-                p={2}
-                bg="gray.50"
-                borderLeft="4px solid"
-                borderColor={colors[index]}
-                borderRadius="md"
+                className="flex justify-between p-2 bg-gray-50 border-l-4 rounded-md"
+                style={{ borderLeftColor: colors[index] }}
               >
-                <Text fontWeight="medium">{item.label}:</Text>
-                <Text>
+                <span className="font-medium">{item.label}:</span>
+                <span>
                   {item.value} ({((item.value / total) * 100).toFixed(1)}%)
-                </Text>
-              </Flex>
+                </span>
+              </div>
             ))}
-            <Flex
-              columnSpan={"initial"}
-              justify="space-between"
-              p={2}
-              bg="gray.200"
-              fontWeight="semibold"
-              borderRadius="md"
+            <div
+              className="flex justify-between p-2 bg-gray-200 font-semibold rounded-md col-span-2"
             >
-              <Text>Total:</Text>
-              <Text>{total}</Text>
-            </Flex>
-          </Grid>
+              <span>Total:</span>
+              <span>{total}</span>
+            </div>
+          </div>
         )}
-      </Box>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

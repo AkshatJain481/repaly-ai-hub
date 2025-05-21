@@ -1,14 +1,4 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Heading,
-  VStack,
-  HStack,
-  Separator,
-  Icon,
-  Container,
-} from "@chakra-ui/react";
+
 import { FiMessageSquare } from "react-icons/fi";
 import { AnalyticsReplyItem } from "@/utils/interfaces";
 
@@ -20,66 +10,57 @@ const InstagramMediaReplyAnalytics = ({
   replyItems: AnalyticsReplyItem[];
 }) => {
   return (
-    <Container
-      w={{ base: "full", md: "1/2" }}
-      maxW="container.md"
-      p={6}
-      borderWidth={2}
-      borderRadius="lg"
-      boxShadow="sm"
-      bg="white"
-    >
-      <Flex justifyContent="space-between" alignItems="center" mb={4}>
-        <Heading as="h2" size="2xl">
+    <div className="w-full md:w-1/2 p-6 border-2 rounded-lg shadow-sm bg-white max-w-3xl">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-3xl font-bold">
           Automated Replies Overview
-        </Heading>
-        <Icon as={FiMessageSquare} boxSize={6} color="gray.400" />
-      </Flex>
+        </h2>
+        <FiMessageSquare className="w-6 h-6 text-gray-400" />
+      </div>
 
-      <Box mb={6}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box>
-            <Heading as="h3" size="xl">
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-2xl font-bold">
               Total Automated Replies
-            </Heading>
-            <Text color="gray.500">Comments automatically responded to</Text>
-          </Box>
-          <Text fontSize="3xl" fontWeight="bold">
+            </h3>
+            <p className="text-gray-500">Comments automatically responded to</p>
+          </div>
+          <p className="text-3xl font-bold">
             {totalReplies}
-          </Text>
-        </Flex>
-      </Box>
+          </p>
+        </div>
+      </div>
 
-      <Separator mb={6} />
+      <hr className="mb-6" />
 
-      <Box>
-        <Heading as="h3" size="md" mb={4}>
+      <div>
+        <h3 className="text-lg font-medium mb-4">
           Replies Breakdown
-        </Heading>
-        <VStack gap={6} align="stretch">
+        </h3>
+        <div className="flex flex-col gap-6">
           {replyItems.map((item, index) => (
-            <Flex
+            <div
               key={index}
-              justifyContent="space-between"
-              alignItems="center"
+              className="flex justify-between items-center"
             >
-              <HStack gap={3}>
-                <Icon as={item.icon} boxSize={5} color="blue.500" />
-                <Box>
-                  <Text fontWeight="semibold">{item.title}</Text>
-                  <Text color="gray.500" fontSize="sm">
+              <div className="flex gap-3 items-center">
+                <item.icon className="w-5 h-5 text-blue-500" />
+                <div>
+                  <p className="font-semibold">{item.title}</p>
+                  <p className="text-gray-500 text-sm">
                     {item.subtitle}
-                  </Text>
-                </Box>
-              </HStack>
-              <Text fontSize="xl" fontWeight="bold">
+                  </p>
+                </div>
+              </div>
+              <p className="text-xl font-bold">
                 {item.count}
-              </Text>
-            </Flex>
+              </p>
+            </div>
           ))}
-        </VStack>
-      </Box>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 
