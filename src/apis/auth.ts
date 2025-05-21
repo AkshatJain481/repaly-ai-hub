@@ -1,3 +1,4 @@
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   GetAccessTokenURL,
@@ -5,6 +6,16 @@ import {
   ValidateTokenURL,
 } from "@/utils/backend_urls";
 import { setToken } from "@/redux/slices/user.slice";
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  userId: string;
+}
 
 export const authAPI = createApi({
   reducerPath: "authAPI",
@@ -35,6 +46,14 @@ export const authAPI = createApi({
       },
     }),
 
+    login: builder.mutation<LoginResponse, LoginCredentials>({
+      query: (credentials) => ({
+        url: '/api/login', // Update with your actual login endpoint
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+
     exchangeCodeForToken: builder.mutation<
       any,
       { platformName: string; code: string }
@@ -61,6 +80,7 @@ export const authAPI = createApi({
 
 export const {
   useGetAccessTokenQuery,
+  useLoginMutation,
   useExchangeCodeForTokenMutation,
   useValidateTokenMutation,
 } = authAPI;

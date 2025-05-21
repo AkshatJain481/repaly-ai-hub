@@ -10,7 +10,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 
 interface ConfirmationPopupProps {

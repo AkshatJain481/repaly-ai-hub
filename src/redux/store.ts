@@ -1,8 +1,10 @@
+
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage
 import businessDetailsReducer from "./slices/businessDetails.slice";
 import userReducer from "./slices/user.slice";
+import authReducer from "./slices/auth.slice";
 import automationReducer from "./slices/automation.slice";
 import storyAutomationReducer from "./slices/storyAutomation.slice";
 import { automationAPI } from "@/apis/automation";
@@ -14,13 +16,14 @@ import { authAPI } from "@/apis/auth";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"], // only persist the user slice
+  whitelist: ["user", "auth"], // persist the user and auth slices
 };
 
 // Combine reducers
 const rootReducer = combineReducers({
   businessDetails: businessDetailsReducer,
   user: userReducer,
+  auth: authReducer,
   automation: automationReducer,
   storyAutomation: storyAutomationReducer,
   [automationAPI.reducerPath]: automationAPI.reducer,
