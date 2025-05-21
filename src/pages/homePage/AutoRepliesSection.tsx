@@ -1,7 +1,5 @@
-
 import { BsCheckCircle } from "react-icons/bs";
 import { FiArrowRight } from "react-icons/fi";
-import { FiInfo } from "react-icons/fi";
 import LoginDrawer from "@/components/common/LoginDrawer";
 
 // Feature list item component

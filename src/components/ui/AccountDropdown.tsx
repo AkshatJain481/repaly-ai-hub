@@ -6,6 +6,7 @@ import { setActiveAccount } from "@/redux/slices/user.slice";
 import { useDispatch } from "react-redux";
 import { PiUserCircleDuotone } from "react-icons/pi";
 import { useState, useRef, useEffect } from "react";
+import * as React from "react";
 
 const AccountDropdown = () => {
   const dispatch = useDispatch();

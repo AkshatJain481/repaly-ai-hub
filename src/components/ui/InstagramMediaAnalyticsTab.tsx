@@ -1,8 +1,5 @@
-import { Flex, Box, Text, Button } from "@chakra-ui/react";
-import {
-  useGetMediaAnalyticsQuery,
-  useGetMediaGraphAnalyticsQuery,
-} from "@/apis/instagram";
+
+import { useGetMediaAnalyticsQuery, useGetMediaGraphAnalyticsQuery } from "@/apis/instagram";
 import Loading from "../common/Loading";
 import {
   FiShoppingCart,
@@ -10,7 +7,6 @@ import {
   FiThumbsUp,
   FiThumbsDown,
   FiTag,
-  // FiMail,
 } from "react-icons/fi";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
@@ -65,10 +61,6 @@ const InstagramMediaAnalyticsTab = () => {
       label: "Tagged DM Replies",
       value: analyticsData?.tagged_comment_dm || 0,
     },
-    // {
-    //   label: "DM Replies",
-    //   value: analyticsData?.DMs_by_us || 0,
-    // },
   ];
 
   const pieChartColors = [
@@ -118,12 +110,6 @@ const InstagramMediaAnalyticsTab = () => {
       count: analyticsData?.tagged_comment_dm || 0,
       icon: FiTag,
     },
-    // {
-    //   title: "DM Replies",
-    //   subtitle: "Direct messages sent",
-    //   count: analyticsData?.DMs_by_us || 0,
-    //   icon: FiMail,
-    // },
   ];
 
   const isLineChartDataEmpty =
@@ -131,23 +117,16 @@ const InstagramMediaAnalyticsTab = () => {
     (!graphAnalyticsData?.by_1h || graphAnalyticsData.by_1h.length === 0);
 
   return (
-    <Box spaceY={4}>
-      <Button
+    <div className="space-y-4">
+      <button
         aria-label="Refresh"
         onClick={() => {
           refetchAnalytics();
           refetchGraphAnalytics();
         }}
-        size="xl"
-        bg="transparent"
-        color="gray.600"
-        _hover={{ color: "gray.800" }}
-        transition="all 0.2s ease"
-        fontWeight={"bold"}
-        borderStyle={"solid"}
-        borderWidth={2}
-        borderColor={"gray.300"}
-        bgColor={"white"}
+        className="bg-transparent text-gray-600 hover:text-gray-800 transition duration-200 
+                   font-bold border-2 border-solid border-gray-300 bg-white py-2 px-4 rounded-md
+                   flex items-center gap-2"
       >
         <BiRefresh
           style={{
@@ -161,15 +140,13 @@ const InstagramMediaAnalyticsTab = () => {
           }}
         />
         Refresh
-      </Button>
+      </button>
       {isAnalyticsLoading || isGraphAnalyticsLoading ? (
         <Loading />
       ) : (
         <>
-          <Flex
-            gap={6}
-            flexDir={{ base: "column", md: "row" }}
-            align={{ base: "center", md: "stretch" }} // stretch children heights on md+
+          <div
+            className="flex flex-col md:flex-row gap-6 items-center md:items-stretch"
           >
             {/* Automated replies overview */}
             <InstagramMediaReplyAnalytics
@@ -178,17 +155,9 @@ const InstagramMediaAnalyticsTab = () => {
             />
 
             {/* Pie Chart */}
-            <Box
-              borderRadius="md"
-              p={6}
-              bg="white"
-              border={2}
-              borderStyle={"solid"}
-              borderColor={"gray.200"}
-              w={{ base: "full", md: "1/2" }}
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"center"}
+            <div
+              className="rounded-md p-6 bg-white border-2 border-solid border-gray-200
+                       w-full md:w-1/2 flex items-center justify-center"
             >
               {analyticsData?.comment_by_us ? (
                 <PieChart
@@ -197,39 +166,26 @@ const InstagramMediaAnalyticsTab = () => {
                   customColors={pieChartColors}
                 />
               ) : (
-                <Text
-                  fontWeight={"bold"}
-                  fontSize={"xl"}
-                  textAlign={"center"}
-                  color={"gray.500"}
+                <p
+                  className="font-bold text-xl text-center text-gray-500"
                 >
                   There is no analytics data available for this post!
-                </Text>
+                </p>
               )}
-            </Box>
-          </Flex>
+            </div>
+          </div>
 
           {/* Line Chart */}
           {isLineChartDataEmpty ? (
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              h={"200px"}
-              border={2}
-              borderStyle={"solid"}
-              borderColor={"gray.200"}
-              borderRadius={"lg"}
+            <div
+              className="flex items-center justify-center h-[200px] border-2 border-solid border-gray-200 rounded-lg"
             >
-              <Text
-                fontWeight={"bold"}
-                fontSize={"xl"}
-                textAlign={"center"}
-                color={"gray.500"}
+              <p
+                className="font-bold text-xl text-center text-gray-500"
               >
                 There is no analytics data available for this post!
-              </Text>
-            </Box>
+              </p>
+            </div>
           ) : (
             <LineChart
               attributes={[
@@ -248,7 +204,7 @@ const InstagramMediaAnalyticsTab = () => {
           <IgCommentSection />
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

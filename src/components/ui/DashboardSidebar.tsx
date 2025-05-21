@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { platformNavConfig } from "@/utils/constants";
 import { PiUserCircleDuotone } from "react-icons/pi";
+import * as React from "react";
 
 interface NavItemProps {
   icon: React.ElementType;

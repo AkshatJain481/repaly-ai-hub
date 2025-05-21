@@ -1,20 +1,5 @@
+
 import { useState } from "react";
-import {
-  Box,
-  VStack,
-  Text,
-  Textarea,
-  Input,
-  Heading,
-  Flex,
-  Switch,
-} from "@chakra-ui/react";
-import {
-  FaCheck,
-  FaExclamationTriangle,
-  FaUserTag,
-  FaQuestionCircle,
-} from "react-icons/fa";
 import CustomResponseSection from "./CustomResponseSection";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -24,6 +9,8 @@ import {
   setPositiveEnabled,
   setInquiryDetails,
 } from "@/redux/slices/automation.slice";
+import { FaCheck, FaExclamationTriangle, FaUserTag, FaQuestionCircle } from "react-icons/fa";
+import { Switch } from "@chakra-ui/react";
 
 const FormField = ({
   label,
@@ -40,27 +27,24 @@ const FormField = ({
   ) => void;
   type?: "input" | "textarea";
 }) => (
-  <Box>
-    <Text fontSize="sm" mb={1} color="gray.500">
-      {label}
-    </Text>
+  <div className="space-y-1">
+    <p className="text-sm text-gray-500">{label}</p>
     {type === "textarea" ? (
-      <Textarea
+      <textarea
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        size="sm"
-        resize="vertical"
+        className="w-full p-2 border border-gray-300 rounded-md resize-y text-sm"
       />
     ) : (
-      <Input
+      <input
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        size="sm"
+        className="w-full p-2 border border-gray-300 rounded-md text-sm"
       />
     )}
-  </Box>
+  </div>
 );
 
 const InquiriesForm = ({
@@ -84,43 +68,41 @@ const InquiriesForm = ({
 }) => {
   const [isOpen, setIsOpen] = useState(mode === "custom");
   return (
-    <Box
-      p={4}
-      bg="white"
-      borderRadius="md"
-      boxShadow="sm"
-      border={1}
-      borderColor="purple.200"
-      borderStyle={"solid"}
-    >
-      <Flex alignItems="center" justifyContent={"space-between"} mb={4}>
-        <Text
-          fontWeight="bold"
-          display={"flex"}
-          gap={2}
-          alignItems="center"
-          color={"purple.600"}
-        >
+    <div className="p-4 bg-white rounded-md shadow-sm border border-purple-200">
+      <div className="flex items-center justify-between mb-4">
+        <p className="font-bold flex gap-2 items-center text-purple-600">
           <FaQuestionCircle />
           Inquiries
-        </Text>
-        <Switch.Root colorPalette={"purple"} size={"lg"} checked={isOpen}>
-          <Switch.HiddenInput />
-          <Switch.Control
-            onClick={() => {
+        </p>
+        <div className="relative inline-flex items-center">
+          <input
+            type="checkbox"
+            checked={isOpen}
+            onChange={() => {
               setProductDetails("");
               setMobileNumber("");
               setWebsiteUrl("");
               setMode(isOpen ? "leave_comment" : "custom");
               setIsOpen(!isOpen);
             }}
+            className="sr-only"
           />
-          <Switch.Label />
-        </Switch.Root>
-      </Flex>
+          <div
+            className={`block w-14 h-8 rounded-full ${
+              isOpen ? "bg-purple-600" : "bg-gray-300"
+            } transition-colors duration-200`}
+          >
+            <div
+              className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ${
+                isOpen ? "transform translate-x-6" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
 
       {isOpen && (
-        <VStack gap={4} align="stretch">
+        <div className="space-y-4">
           <FormField
             label="Website URL"
             placeholder="https://yourwebsite.com"
@@ -140,9 +122,9 @@ const InquiriesForm = ({
             onChange={(e) => setProductDetails(e.target.value)}
             type="textarea"
           />
-        </VStack>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 
@@ -152,19 +134,10 @@ const AIEnabledInteractions = () => {
   const dispatch = useDispatch();
 
   return (
-    <Box
-      shadow="lg"
-      border={1}
-      borderStyle="solid"
-      borderColor="gray.200"
-      p={6}
-      borderRadius="lg"
-    >
-      <Heading size="md" mb={6}>
-        AI-Enabled Interactions
-      </Heading>
+    <div className="shadow-lg border border-gray-200 p-6 rounded-lg">
+      <h2 className="text-lg font-bold mb-6">AI-Enabled Interactions</h2>
 
-      <VStack gap={5} align="stretch">
+      <div className="space-y-5">
         <CustomResponseSection
           icon={<FaCheck />}
           title="Positive Comments"
@@ -215,8 +188,8 @@ const AIEnabledInteractions = () => {
             )
           }
         />
-      </VStack>
-    </Box>
+      </div>
+    </div>
   );
 };
 

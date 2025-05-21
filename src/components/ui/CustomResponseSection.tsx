@@ -1,19 +1,10 @@
+
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  Textarea,
-  Switch,
-  Tooltip,
-  useTooltip,
-} from "@chakra-ui/react";
+import { AIResponseSettings } from "@/utils/interfaces";
 import { FaWandMagicSparkles, FaRegFaceSmileBeam } from "react-icons/fa6";
 import { RiEditBoxLine, RiBriefcase2Fill } from "react-icons/ri";
 import { ImScissors } from "react-icons/im";
 import { FaRegLaughSquint } from "react-icons/fa";
-import { AIResponseSettings } from "@/utils/interfaces";
 import { FiInfo } from "react-icons/fi";
 
 const RESPONSE_MODES = [
@@ -63,9 +54,9 @@ const EXAMPLE_RESPONSES: Record<string, Record<string, string>> = {
     professional:
       "We appreciate your interest and look forward to discussing how we can best serve your business needs.",
     humorous:
-      "Looking to take the next step? We’d love to chat and help you get closer to making your dream purchase!",
+      "Looking to take the next step? We'd love to chat and help you get closer to making your dream purchase!",
     concise:
-      "Thanks for your inquiry! We’ll get back to you soon with more details.",
+      "Thanks for your inquiry! We'll get back to you soon with more details.",
   },
 };
 
@@ -82,19 +73,19 @@ const ModeButton = ({
   color: string;
   onClick: () => void;
 }) => (
-  <Button
-    bgColor={isActive ? `${color}.200` : "transparent"}
-    color={isActive ? `${color}.600` : "gray.600"}
-    border="1px solid"
-    borderColor="gray.200"
-    fontWeight="bold"
-    px={4}
-    borderRadius="lg"
-    _hover={{ bgColor: isActive ? `${color}.100` : "gray.100" }}
+  <button
+    className={`
+      px-4 py-2 font-bold rounded-lg transition-colors
+      ${isActive ? `bg-${color}-200 text-${color}-600` : 'bg-transparent text-gray-600'}
+      border border-gray-200
+      hover:${isActive ? `bg-${color}-100` : 'bg-gray-100'}
+    `}
     onClick={onClick}
   >
-    {icon} {label}
-  </Button>
+    <span className="flex items-center gap-1">
+      {icon} {label}
+    </span>
+  </button>
 );
 
 const ToneButton = ({
@@ -108,18 +99,18 @@ const ToneButton = ({
   icon: React.ReactElement;
   onClick: () => void;
 }) => (
-  <Button
-    mt={4}
-    bgColor={isActive ? "gray.100" : "transparent"}
-    color="gray.600"
-    fontWeight="bold"
-    px={4}
-    borderRadius="lg"
-    _hover={{ bgColor: "gray.100" }}
+  <button
+    className={`
+      mt-4 px-4 py-2 font-bold rounded-lg transition-colors
+      ${isActive ? 'bg-gray-100' : 'bg-transparent'} text-gray-600
+      hover:bg-gray-100
+    `}
     onClick={onClick}
   >
-    {icon} {label}
-  </Button>
+    <span className="flex items-center gap-1">
+      {icon} {label}
+    </span>
+  </button>
 );
 
 const ExampleResponse = ({
@@ -131,16 +122,13 @@ const ExampleResponse = ({
   color: string;
   title: string;
 }) => (
-  <Text
-    color={`${color}.500`}
-    fontSize="md"
-    mt={2}
-    p={3}
-    borderRadius="md"
-    bgColor={`${color}.50`}
+  <p
+    className={`
+      text-${color}-500 text-md mt-2 p-3 rounded-md bg-${color}-50
+    `}
   >
     {EXAMPLE_RESPONSES[title][response] || response}
-  </Text>
+  </p>
 );
 
 const CustomResponseSection = ({
@@ -158,34 +146,20 @@ const CustomResponseSection = ({
 }) => {
   const [isEditable, setIsEditable] = useState(false);
   const isOpen = mode.responseMode !== "leave_comment";
-  const tooltip = useTooltip();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  
   return (
-    <Box
-      p={4}
-      bg="white"
-      borderRadius="md"
-      boxShadow="sm"
-      mb={4}
-      border={1}
-      borderStyle={"solid"}
-      borderColor={`${color}.200`}
-    >
-      <Flex alignItems="center" justifyContent={"space-between"} mb={4}>
-        <Text
-          fontWeight="bold"
-          color={`${color}.600`}
-          display={"flex"}
-          alignItems={"center"}
-        >
-          <Box mr={2} color={`${color}.500`}>
-            {icon}
-          </Box>
+    <div className={`p-4 bg-white rounded-md shadow-sm mb-4 border border-${color}-200`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className={`font-bold text-${color}-600 flex items-center`}>
+          <span className={`mr-2 text-${color}-500`}>{icon}</span>
           {title}
-        </Text>
-        <Switch.Root colorPalette={color} size={"lg"} checked={isOpen}>
-          <Switch.HiddenInput />
-          <Switch.Control
-            onClick={() => {
+        </div>
+        <div className="relative inline-flex items-center">
+          <input
+            type="checkbox"
+            checked={isOpen}
+            onChange={() => {
               const newMode =
                 mode.responseMode === "leave_comment"
                   ? "ai_enabled"
@@ -196,16 +170,23 @@ const CustomResponseSection = ({
                 response: newMode === "ai_enabled" ? "friendly" : "",
               });
             }}
+            className="sr-only"
           />
-          <Switch.Label />
-        </Switch.Root>
-      </Flex>
+          <div
+            className={`block w-14 h-8 rounded-full ${
+              isOpen ? `bg-${color}-600` : "bg-gray-300"
+            } transition-colors duration-200`}
+          >
+            <div
+              className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ${
+                isOpen ? "transform translate-x-6" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
 
-      <Flex
-        gap={4}
-        direction={{ base: "column", sm: "row" }}
-        align={{ base: "none", sm: "center" }}
-      >
+      <div className="flex gap-4 flex-col sm:flex-row sm:items-center">
         {mode.responseMode !== "leave_comment" &&
           RESPONSE_MODES.map(({ key, label, icon, color }) => (
             <ModeButton
@@ -222,14 +203,12 @@ const CustomResponseSection = ({
               }
             />
           ))}
-      </Flex>
+      </div>
 
       {mode.responseMode === "ai_enabled" && (
         <>
-          <Text color="gray.600" mt={4}>
-            Response Tone :
-          </Text>
-          <Flex gap={4} flexWrap="wrap">
+          <p className="text-gray-600 mt-4">Response Tone :</p>
+          <div className="flex gap-4 flex-wrap">
             {TONES.map(({ key, label, icon }) => (
               <ToneButton
                 key={key}
@@ -239,22 +218,23 @@ const CustomResponseSection = ({
                 onClick={() => setMode({ ...mode, response: key })}
               />
             ))}
-          </Flex>
+          </div>
 
-          <Text mt={4} display={"flex"} alignItems="center" gap={2}>
-            <Tooltip.RootProvider value={tooltip}>
-              <Tooltip.Trigger asChild cursor={"pointer"}>
-                <FiInfo />
-              </Tooltip.Trigger>
-              <Tooltip.Positioner>
-                <Tooltip.Content>
-                  This response will be different for each comment and will be
-                  AI generated
-                </Tooltip.Content>
-              </Tooltip.Positioner>
-            </Tooltip.RootProvider>
-            Example Response:
-          </Text>
+          <div className="mt-4 flex items-center gap-2">
+            <div className="relative">
+              <FiInfo 
+                onMouseEnter={() => setTooltipVisible(true)}
+                onMouseLeave={() => setTooltipVisible(false)}
+                className="cursor-pointer"
+              />
+              {tooltipVisible && (
+                <div className="absolute bottom-full mb-2 left-0 bg-black text-white text-xs p-2 rounded whitespace-nowrap">
+                  This response will be different for each comment and will be AI generated
+                </div>
+              )}
+            </div>
+            <span>Example Response:</span>
+          </div>
           <ExampleResponse
             response={mode.response}
             color={color}
@@ -265,32 +245,20 @@ const CustomResponseSection = ({
 
       {mode.responseMode === "custom" && (
         <>
-          <Button
-            mt={4}
-            bg="transparent"
-            color="gray.600"
-            border="1px solid"
-            borderColor="gray.200"
-            fontWeight="bold"
-            px={4}
-            borderRadius="lg"
-            _hover={{ bgColor: "gray.100" }}
+          <button
+            className="mt-4 bg-transparent text-gray-600 border border-gray-200 font-bold px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-1"
             onClick={() => setIsEditable(!isEditable)}
           >
             <RiEditBoxLine />
             {isEditable ? "Done" : "Edit"}
-          </Button>
+          </button>
 
           {isEditable ? (
-            <Textarea
-              mt={4}
-              size="sm"
+            <textarea
+              className="mt-4 w-full p-2 border border-gray-300 rounded-md text-sm min-h-[80px] resize-y"
               placeholder={`Enter your custom response for ${title}`}
               value={mode.response}
               onChange={(e) => setMode({ ...mode, response: e.target.value })}
-              minH="80px"
-              resize="vertical"
-              borderRadius="md"
             />
           ) : (
             <ExampleResponse
@@ -303,7 +271,7 @@ const CustomResponseSection = ({
           )}
         </>
       )}
-    </Box>
+    </div>
   );
 };
 
