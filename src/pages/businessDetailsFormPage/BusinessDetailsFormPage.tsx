@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import SingleChoiceQuestion from "./SingleChoiceQuestion";
 import { Questions } from "@/utils/constants";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";

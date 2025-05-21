@@ -1,4 +1,5 @@
-import { Box, HStack, Tabs } from "@chakra-ui/react";
+
+import { Box } from "@chakra-ui/react";
 import DashboardSidebar from "../ui/DashboardSidebar";
 import { Outlet } from "react-router-dom";
 import { bgColor } from "@/utils/constants";
@@ -18,15 +19,15 @@ const DashboardLayout = () => {
   }
 
   return (
-    <HStack height={"100vh"} gap={0} overflow="hidden">
+    <div className="flex h-screen overflow-hidden">
       <DashboardSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <Box height={"100vh"} flex={1} bgColor={bgColor}>
-        <Tabs.Root defaultValue="grid" variant="plain">
+        <div>
           <DashboardNavbar onOpen={() => setIsOpen(true)} />
           <Outlet />
-        </Tabs.Root>
+        </div>
       </Box>
-    </HStack>
+    </div>
   );
 };
 

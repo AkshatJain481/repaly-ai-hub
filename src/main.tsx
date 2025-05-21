@@ -9,11 +9,12 @@ import AppRouter from "./AppRouter.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./components/ui/theme-provider";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import ChakraUIProvider from "./chakraUI/ChakraUIProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ChakraProvider>
+    <ChakraUIProvider>
       <ReduxProvider store={repalyStore}>
         <PersistGate loading={null} persistor={persistor}>
           <ThemeProvider defaultTheme="system" storageKey="ui-theme">
@@ -29,6 +30,6 @@ createRoot(document.getElementById("root")!).render(
           </ThemeProvider>
         </PersistGate>
       </ReduxProvider>
-    </ChakraProvider>
+    </ChakraUIProvider>
   </StrictMode>
 );
