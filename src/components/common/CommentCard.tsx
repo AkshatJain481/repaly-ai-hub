@@ -1,6 +1,4 @@
-
 import { BiMessageRoundedDetail, BiReply } from "react-icons/bi";
-import { BsHeart } from "react-icons/bs";
 
 interface CommentCardProps {
   username?: string;

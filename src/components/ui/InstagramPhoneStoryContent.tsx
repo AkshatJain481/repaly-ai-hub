@@ -1,8 +1,7 @@
-
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { BiMessageRoundedDetail, BiSend, BiUserCircle } from "react-icons/bi";
+import { BiMessageRoundedDetail, BiSend } from "react-icons/bi";
 import { BsHeart, BsHeartFill, BsVolumeUp, BsVolumeMute } from "react-icons/bs";
 import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
 
@@ -13,7 +12,7 @@ const InstagramPhoneStoryContent = () => {
   );
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState<boolean>(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null); // ref for video element
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleVideoClick = () => {
     if (videoRef.current) {

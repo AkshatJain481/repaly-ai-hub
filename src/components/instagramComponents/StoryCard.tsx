@@ -1,11 +1,11 @@
-import { Box, Image, Text, HStack, Button } from "@chakra-ui/react";
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BsLightning } from "react-icons/bs";
 import { BiBarChart } from "react-icons/bi";
 import { primaryColor } from "@/utils/constants";
 import { StoryCardProp } from "@/utils/interfaces";
 import { getFormattedDate } from "@/utils/commonFunctions";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
   const navigate = useNavigate();
@@ -18,34 +18,24 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
   };
 
   return (
-    <Box
-      borderRadius="xl"
-      bgColor="white"
-      border="1px solid"
-      borderColor="gray.200"
-      cursor="pointer"
+    <div
+      className="rounded-xl bg-white border border-gray-200 cursor-pointer shadow-sm"
       onClick={() => handleNavigate()}
     >
-      <Box
-        position="relative"
-        aspectRatio={1}
-        borderTopRadius="xl"
-        overflow="hidden"
-        boxShadow="md"
+      <div
+        className="relative aspect-square rounded-t-xl overflow-hidden shadow-md"
       >
         {/* Image */}
         {storyData?.media_type === "IMAGE" ? (
-          <Image
+          <img
             src={
               storyData?.media_url ||
               "https://placehold.co/400x400?text=Story+Image"
             }
             alt="Media"
-            width="100%"
-            height="100%"
-            objectFit="cover"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement; // Cast to HTMLImageElement
+            className="w-full h-full object-cover"
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+              const target = e.currentTarget;
               target.src = "https://placehold.co/400x400?text=Story+Image"; // Set the placeholder
             }}
           />
@@ -55,11 +45,7 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
               <img
                 src="https://placehold.co/400x400?text=Story+Image"
                 alt="Placeholder"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                className="w-full h-full object-cover"
               />
             ) : (
               <video
@@ -68,65 +54,43 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
                 playsInline
                 onLoadedData={(e) => e.currentTarget.pause()}
                 onError={() => setVideoError(true)}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                className="w-full h-full object-cover"
               />
             )}
           </>
         )}
-      </Box>
+      </div>
 
       {/* Caption & Buttons */}
-      <Box p={4}>
-        <Text fontSize="sm" color="gray.500">
+      <div className="p-4">
+        <p className="text-sm text-gray-500">
           {getFormattedDate(storyData?.timestamp)}
-        </Text>
+        </p>
 
-        <HStack mt={2} gap={2} justifyContent="space-around">
-          <Button
-            bgColor="gray.100"
-            color="black"
-            border="1px solid"
-            borderColor="gray.200"
-            flex="1"
-            px={2}
-            fontSize="sm"
-            display="flex"
-            alignItems="center"
-            gap={1}
-            onClick={(e) => {
+        <div className="mt-2 gap-2 justify-around flex">
+          <button
+            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 py-2 text-sm flex items-center justify-center gap-1 rounded-md hover:bg-gray-200 transition-colors"
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               handleNavigate("automate");
             }}
           >
-            <BsLightning color={primaryColor} />
-            <Text fontSize="sm">Automate</Text>
-          </Button>
-          <Button
-            bgColor="gray.100"
-            color="black"
-            border="1px solid"
-            borderColor="gray.200"
-            flex="1"
-            px={2}
-            fontSize="sm"
-            display="flex"
-            alignItems="center"
-            gap={1}
-            onClick={(e) => {
+            <BsLightning style={{ color: primaryColor }} />
+            <span className="text-sm">Automate</span>
+          </button>
+          <button
+            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 py-2 text-sm flex items-center justify-center gap-1 rounded-md hover:bg-gray-200 transition-colors"
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               handleNavigate("analytics");
             }}
           >
-            <BiBarChart color={primaryColor} />
-            <Text fontSize="sm">Analytics</Text>
-          </Button>
-        </HStack>
-      </Box>
-    </Box>
+            <BiBarChart style={{ color: primaryColor }} />
+            <span className="text-sm">Analytics</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { BiChevronLeft } from "react-icons/bi";
 import InstagramMediaAnalyticsTab from "@/components/ui/InstagramMediaAnalyticsTab";
@@ -18,7 +17,7 @@ import { IoStatsChart } from "react-icons/io5";
 const InstagramMediaDetailPage = () => {
   const { mediaId } = useParams();
   const [searchParams] = useSearchParams();
-  const tab = searchParams.get("tab");
+  const tab = searchParams.get("tab") || "";
   const [phoneTab, setPhoneTab] = useState<string>("post");
   const { tags, responseDM, responseComment } = useSelector(
     (state: RootState) => state.automation

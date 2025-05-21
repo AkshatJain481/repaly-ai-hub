@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { BiChevronLeft } from "react-icons/bi";
 import { useParams, Link, useSearchParams } from "react-router-dom";
@@ -15,7 +14,7 @@ import { IoStatsChart } from "react-icons/io5";
 const InstagramStoryDetailPage = () => {
   const { storyId } = useParams();
   const [searchParams] = useSearchParams();
-  const tab = searchParams.get("tab");
+  const tab = searchParams.get("tab") || "";
 
   const { isFetching } = useGetStoryDetailsQuery(storyId || "", {
     skip: !storyId,

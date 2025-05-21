@@ -1,5 +1,5 @@
 
-import { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/globals.css";
 import { Provider as ReduxProvider } from "react-redux";
@@ -10,8 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./components/ui/theme-provider";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+// Create root with null check and explicit casting
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Root element not found");
+
+const root = createRoot(rootElement);
+
+root.render(
+  <React.StrictMode>
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider defaultTheme="system" storageKey="ui-theme">
@@ -27,5 +33,5 @@ createRoot(document.getElementById("root")!).render(
         </ThemeProvider>
       </PersistGate>
     </ReduxProvider>
-  </StrictMode>
+  </React.StrictMode>
 );
