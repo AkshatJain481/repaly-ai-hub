@@ -14,14 +14,14 @@ import InstagramMediaPage from "./pages/dashboardPages/instagramMediaPage/Instag
 import InstagramStoryPage from "./pages/dashboardPages/instagramStoryPage/InstagramStoryPage";
 import InstagramStoryDetailPage from "./pages/dashboardPages/instagramStoryPage/InstagramStoryDetailPage";
 import AuthProtectedRoute from "./pages/protectedRoutes/AuthProtectedRoute";
-import useTokenExpiryWatcher from "./hooks/useTokenExpiryWatcher";
+import { TokenExpiryWatcher } from "./hooks/useTokenExpiryWatcher";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import FacebookAuthentication from "./pages/redirectionPages/authenticationPages/FacebookAuthentication";
 
 const AppRouter = () => {
-  useTokenExpiryWatcher();
   return (
     <Router>
+      <TokenExpiryWatcher />
       <Routes>
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<HomePage />} />
