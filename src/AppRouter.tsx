@@ -34,7 +34,7 @@ const AppRouter = () => {
           <Route path="demo" element={<DemoPage />} />
         </Route>
 
-        <Route path="dashboard">
+        <Route path="dashboard" element={<AuthProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route index element={<DashboardHomePage />} />
             <Route path="instagram">
