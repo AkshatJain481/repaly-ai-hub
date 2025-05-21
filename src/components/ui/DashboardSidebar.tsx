@@ -1,17 +1,6 @@
+
 import { useState, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import {
-  Box,
-  Flex,
-  Icon,
-  Text,
-  VStack,
-  Avatar,
-  Separator,
-  Button,
-  Stack,
-  Image,
-} from "@chakra-ui/react";
 import { AiFillHome } from "react-icons/ai";
 import { secondaryTextColor, primaryColor } from "@/utils/constants";
 import { logout } from "@/redux/slices/user.slice";
@@ -19,6 +8,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { platformNavConfig } from "@/utils/constants";
+import { PiUserCircleDuotone } from "react-icons/pi";
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -39,47 +29,35 @@ const NavItem = ({
   const itemRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Flex
+    <div
       ref={itemRef}
-      align="center"
-      p={2}
-      borderRadius="lg"
-      role="group"
-      cursor="pointer"
-      position="relative"
-      _hover={{ bg: "gray.100" }}
+      className={`flex items-center p-2 rounded-lg cursor-pointer relative hover:bg-gray-100 ${
+        isActive ? "text-primary" : "text-gray-600"
+      }`}
       onClick={onClick}
     >
       {isActive && (
-        <Box
-          position="absolute"
-          left="0"
-          height="0"
-          width="4px"
-          bg={primaryColor}
-          borderRadius="full"
-          animation={isActive ? "expandVertical 0.3s forwards" : "none"}
+        <div
+          className="absolute left-0 h-0 w-1 bg-primary rounded-full"
+          style={{animation: isActive ? "expandVertical 0.3s forwards" : "none"}}
         />
       )}
-      <Icon
-        as={icon}
-        boxSize={8}
-        color={isActive ? primaryColor : secondaryTextColor}
-      />
-      <Text
-        ml={4}
-        fontWeight={isActive ? "bold" : "normal"}
-        color={isActive ? primaryColor : secondaryTextColor}
-        opacity={isExpanded ? 1 : 0}
-        transition="all 0.3s ease"
-        width={isExpanded ? "400px" : "0"}
-        overflow="hidden"
-        whiteSpace="nowrap"
-        fontSize={"lg"}
+      {React.createElement(icon, { 
+        size: 32, 
+        color: isActive ? primaryColor : secondaryTextColor 
+      })}
+      <span
+        className={`ml-4 font-${isActive ? "bold" : "normal"} text-${
+          isActive ? "primary" : "gray-600"
+        } opacity-${isExpanded ? "100" : "0"} transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap text-lg`}
+        style={{
+          width: isExpanded ? "400px" : "0",
+          color: isActive ? primaryColor : secondaryTextColor
+        }}
       >
         {label}
-      </Text>
-    </Flex>
+      </span>
+    </div>
   );
 };
 
@@ -127,67 +105,45 @@ const DashboardSidebar = ({
   return (
     <>
       {/* Sidebar Container For Desktop*/}
-      <Box
-        h="100vh"
-        bg="white"
-        borderRight="2px"
-        borderColor="gray.200"
-        borderStyle="solid"
-        display={{ base: "none", md: "block" }}
-        width={isExpanded ? "16rem" : "5rem"}
-        transition="width 0.3s ease"
+      <div
+        className={`h-screen bg-white border-r-2 border-gray-200 border-solid hidden md:block transition-all duration-300 ease-in-out relative ${
+          isExpanded ? "w-64" : "w-20"
+        }`}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
-        position="relative"
       >
-        <Flex direction="column" h="full" p={4} gap={8}>
+        <div className="flex flex-col h-full p-4 gap-8">
           {/* Profile Section */}
           <Link to={"/dashboard"}>
             {isExpanded ? (
-              <Image src="/repaly-logo.png" borderRadius={"full"} />
+              <img src="/repaly-logo.png" className="rounded-full" alt="Repaly Logo" />
             ) : (
-              <Image src="/logo.png" borderRadius={"full"} h={50} />
+              <img src="/logo.png" className="rounded-full h-[50px]" alt="Repaly Logo Icon" />
             )}
           </Link>
-          <Flex
-            alignItems={"center"}
-            justifyContent={isExpanded ? "none" : "center"}
-            gap={3}
-          >
-            <Avatar.Root size="md">
-              <Avatar.Fallback name={userProfile?.name} />
-              <Avatar.Image src={userProfile?.picture} />
-            </Avatar.Root>
+          <div className={`flex items-center ${isExpanded ? "" : "justify-center"} gap-3`}>
+            <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+              {userProfile?.picture ? (
+                <img src={userProfile.picture} alt={userProfile.name} className="w-full h-full object-cover" />
+              ) : (
+                <PiUserCircleDuotone size={40} />
+              )}
+            </div>
             {isExpanded && (
-              <Stack gap={0}>
-                <Text
-                  fontSize="sm"
-                  fontWeight="medium"
-                  color="gray.700"
-                  overflow="hidden"
-                  whiteSpace="nowrap"
-                  transition="all 0.3s ease"
-                >
+              <div className="flex flex-col gap-0">
+                <p className="text-sm font-medium text-gray-700 overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out">
                   {userProfile?.name || "UserName"}
-                </Text>
-                <Text
-                  fontSize="xs"
-                  fontWeight="medium"
-                  color="gray.500"
-                  overflow="hidden"
-                  whiteSpace="nowrap"
-                  transition="all 0.3s ease"
-                >
+                </p>
+                <p className="text-xs font-medium text-gray-500 overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out">
                   {userProfile?.email || "username@email.com"}
-                </Text>
-              </Stack>
+                </p>
+              </div>
             )}
-          </Flex>
-          <Separator />
+          </div>
+          <hr className="border-t border-gray-200" />
 
           {/* Navigation Items */}
-          <VStack gap={4} align="stretch" position={"relative"}>
-            {/* Remove global sliding active bar since we're adding individual ones */}
+          <div className="flex flex-col gap-4 relative">
             <NavItem
               icon={AiFillHome}
               label="Home"
@@ -196,88 +152,60 @@ const DashboardSidebar = ({
               onClick={() => navigate("/dashboard")}
             />
             {renderDynamicNavItems(false)}
-          </VStack>
-          {/* Logout Button */}
+          </div>
 
-          <Flex flexGrow={1} />
+          <div className="flex-grow"></div>
 
-          <Button
+          <button
             onClick={() => dispatch(logout())}
-            colorPalette={"purple"}
-            variant={"solid"}
-            fontWeight={"bold"}
+            className="bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-purple-700"
           >
-            <Icon as={IoLogOutOutline} boxSize={6} /> {/* Forces size */}
+            <IoLogOutOutline size={24} />
             {isExpanded && "Logout"}
-          </Button>
-        </Flex>
-      </Box>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div
+          className="fixed md:hidden top-0 left-0 w-screen h-screen bg-black/60 z-50"
+          onClick={onClose}
+        ></div>
+      )}
 
       {/* Sidebar Container For Mobile*/}
-      {isOpen && (
-        <Box
-          position="fixed"
-          display={{ base: "block", md: "none" }}
-          top={0}
-          left={0}
-          w="100vw"
-          h="100vh"
-          bg="blackAlpha.600"
-          zIndex={99}
-          opacity={isOpen ? 1 : 0}
-          transition="opacity 0.3s ease-in-out"
-          onClick={onClose} // Close drawer when clicking outside
-        />
-      )}
-      <Box
-        position="fixed"
-        top={0}
-        right={isOpen ? "0" : "-16rem"} /* Slide in & out */
-        h="100vh"
-        bg="white"
-        borderLeft="2px solid gray.200"
-        width="16rem"
-        zIndex={100}
-        transition="right 0.3s ease-in-out"
-        display={{ base: "block", md: "none" }}
+      <div
+        className={`fixed top-0 ${
+          isOpen ? "right-0" : "-right-64"
+        } h-screen bg-white border-l-2 border-gray-200 w-64 z-[100] transition-right duration-300 ease-in-out md:hidden`}
       >
-        <Flex direction="column" h="full" p={4} gap={8}>
+        <div className="flex flex-col h-full p-4 gap-8">
           {/* Profile Section */}
           <Link to={"/dashboard"}>
-            <Image src="/repaly-logo.png" borderRadius={"full"} />
+            <img src="/repaly-logo.png" className="rounded-full" alt="Repaly Logo" />
           </Link>
-          <Flex alignItems={"center"} gap={3}>
-            <Avatar.Root size="sm">
-              <Avatar.Fallback name={userProfile?.name} />
-              <Avatar.Image src={userProfile?.picture} />
-            </Avatar.Root>
-            <Stack gap={0}>
-              <Text
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.700"
-                overflow="hidden"
-                whiteSpace="nowrap"
-                transition="all 0.3s ease"
-              >
+          <div className="flex items-center gap-3">
+            <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full">
+              {userProfile?.picture ? (
+                <img src={userProfile.picture} alt={userProfile.name} className="w-full h-full object-cover" />
+              ) : (
+                <PiUserCircleDuotone size={32} />
+              )}
+            </div>
+            <div className="flex flex-col gap-0">
+              <p className="text-sm font-medium text-gray-700 overflow-hidden whitespace-nowrap">
                 {userProfile?.name || "User Name"}
-              </Text>
-              <Text
-                fontSize="xs"
-                fontWeight="medium"
-                color="gray.500"
-                overflow="hidden"
-                whiteSpace="nowrap"
-                transition="all 0.3s ease"
-              >
+              </p>
+              <p className="text-xs font-medium text-gray-500 overflow-hidden whitespace-nowrap">
                 {userProfile?.email || "username@email.com"}
-              </Text>
-            </Stack>
-          </Flex>
-          <Separator />
+              </p>
+            </div>
+          </div>
+          <hr className="border-t border-gray-200" />
 
           {/* Navigation Items */}
-          <VStack gap={4} align="stretch" position={"relative"}>
+          <div className="flex flex-col gap-4">
             <NavItem
               icon={AiFillHome}
               label="Home"
@@ -286,21 +214,19 @@ const DashboardSidebar = ({
               onClick={() => navigate("/dashboard")}
             />
             {renderDynamicNavItems(true)}
-          </VStack>
-          {/* Logout Button */}
+          </div>
 
-          <Flex flexGrow={1} />
-          <Button
+          <div className="flex-grow"></div>
+
+          <button
             onClick={() => dispatch(logout())}
-            colorPalette={"purple"}
-            variant={"solid"}
-            fontWeight={"bold"}
+            className="bg-purple-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-purple-700"
           >
-            <Icon as={IoLogOutOutline} boxSize={6} /> {/* Forces size */}
+            <IoLogOutOutline size={24} />
             Logout
-          </Button>
-        </Flex>
-      </Box>
+          </button>
+        </div>
+      </div>
     </>
   );
 };

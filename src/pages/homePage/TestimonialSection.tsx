@@ -1,5 +1,4 @@
 
-// Remove unused imports
 const TestimonialSection = () => {
   return (
     <div className="py-10 md:py-20 bg-background px-1">

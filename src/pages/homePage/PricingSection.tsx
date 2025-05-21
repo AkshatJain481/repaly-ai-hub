@@ -1,50 +1,23 @@
-import { Box, Heading, Text, Badge, VStack } from "@chakra-ui/react";
+
 import PricingCard from "../../components/common/PricingCard";
-import {
-  textColor,
-  secondaryTextColor,
-  primaryColor,
-  accentColor,
-} from "../../utils/constants";
 
 const PricingSection = () => {
   return (
-    <Box position="relative" py={{ base: 10, md: 20 }} overflow="hidden" px={1}>
-      <VStack gap={6} mb={16} textAlign="center">
-        <Badge
-          bg={`${accentColor}20`}
-          color={primaryColor}
-          fontSize="sm"
-          fontWeight="bold"
-          py={2}
-          px={4}
-          borderRadius="full"
-        >
+    <div className="relative py-10 md:py-20 overflow-hidden px-1">
+      <div className="flex flex-col items-center gap-6 mb-16 text-center">
+        <span className="bg-primary/20 text-primary text-sm font-bold py-2 px-4 rounded-full">
           Pricing
-        </Badge>
+        </span>
 
-        <Heading
-          as="h2"
-          fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
-          fontWeight="bold"
-          color={textColor}
-          lineHeight={"1.2"}
-        >
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
           Plans That Scale With Your Growth
-        </Heading>
+        </h2>
 
-        <Text fontSize="lg" color={secondaryTextColor} maxW="3xl">
+        <p className="text-lg text-muted-foreground max-w-3xl">
           Choose the perfect plan for your social media needs. All plans include
           core features with different limits.
-        </Text>
-        <Box
-          display="grid"
-          gridTemplateColumns="repeat(3, 1fr)" // Adjust the number of columns as needed
-          gap={8}
-          overflowX="auto" // Enable horizontal scrolling
-          maxWidth={"100%"}
-          p={4}
-        >
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 overflow-x-auto max-w-full p-4">
           <PricingCard
             title="Free Plan"
             price="0"
@@ -84,9 +57,9 @@ const PricingSection = () => {
               { text: "Dedicated Account Manager" },
             ]}
           />
-        </Box>
-      </VStack>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

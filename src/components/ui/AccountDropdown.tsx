@@ -1,19 +1,11 @@
-import {
-  Menu,
-  Portal,
-  Stack,
-  Text,
-  Icon,
-  Button,
-  Avatar,
-  HStack,
-} from "@chakra-ui/react";
+
 import { socialMediaPlatforms } from "@/utils/constants";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setActiveAccount } from "@/redux/slices/user.slice";
 import { useDispatch } from "react-redux";
 import { PiUserCircleDuotone } from "react-icons/pi";
+import { useState, useRef, useEffect } from "react";
 
 const AccountDropdown = () => {
   const dispatch = useDispatch();
@@ -23,6 +15,8 @@ const AccountDropdown = () => {
   const userAccounts = useSelector(
     (state: RootState) => state.user.userAccounts
   );
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const socialMedia = (platformName: string | undefined) => {
     switch (platformName) {
@@ -33,110 +27,104 @@ const AccountDropdown = () => {
     }
   };
 
+  // Handle outside click to close the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (userAccounts.length === 0) return null;
 
   return (
-    <Stack>
-      <Menu.Root>
-        <Menu.Trigger asChild>
-          <Button
-            border={"solid"}
-            borderWidth={"1px"}
-            borderColor={"gray.200"}
-            cursor={"pointer"}
-            variant={"subtle"}
-            p={4}
-            _focus={{ outline: "none" }}
-            h={"55px"}
-            w={"full"}
-            justifyContent={"start"}
-            alignItems={"center"}
-            gap={3}
-            bg={"white"}
-            boxShadow={"sm"}
-            borderRadius={"md"}
-            _hover={{
-              bg: "gray.50",
-              boxShadow: "md",
-            }}
-            transition={"all 0.2s ease"}
-          >
-            {" "}
-            <HStack>
-              <Avatar.Root size="xl">
-                <Avatar.Fallback boxSize={12} as={PiUserCircleDuotone} />
-                <Avatar.Image src={activeAccount?.profile_picture_url} />
-              </Avatar.Root>
-              <Stack gap={0} textAlign={"left"}>
-                <Text fontWeight={"semibold"} color={"gray.800"}>
-                  {activeAccount?.name || "Full Name"}
-                </Text>
-                <Text color={"gray.500"} fontSize={"sm"}>
-                  {activeAccount?.username || "Username"}
-                </Text>
-              </Stack>{" "}
-            </HStack>
-            <Icon
-              as={socialMedia(activeAccount?.platformName)?.icon}
-              color={socialMedia(activeAccount?.platformName)?.color}
-              boxSize={6}
-            />
-          </Button>
-        </Menu.Trigger>
-        <Portal>
-          <Menu.Positioner>
-            <Menu.Content
-              borderRadius={"md"}
-              boxShadow={"lg"}
-              border={"1px solid"}
-              borderColor={"gray.100"}
-              bg={"white"}
-              p={1}
+    <div className="relative" ref={menuRef}>
+      <button
+        className="border border-solid border-gray-200 cursor-pointer p-4 h-[55px] w-full flex justify-start items-center gap-3 bg-white shadow-sm rounded-md hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        <div className="flex items-center">
+          <div className="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
+            {activeAccount?.profile_picture_url ? (
+              <img 
+                src={activeAccount.profile_picture_url} 
+                alt={activeAccount.name || "User"} 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <PiUserCircleDuotone size={48} />
+            )}
+          </div>
+          <div className="ml-3 text-left">
+            <p className="font-semibold text-gray-800">
+              {activeAccount?.name || "Full Name"}
+            </p>
+            <p className="text-sm text-gray-500">
+              {activeAccount?.username || "Username"}
+            </p>
+          </div>
+        </div>
+        {activeAccount?.platformName && (
+          <div className="ml-auto">
+            {React.createElement(socialMedia(activeAccount.platformName)?.icon, {
+              size: 24,
+              color: socialMedia(activeAccount.platformName)?.color
+            })}
+          </div>
+        )}
+      </button>
+
+      {isMenuOpen && (
+        <div className="absolute z-10 mt-1 w-full rounded-md shadow-lg border border-solid border-gray-100 bg-white p-1">
+          {userAccounts.map((account, index) => (
+            <div
+              key={`${account.id}-${index}`}
+              className="flex items-center justify-between gap-3 px-3 py-2 rounded-sm hover:bg-gray-100 cursor-pointer transition-all duration-200"
+              onClick={() => {
+                dispatch(setActiveAccount(account));
+                setIsMenuOpen(false);
+              }}
             >
-              {userAccounts.map((account, index) => (
-                <Menu.Item
-                  key={index}
-                  value={account.id}
-                  onClick={() => dispatch(setActiveAccount(account))}
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  gap={3}
-                  px={3}
-                  py={2}
-                  borderRadius={"sm"}
-                  _hover={{
-                    bg: "gray.100",
-                    cursor: "pointer",
-                  }}
-                  transition={"all 0.2s ease"}
-                >
-                  <HStack>
-                    <Avatar.Root size="xl">
-                      <Avatar.Fallback boxSize={12} as={PiUserCircleDuotone} />
-                      <Avatar.Image src={account?.profile_picture_url} />
-                    </Avatar.Root>
-                    <Stack textAlign={"left"} gap={0}>
-                      <Text fontWeight={"medium"} color={"gray.800"}>
-                        {account?.name}
-                      </Text>
-                      <Text color={"gray.500"} fontSize={"sm"}>
-                        {account?.username}
-                      </Text>
-                    </Stack>
-                  </HStack>
-                  <Icon
-                    as={socialMedia(account.platformName)?.icon}
-                    color={socialMedia(account.platformName)?.color}
-                    boxSize={6}
-                  />
-                </Menu.Item>
-              ))}
-            </Menu.Content>
-          </Menu.Positioner>
-        </Portal>
-      </Menu.Root>
-    </Stack>
+              <div className="flex items-center">
+                <div className="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
+                  {account?.profile_picture_url ? (
+                    <img 
+                      src={account.profile_picture_url} 
+                      alt={account.name || "User"} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <PiUserCircleDuotone size={48} />
+                  )}
+                </div>
+                <div className="ml-3 text-left">
+                  <p className="font-medium text-gray-800">
+                    {account?.name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {account?.username}
+                  </p>
+                </div>
+              </div>
+              {account.platformName && (
+                <div>
+                  {React.createElement(socialMedia(account.platformName)?.icon, {
+                    size: 24,
+                    color: socialMedia(account.platformName)?.color
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

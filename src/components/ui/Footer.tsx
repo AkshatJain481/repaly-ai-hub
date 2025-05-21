@@ -1,25 +1,9 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Text,
-  Link,
-  Stack,
-  HStack,
-} from "@chakra-ui/react";
+
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-  // Define colors to match the rest of the app
-  const bgColor = "#121826";
-  const primaryColor = "#4fbdc9";
-  const textColor = "#ffffff";
-  const secondaryTextColor = "#9ca3af";
-  const brandColor = "#7d7aff"; // Purple color for the logo
-
+  // Define footer links
   const footerLinks = {
     info: [
       { label: "FAQs", href: "faqs" },
@@ -43,22 +27,22 @@ const Footer = () => {
 
   const socialLinks = [
     {
-      icon: <FaInstagram size={24} color={secondaryTextColor} />,
+      icon: <FaInstagram size={24} className="text-gray-400" />,
       href: "#",
       label: "Instagram",
     },
     {
-      icon: <FaFacebook size={24} color={secondaryTextColor} />,
+      icon: <FaFacebook size={24} className="text-gray-400" />,
       href: "#",
       label: "Facebook",
     },
     {
-      icon: <FaTwitter size={24} color={secondaryTextColor} />,
+      icon: <FaTwitter size={24} className="text-gray-400" />,
       href: "#",
       label: "Twitter",
     },
     {
-      icon: <FaLinkedin size={24} color={secondaryTextColor} />,
+      icon: <FaLinkedin size={24} className="text-gray-400" />,
       href: "#",
       label: "LinkedIn",
     },
@@ -67,157 +51,119 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Box bg={bgColor} color={textColor} py={12}>
-      <Container maxW="container.xl">
+    <footer className="bg-[#121826] text-white py-12">
+      <div className="container mx-auto">
         {/* Main footer content */}
-        <Grid
-          templateColumns={{ base: "1fr", md: "1.5fr repeat(3, 1fr)" }}
-          gap={{ base: 8, md: 12 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-[1.5fr,1fr,1fr,1fr] gap-8 md:gap-12">
           {/* Brand column */}
-          <GridItem>
-            <Heading
-              as="h2"
-              fontSize="2xl"
-              fontWeight="bold"
-              mb={4}
-              color={brandColor}
-            >
+          <div>
+            <h2 className="text-2xl font-bold mb-4 text-[#7d7aff]">
               Repaly
-            </Heading>
-            <Text color={secondaryTextColor} mb={6} maxW="xs" fontSize={"lg"}>
+            </h2>
+            <p className="text-gray-400 mb-6 max-w-xs text-lg">
               AI-powered social media automation to help creators, influencers,
               and brands boost engagement and sales.
-            </Text>
+            </p>
 
             {/* Social icons */}
-            <HStack gap={4}>
+            <div className="flex gap-4">
               {socialLinks.map((social, index) => (
-                <Link
+                <a
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  _hover={{ color: primaryColor }}
-                  transition="color 0.2s"
+                  className="hover:text-primary transition-colors duration-200"
                 >
                   {social.icon}
-                </Link>
+                </a>
               ))}
-            </HStack>
-          </GridItem>
+            </div>
+          </div>
 
           {/* Info links column */}
-          <GridItem>
-            <Heading as="h3" fontSize="lg" fontWeight="semibold" mb={4}>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">
               Info
-            </Heading>
-            <Stack gap={3}>
+            </h3>
+            <div className="flex flex-col gap-3">
               {footerLinks.info.map((link, index) => (
-                <Link
+                <a
                   key={index}
                   href={link.href}
-                  color={secondaryTextColor}
-                  _hover={{ color: textColor }}
-                  transition="color 0.2s"
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
-            </Stack>
-          </GridItem>
+            </div>
+          </div>
 
           {/* Company links column */}
-          <GridItem>
-            <Heading as="h3" fontSize="lg" fontWeight="semibold" mb={4}>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">
               Company
-            </Heading>
-            <Stack gap={3}>
+            </h3>
+            <div className="flex flex-col gap-3">
               {footerLinks.company.map((link, index) => (
                 <Link
                   key={index}
-                  href={link.href}
-                  color={secondaryTextColor}
-                  _hover={{ color: textColor }}
-                  transition="color 0.2s"
+                  to={link.href}
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
               ))}
-            </Stack>
-          </GridItem>
+            </div>
+          </div>
 
           {/* Business links column */}
-          <GridItem>
-            <Heading as="h3" fontSize="lg" fontWeight="semibold" mb={4}>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">
               Business
-            </Heading>
-            <Stack gap={3}>
+            </h3>
+            <div className="flex flex-col gap-3">
               {footerLinks.business.map((link, index) => (
-                <Link
+                <a
                   key={index}
                   href={link.href}
-                  color={secondaryTextColor}
-                  _hover={{ color: textColor }}
-                  transition="color 0.2s"
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
-            </Stack>
-          </GridItem>
-        </Grid>
+            </div>
+          </div>
+        </div>
 
         {/* Footer bottom section with copyright and policies */}
-
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          mt={12}
-          align={{ base: "flex-start", md: "center" }}
-          gap={4}
-          borderTop={"1px"}
-          borderStyle={"solid"}
-          borderColor={"gray.700"}
-        >
-          <Text color={"gray.500"} mt={12} fontWeight={"bold"} fontSize="sm">
+        <div className="flex flex-col md:flex-row justify-between mt-12 items-start md:items-center gap-4 border-t border-solid border-gray-700">
+          <p className="text-gray-500 mt-12 font-bold text-sm">
             © {currentYear} Repaly. All rights reserved.
-          </Text>
+          </p>
 
-          <HStack gap={6} mt={12}>
-            <Link
+          <div className="flex gap-6 mt-12">
+            <a
               href="#"
-              color={"gray.500"}
-              fontWeight={"bold"}
-              fontSize="sm"
-              _hover={{ color: textColor }}
-              transition="color 0.2s"
+              className="text-gray-500 font-bold text-sm hover:text-white transition-colors duration-200"
             >
               Terms of Service
-            </Link>
-            <Link
+            </a>
+            <a
               href="#"
-              color={"gray.500"}
-              fontWeight={"bold"}
-              fontSize="sm"
-              _hover={{ color: textColor }}
-              transition="color 0.2s"
+              className="text-gray-500 font-bold text-sm hover:text-white transition-colors duration-200"
             >
               Privacy Policy
-            </Link>
-            <Link
+            </a>
+            <a
               href="#"
-              color={"gray.500"}
-              fontWeight={"bold"}
-              fontSize="sm"
-              _hover={{ color: textColor }}
-              transition="color 0.2s"
+              className="text-gray-500 font-bold text-sm hover:text-white transition-colors duration-200"
             >
               Cookie Policy
-            </Link>
-          </HStack>
-        </Flex>
-      </Container>
-    </Box>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

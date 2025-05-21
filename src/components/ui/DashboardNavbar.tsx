@@ -1,33 +1,20 @@
-import { Box, Flex, Icon } from "@chakra-ui/react";
-import { secondaryTextColor } from "@/utils/constants";
+
 import { GoBell } from "react-icons/go";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { secondaryTextColor } from "@/utils/constants";
 
 const DashboardNavbar = ({ onOpen }: { onOpen: () => void }) => {
   return (
-    <Box
-      bg={"white"}
-      px={4}
-      py={3}
-      borderBottom={"2px"}
-      borderStyle={"solid"}
-      borderColor={"gray.200"}
-    >
-      <Flex
-        alignItems="center"
-        justifyContent={{ base: "space-between", md: "end" }}
-        gap={0}
-      >
+    <div className="bg-white px-4 py-3 border-b-2 border-solid border-gray-200">
+      <div className="flex items-center justify-end md:justify-end gap-0">
         <GoBell size={26} color={secondaryTextColor} />
-        <Icon
-          onClick={onOpen}
-          cursor="pointer"
-          boxSize={26}
-          as={GiHamburgerMenu}
-          display={{ base: "block", md: "none" }}
+        <GiHamburgerMenu 
+          className="cursor-pointer block md:hidden ml-2" 
+          size={26}
+          onClick={onOpen} 
         />
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };
 

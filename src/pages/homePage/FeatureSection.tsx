@@ -1,21 +1,5 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  Badge,
-  SimpleGrid,
-  Center,
-  VStack,
-} from "@chakra-ui/react";
+
 import { BsChatDots, BsAt, BsBarChart } from "react-icons/bs";
-import {
-  bgColor,
-  accentColor,
-  primaryColor,
-  textColor,
-  secondaryTextColor,
-} from "@/utils/constants";
 
 const FeatureCard = ({
   icon,
@@ -27,27 +11,13 @@ const FeatureCard = ({
   description: string;
 }) => {
   return (
-    <Box
-      bg="white"
-      borderRadius="xl"
-      p={8}
-      transition="all 0.3s"
-      _hover={{
-        transform: "translateY(-4px)",
-        boxShadow: "md",
-        cursor: "pointer",
-      }}
-    >
-      <Center mb={4} w={12} h={12} borderRadius="md" bg={`${accentColor}20`}>
+    <div className="bg-white rounded-xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:cursor-pointer">
+      <div className="mb-4 w-12 h-12 rounded-md flex items-center justify-center bg-primary/20">
         {icon}
-      </Center>
-      <Heading as="h3" fontSize="xl" fontWeight="bold" mb={3}>
-        {title}
-      </Heading>
-      <Text color={secondaryTextColor} fontSize="lg">
-        {description}
-      </Text>
-    </Box>
+      </div>
+      <h3 className="text-xl font-bold mb-3">{title}</h3>
+      <p className="text-lg text-muted-foreground">{description}</p>
+    </div>
   );
 };
 
@@ -55,19 +25,19 @@ const FeaturesSection = () => {
   // Feature data
   const features = [
     {
-      icon: <BsChatDots color={primaryColor} size={24} />,
+      icon: <BsChatDots className="text-primary" size={24} />,
       title: "Smart Auto-Replies",
       description:
         "AI-powered responses for comments that keep your engagement high and save hours of manual work.",
     },
     {
-      icon: <BsAt color={primaryColor} size={24} />,
+      icon: <BsAt className="text-primary" size={24} />,
       title: "Custom DM Automation",
       description:
         "Create personalized direct messages based on user inquiries, complete with media and your brand voice.",
     },
     {
-      icon: <BsBarChart color={primaryColor} size={24} />,
+      icon: <BsBarChart className="text-primary" size={24} />,
       title: "Media Analytics",
       description:
         "Track engagement, analyze comments, and boost your social media growth with AI-powered insights.",
@@ -75,75 +45,30 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <Box
-      position="relative"
-      py={{ base: 10, md: 20 }}
-      overflow="hidden"
-      bgColor={bgColor}
-      px={1}
-    >
+    <div className="relative py-10 md:py-20 overflow-hidden bg-background px-1">
       {/* Background decorative elements */}
-      <Box
-        position="absolute"
-        top="0"
-        left="0"
-        w="full"
-        h="full"
-        overflow="hidden"
-      >
-        <Box
-          position="absolute"
-          top="60%"
-          left="10%"
-          w="40"
-          h="40"
-          borderRadius="full"
-          bg={`${accentColor}10`}
-          filter="blur(60px)"
-        />
-        <Box
-          position="absolute"
-          top="20%"
-          right="10%"
-          w="64"
-          h="64"
-          borderRadius="full"
-          bg={`${primaryColor}10`}
-          filter="blur(70px)"
-        />
-      </Box>
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+        <div className="absolute top-[60%] left-[10%] w-40 h-40 rounded-full bg-primary/10 blur-[60px]"></div>
+        <div className="absolute top-[20%] right-[10%] w-64 h-64 rounded-full bg-primary/10 blur-[70px]"></div>
+      </div>
 
-      <Container maxW="container.xl" position="relative" zIndex={1}>
-        <VStack gap={6} mb={16} textAlign="center">
-          <Badge
-            bg={`${accentColor}20`}
-            color={primaryColor}
-            fontSize="sm"
-            fontWeight="bold"
-            py={2}
-            px={4}
-            borderRadius="full"
-          >
+      <div className="container relative z-10 mx-auto">
+        <div className="flex flex-col items-center gap-6 mb-16 text-center">
+          <span className="bg-primary/20 text-primary text-sm font-bold py-2 px-4 rounded-full">
             Features
-          </Badge>
+          </span>
 
-          <Heading
-            as="h2"
-            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
-            fontWeight="bold"
-            color={textColor}
-            lineHeight={"1.2"}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
             Everything You Need to Elevate Your Social Media
-          </Heading>
+          </h2>
 
-          <Text fontSize="lg" color={secondaryTextColor} maxW="3xl">
+          <p className="text-lg text-muted-foreground max-w-3xl">
             Designed for creators, influencers, and brands who want to scale
             their online presence without hiring a team
-          </Text>
-        </VStack>
+          </p>
+        </div>
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} gap={8}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}
@@ -152,9 +77,9 @@ const FeaturesSection = () => {
               description={feature.description}
             />
           ))}
-        </SimpleGrid>
-      </Container>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

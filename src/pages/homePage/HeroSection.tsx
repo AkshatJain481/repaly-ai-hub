@@ -1,159 +1,94 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Heading,
-  Text,
-  Button,
-  Badge,
-  Stack,
-  Image,
-  AvatarGroup,
-  Avatar,
-} from "@chakra-ui/react";
-import {
-  accentColor,
-  primaryColor,
-  textColor,
-  secondaryTextColor,
-  bgColor,
-} from "@/utils/constants";
+
 import { FiArrowRight } from "react-icons/fi";
 import LoginDrawer from "@/components/common/LoginDrawer";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <Box position="relative" overflow="hidden" bgColor={bgColor} px={1}>
-      <Container py={12} zIndex={10} position="relative">
-        <Flex
-          direction={{ base: "column", lg: "row" }}
-          justify="space-between"
-          align="center"
-          gap={12}
-        >
+    <div className="relative overflow-hidden bg-background px-1">
+      <div className="container py-12 z-10 relative">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
           {/* Left column: Text content */}
-          <Stack gap={8} align="flex-start" maxW={{ lg: "50%" }}>
-            <Badge
-              bg={`${accentColor}20`}
-              color={primaryColor}
-              fontSize="sm"
-              fontWeight="bold"
-              p={3}
-              borderRadius="full"
-            >
+          <div className="flex flex-col gap-8 items-start lg:max-w-[50%]">
+            <span className="bg-primary/20 text-primary text-sm font-bold p-3 rounded-full">
               Your Social Media Manager
-            </Badge>
+            </span>
 
-            <Heading
-              as="h1"
-              fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
-              fontWeight="bold"
-              color={textColor}
-              lineHeight={"1.2"}
-            >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               Your{" "}
                 <p className="bg-gradient-to-r from-[#9b87f5] to-[#3e83f6] bg-clip-text text-transparent">
                   AI Assistant
                 </p>
               for Social Media
-            </Heading>
+            </h1>
 
-            <Text fontSize="lg" color={secondaryTextColor} maxW="xl">
+            <p className="text-lg text-muted-foreground max-w-xl">
               Instant AI-Powered Replies for Comments & DMs – Boost Engagement,
               Increase Conversions, and Save Hours of Manual Work.
-            </Text>
+            </p>
 
-            <Flex flexWrap="wrap" gap={4}>
+            <div className="flex flex-wrap gap-4">
               <LoginDrawer
                 triggerButton={
-                  <Button
-                    bg={primaryColor}
-                    color="white"
-                    size="lg"
-                    px={6}
-                    py={6}
-                    borderRadius="full"
-                    fontWeight="bold"
-                    _hover={{
-                      transform: "translateY(-2px)",
-                      boxShadow: `0 10px 15px -3px ${primaryColor}20`,
-                    }}
-                    transition="all 0.3s"
+                  <button
+                    className="bg-primary text-white text-lg px-6 py-6 rounded-full font-bold hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
                   >
                     Get Started for Free
-                    <FiArrowRight />
-                  </Button>
+                    <FiArrowRight className="inline ml-2" />
+                  </button>
                 }
               />
               <Link to="/demo">
-                <Button
-                  bg="white"
-                  color={primaryColor}
-                  size="lg"
-                  px={6}
-                  py={6}
-                  borderRadius="full"
-                  fontWeight="bold"
-                  border="1px"
-                  borderStyle={"solid"}
-                  borderColor={primaryColor}
-                  _hover={{
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                  }}
-                  transition="all 0.3s"
+                <button
+                  className="bg-white text-primary text-lg px-6 py-6 rounded-full font-bold border border-solid border-primary hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
                 >
                   Watch Demo
-                </Button>
+                </button>
               </Link>
-            </Flex>
+            </div>
 
-            <Flex align="center" gap={3} pt={4}>
-              <AvatarGroup>
-                <Avatar.Root size={"lg"}>
-                  <Avatar.Fallback name="Segun Adebayo" />
-                  <Avatar.Image src="https://bit.ly/sage-adebayo" />
-                </Avatar.Root>
-                <Avatar.Root size={"lg"}>
-                  <Avatar.Fallback name="Segun Adebayo" />
-                  <Avatar.Image src="https://bit.ly/sage-adebayo" />
-                </Avatar.Root>
-                <Avatar.Root size={"lg"}>
-                  <Avatar.Fallback name="Segun Adebayo" />
-                  <Avatar.Image src="https://bit.ly/sage-adebayo" />
-                </Avatar.Root>
-              </AvatarGroup>
-              <Box>
-                <Text
-                  fontSize="md"
-                  fontWeight="bold"
-                  color={secondaryTextColor}
-                >
+            <div className="flex items-center gap-3 pt-4">
+              <div className="flex -space-x-4">
+                <img 
+                  src="https://bit.ly/sage-adebayo" 
+                  alt="User" 
+                  className="w-10 h-10 rounded-full border-2 border-white"
+                />
+                <img 
+                  src="https://bit.ly/sage-adebayo" 
+                  alt="User" 
+                  className="w-10 h-10 rounded-full border-2 border-white"
+                />
+                <img 
+                  src="https://bit.ly/sage-adebayo" 
+                  alt="User" 
+                  className="w-10 h-10 rounded-full border-2 border-white"
+                />
+              </div>
+              <div>
+                <p className="text-md font-bold text-muted-foreground">
                   Trusted by 2,000+ creators
-                </Text>
-                <Text fontSize="sm" color={secondaryTextColor}>
+                </p>
+                <p className="text-sm text-muted-foreground">
                   Join them today
-                </Text>
-              </Box>
-            </Flex>
-          </Stack>
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Right column: App preview image */}
-          <Box maxW={{ lg: "50%" }} position="relative">
-            <Box position="relative" overflow="hidden">
-              <Image
+          <div className="lg:max-w-[50%] relative">
+            <div className="relative overflow-hidden">
+              <img
                 src="/heroSection.png"
                 alt="Social Media Management Dashboard"
-                borderRadius="lg"
-                w="full"
-                h="auto"
+                className="rounded-lg w-full h-auto"
               />
-            </Box>
-          </Box>
-        </Flex>
-      </Container>
-    </Box>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
