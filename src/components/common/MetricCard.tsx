@@ -1,5 +1,15 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { FiArrowUp, FiArrowDown } from "react-icons/fi";
+
+import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import { ReactNode } from "react";
+
+interface MetricCardProps {
+  title: string;
+  value?: number;
+  percentChange?: number;
+  isPositive?: boolean;
+  iconBgColor: string;
+  icon: ReactNode;
+}
 
 const MetricCard = ({
   title,
@@ -8,65 +18,41 @@ const MetricCard = ({
   isPositive,
   iconBgColor,
   icon,
-}: {
-  title: string;
-  value?: number;
-  percentChange?: number;
-  isPositive?: boolean;
-  iconBgColor: string;
-  icon: any;
-}) => {
+}: MetricCardProps) => {
   // Determine if we should show percentage change
   const showPercentage = percentChange !== undefined;
 
   return (
-    <Box
-      bg="white"
-      shadow={"xs"}
-      borderRadius="lg"
-      p={4}
-      height="full"
-      width="full"
-    >
-      <Flex gap={4}>
-        <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-          <Box
-            bg={iconBgColor}
-            borderRadius="full"
-            p={2}
-            color="white"
-            fontSize="3xl"
-          >
+    <div className="bg-white shadow-sm rounded-lg p-4 h-full w-full">
+      <div className="flex gap-4">
+        <div className="flex items-center justify-center">
+          <div className={`${iconBgColor} rounded-full p-2 text-white text-3xl`}>
             {icon}
-          </Box>
-        </Box>
-        <Box p={0}>
-          <Text color="gray.500" fontSize="md" fontWeight={"bold"}>
+          </div>
+        </div>
+        <div className="p-0">
+          <p className="text-gray-500 text-md font-bold">
             {title}
-          </Text>
-          <Flex alignItems="center">
-            <Text fontSize="4xl" fontWeight="bold" mr={2}>
+          </p>
+          <div className="flex items-center">
+            <p className="text-4xl font-bold mr-2">
               {value ?? "No Data"}
-            </Text>
+            </p>
 
             {showPercentage && (
-              <Flex
-                alignItems="center"
-                fontSize="sm"
-                color={isPositive ? "green.500" : "red.500"}
-              >
+              <div className={`flex items-center text-sm ${isPositive ? "text-green-500" : "text-red-500"}`}>
                 {isPositive ? (
-                  <FiArrowUp className="mr-1" />
+                  <ArrowUpIcon className="mr-1 h-4 w-4" />
                 ) : (
-                  <FiArrowDown className="mr-1" />
+                  <ArrowDownIcon className="mr-1 h-4 w-4" />
                 )}
-                <Text>{Math.abs(percentChange)}%</Text>
-              </Flex>
+                <p>{Math.abs(percentChange)}%</p>
+              </div>
             )}
-          </Flex>
-        </Box>
-      </Flex>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

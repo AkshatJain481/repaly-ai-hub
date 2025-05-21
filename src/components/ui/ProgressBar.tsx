@@ -1,11 +1,11 @@
 
 import { Progress } from "@/components/ui/progress";
 
-const ProgressBar = ({
-  completePercentage,
-}: {
+interface ProgressBarProps {
   completePercentage: number;
-}) => {
+}
+
+const ProgressBar = ({ completePercentage }: ProgressBarProps) => {
   return (
     <Progress 
       value={completePercentage} 

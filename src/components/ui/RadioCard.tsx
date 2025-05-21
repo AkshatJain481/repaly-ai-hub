@@ -3,7 +3,7 @@ import * as React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 
-interface RadioCardItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupItem> {
+interface RadioCardItemProps extends React.ComponentPropsWithoutRef<"input"> {
   icon?: React.ReactElement;
   label?: React.ReactNode;
   description?: React.ReactNode;

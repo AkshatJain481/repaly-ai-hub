@@ -1,9 +1,13 @@
-import { Stack } from "@chakra-ui/react";
+
 import CommentCard from "../common/CommentCard";
 
-const TaggedComments = ({ comments }: { comments: any[][] }) => {
+interface TaggedCommentsProps {
+  comments: any[][];
+}
+
+const TaggedComments = ({ comments }: TaggedCommentsProps) => {
   return (
-    <Stack gap={4} mt={4}>
+    <div className="flex flex-col gap-4 mt-4">
       {comments && comments.length > 0 ? (
         comments?.map((comment, idx) => (
           <CommentCard
@@ -16,23 +20,11 @@ const TaggedComments = ({ comments }: { comments: any[][] }) => {
           />
         ))
       ) : (
-        <Stack
-          bg="white"
-          borderRadius="md"
-          p={4}
-          boxShadow="sm"
-          textAlign="center"
-          fontSize="lg"
-          color="gray.500"
-          fontWeight="bold"
-          justifyContent="center"
-          alignItems="center"
-          height="50vh"
-        >
+        <div className="bg-white rounded-md p-4 shadow-sm text-center text-lg text-gray-500 font-bold flex justify-center items-center flex-col h-[50vh]">
           No tagged comments found.
-        </Stack>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 };
 

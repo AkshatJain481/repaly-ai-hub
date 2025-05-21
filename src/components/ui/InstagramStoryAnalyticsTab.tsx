@@ -1,10 +1,11 @@
-import { Stack, Box, Button } from "@chakra-ui/react";
+
 import { useGetStoryAnalyticsQuery } from "@/apis/instagram";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Loading from "../common/Loading";
-import { BiRefresh } from "react-icons/bi";
+import { RefreshCw } from "lucide-react";
 import TaggedComments from "./TaggedComments";
+import { Button } from "@/components/ui/button";
 
 const InstagramStoryAnalyticsTab = () => {
   const { storyDetails } = useSelector(
@@ -20,34 +21,20 @@ const InstagramStoryAnalyticsTab = () => {
   });
 
   return (
-    <Stack gap={6}>
+    <div className="flex flex-col gap-6">
       <Button
         aria-label="Refresh"
         onClick={() => refetchAnalytics()}
-        size="xl"
-        bg="transparent"
-        color="gray.600"
-        maxW={"150px"}
-        _hover={{ color: "gray.800" }}
-        transition="all 0.2s ease"
-        fontWeight={"bold"}
-        borderStyle={"solid"}
-        borderWidth={2}
-        borderColor={"gray.300"}
-        bgColor={"white"}
+        variant="outline"
+        className="max-w-[150px]"
       >
-        <BiRefresh
-          style={{
-            animation: isAnalyticsLoading ? "spin 1s linear infinite" : "none",
-            transition: "transform 0.7s ease-in-out",
-            height: "30px",
-            width: "30px",
-          }}
+        <RefreshCw
+          className={`h-5 w-5 mr-2 ${isAnalyticsLoading ? "animate-spin" : ""}`}
         />
         Refresh
       </Button>
-      <Box borderRadius="md" p={6} bg="white" boxShadow="sm">
-        <Box bg="gray.50" borderRadius="md">
+      <div className="rounded-md p-6 bg-white shadow-sm">
+        <div className="bg-gray-50 rounded-md">
           {isAnalyticsLoading ? (
             <Loading />
           ) : (
@@ -55,9 +42,9 @@ const InstagramStoryAnalyticsTab = () => {
               comments={analyticsData?.comments_by_type?.tagged || []}
             />
           )}
-        </Box>
-      </Box>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 };
 

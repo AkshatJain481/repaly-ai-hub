@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Configure store
-const repalyStore = configureStore({
+const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -49,7 +49,7 @@ const repalyStore = configureStore({
     ),
 });
 
-export const persistor = persistStore(repalyStore);
-export type RootState = ReturnType<typeof repalyStore.getState>;
-export type AppDispatch = typeof repalyStore.dispatch;
-export default repalyStore;
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export default store;
