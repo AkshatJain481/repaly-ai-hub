@@ -1,4 +1,3 @@
-
 import { StoryCardProp } from "@/utils/interfaces";
 import Loading from "@/components/common/Loading";
 import { useSelector } from "react-redux";
@@ -24,61 +23,57 @@ const InstagramStoryPage = () => {
   });
 
   if (!activeAccount && !isLoading) {
-    return <Navigate to={"/dashboard"} />;
+    return <Navigate to="/dashboard" />;
   }
 
   const renderMedia = () => {
     return (
       <>
-        <div className="flex justify-between items-center flex-wrap gap-4">
-          <div className="flex flex-col gap-0">
-            <h1 className="text-3xl font-bold">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
               Instagram Stories
             </h1>
-            <p className="text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Automate your Instagram stories with ease
             </p>
           </div>
-          <div className="flex items-end flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-start md:items-end gap-3 w-full sm:w-auto">
             <Button
-              variant="outline"
               onClick={() => refetch()}
-              className="font-bold border-2 border-gray-300 bg-white"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors"
             >
               <FiRefreshCw
-                className={`h-7 w-7 mr-2 ${isFetching ? "animate-spin" : ""}`}
-                style={{
-                  transition: "transform 0.7s ease-in-out",
-                  height: "30px",
-                  width: "30px",
-                }}
+                className={`w-5 h-5 ${isFetching ? "animate-spin" : ""}`}
               />
               Refresh
             </Button>
             <AccountDropdown />
           </div>
         </div>
-        {isLoading ? (
-          <Loading />
-        ) : storyData.length === 0 ? (
-          <div className="flex items-center justify-center h-[70vh]">
-            <p className="text-center mt-6 text-gray-500 text-4xl font-semibold">
-              No Stories Available!
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-auto hide-scrollbar">
-            {storyData?.map((data: StoryCardProp) => (
-              <StoryCard key={data.story_id} storyData={data} />
-            ))}
-          </div>
-        )}
+        <div className="flex-1 overflow-y-auto max-h-[calc(100vh-180px)]">
+          {isLoading ? (
+            <Loading />
+          ) : storyData.length === 0 ? (
+            <div className="flex items-center justify-center h-[70vh]">
+              <p className="text-2xl font-semibold text-gray-500 dark:text-gray-400 text-center">
+                No Stories Available
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 overflow-auto scrollbar-hidden">
+              {storyData?.map((data: StoryCardProp) => (
+                <StoryCard key={data.story_id} storyData={data} />
+              ))}
+            </div>
+          )}
+        </div>
       </>
     );
   };
 
   return (
-    <div className="p-2 flex flex-col gap-6 h-[90vh] overflow-hidden hide-scrollbar">
+    <div className="p-2 flex flex-col gap-6 dark:bg-black min-h-screen">
       {renderMedia()}
     </div>
   );

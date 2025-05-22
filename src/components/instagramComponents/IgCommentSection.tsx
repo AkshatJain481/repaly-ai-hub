@@ -68,22 +68,25 @@ const IgCommentSection = () => {
   ] as const;
 
   return (
-    <div className="w-full">
+    <div className="w-full p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 transition-colors duration-200">
       <Tabs.Root
         value={commentType}
         onValueChange={(val) => setCommentType(val as typeof commentType)}
       >
         {/* Tabs Header */}
-        <Tabs.List className="flex overflow-x-auto bg-gray-100 p-1 rounded-lg gap-2">
+        <Tabs.List className="flex overflow-x-auto bg-gray-100 dark:bg-gray-700 rounded-lg p-1 border border-gray-200 dark:border-gray-600 gap-2">
           {tabs.map((type) => (
             <Tabs.Trigger
               key={type}
               value={type}
-              className={`min-w-[150px] px-4 py-2 text-sm font-medium text-center rounded-lg flex-shrink-0 transition-all duration-150 ${
-                commentType === type
-                  ? "bg-[var(--primaryColor)] text-white"
-                  : "bg-white text-gray-700 border border-gray-200"
-              }`}
+              className={`
+                min-w-[140px] px-4 py-2 text-sm font-medium text-center rounded-md flex-shrink-0 transition-colors duration-150
+                ${
+                  commentType === type
+                    ? "bg-purple-600 dark:bg-purple-500 text-white"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                }
+              `}
             >
               {type
                 .split("_")
@@ -101,12 +104,12 @@ const IgCommentSection = () => {
             </div>
           ) : commentsData.length === 0 ? (
             <div className="flex items-center justify-center h-[30vh]">
-              <p className="text-lg font-bold text-gray-500 text-center">
+              <p className="text-lg font-semibold text-gray-500 dark:text-gray-400 text-center">
                 No data available
               </p>
             </div>
           ) : (
-            <div className="flex flex-col gap-4 mt-4">
+            <div className="flex flex-col gap-4">
               {commentsData.map((comment, idx) => (
                 <CommentCard
                   key={idx}

@@ -56,7 +56,7 @@ const InstagramMediaAutomateTab = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <ConfirmationPopup
         message="This action will result in DELETION of ALL automation settings, still want to proceed?"
         isOpen={isPopupOpen}
@@ -66,7 +66,7 @@ const InstagramMediaAutomateTab = () => {
         onClose={() => setIsPopupOpen(false)}
       />
 
-      <div className="bg-white border-2 border-gray-200 rounded-xl p-4 space-y-6">
+      <div className="dark:bg-gray-900 dark:border-purple-600 border-2 border-gray-200 rounded-xl p-4 space-y-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-center text-2xl font-bold">
           <p className="bg-gradient-to-r from-[#9b87f5] to-[#3e83f6] bg-clip-text text-transparent">
@@ -80,7 +80,6 @@ const InstagramMediaAutomateTab = () => {
             Turn Off Automation
           </button>
         </div>
-
         {/* Main Sections */}
         <TagManagement />
         <AIEnabledInteractions />

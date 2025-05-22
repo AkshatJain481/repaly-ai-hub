@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsLightning } from "react-icons/bs";
@@ -6,6 +5,7 @@ import { BiBarChart } from "react-icons/bi";
 import { primaryColor } from "@/utils/constants";
 import { StoryCardProp } from "@/utils/interfaces";
 import { getFormattedDate } from "@/utils/commonFunctions";
+import { Button } from "../ui/button";
 
 const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
   const navigate = useNavigate();
@@ -19,12 +19,10 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
 
   return (
     <div
-      className="rounded-xl bg-white border border-gray-200 cursor-pointer shadow-sm"
+      className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200"
       onClick={() => handleNavigate()}
     >
-      <div
-        className="relative aspect-square rounded-t-xl overflow-hidden shadow-md"
-      >
+      <div className="relative aspect-square rounded-t-xl overflow-hidden aspect-1">
         {/* Image */}
         {storyData?.media_type === "IMAGE" ? (
           <img
@@ -32,11 +30,11 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
               storyData?.media_url ||
               "https://placehold.co/400x400?text=Story+Image"
             }
-            alt="Media"
-            className="w-full h-full object-cover"
+            alt="Story media"
+            className="w-full object-contain bg-gray-100 dark:bg-gray-700"
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              const target = e.currentTarget;
-              target.src = "https://placehold.co/400x400?text=Story+Image"; // Set the placeholder
+              e.currentTarget.src =
+                "https://placehold.co/400x400?text=Story+Image";
             }}
           />
         ) : (
@@ -63,31 +61,31 @@ const StoryCard = ({ storyData }: { storyData: StoryCardProp }) => {
 
       {/* Caption & Buttons */}
       <div className="p-4">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {getFormattedDate(storyData?.timestamp)}
         </p>
 
-        <div className="mt-2 gap-2 justify-around flex">
-          <button
-            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 py-2 text-sm flex items-center justify-center gap-1 rounded-md hover:bg-gray-200 transition-colors"
+        <div className="mt-3 flex gap-3">
+          <Button
+            className="flex-1 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors flex items-center justify-center gap-2"
             onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               handleNavigate("automate");
             }}
           >
-            <BsLightning style={{ color: primaryColor }} />
-            <span className="text-sm">Automate</span>
-          </button>
-          <button
-            className="bg-gray-100 text-black border border-gray-200 flex-1 px-2 py-2 text-sm flex items-center justify-center gap-1 rounded-md hover:bg-gray-200 transition-colors"
+            <BsLightning className="w-4 h-4" style={{ color: primaryColor }} />
+            Automate
+          </Button>
+          <Button
+            className="flex-1 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors flex items-center justify-center gap-2"
             onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               handleNavigate("analytics");
             }}
           >
-            <BiBarChart style={{ color: primaryColor }} />
-            <span className="text-sm">Analytics</span>
-          </button>
+            <BiBarChart className="w-4 h-4" style={{ color: primaryColor }} />
+            Analytics
+          </Button>
         </div>
       </div>
     </div>

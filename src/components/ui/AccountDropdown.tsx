@@ -1,4 +1,3 @@
-
 import { socialMediaPlatforms } from "@/utils/constants";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -6,6 +5,7 @@ import { setActiveAccount } from "@/redux/slices/user.slice";
 import { useDispatch } from "react-redux";
 import { PiUserCircleDuotone } from "react-icons/pi";
 import { useState, useRef, useEffect } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import * as React from "react";
 
 const AccountDropdown = () => {
@@ -47,36 +47,44 @@ const AccountDropdown = () => {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="border border-solid border-gray-200 cursor-pointer p-4 h-[55px] w-full flex justify-start items-center gap-3 bg-white shadow-sm rounded-md hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+        className="border border-solid border-gray-200 cursor-pointer p-4 h-16 w-full flex justify-start items-center gap-3 shadow-sm rounded-md hover:shadow-md transition-all duration-200"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         <div className="flex items-center">
           <div className="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
             {activeAccount?.profile_picture_url ? (
-              <img 
-                src={activeAccount.profile_picture_url} 
-                alt={activeAccount.name || "User"} 
-                className="w-full h-full object-cover"
-              />
+              <Avatar className="w-full h-full">
+                <AvatarImage
+                  src={activeAccount?.profile_picture_url}
+                  alt={activeAccount?.name}
+                />
+                <AvatarFallback className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                  {activeAccount?.name?.[0]?.toUpperCase() ||
+                    activeAccount?.username?.[0]?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
             ) : (
               <PiUserCircleDuotone size={48} />
             )}
           </div>
           <div className="ml-3 text-left">
-            <p className="font-semibold text-gray-800">
+            <p className="font-semibold">
               {activeAccount?.name || "Full Name"}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-400">
               {activeAccount?.username || "Username"}
             </p>
           </div>
         </div>
         {activeAccount?.platformName && (
           <div className="ml-auto">
-            {React.createElement(socialMedia(activeAccount.platformName)?.icon, {
-              size: 24,
-              color: socialMedia(activeAccount.platformName)?.color
-            })}
+            {React.createElement(
+              socialMedia(activeAccount.platformName)?.icon,
+              {
+                size: 24,
+                color: socialMedia(activeAccount.platformName)?.color,
+              }
+            )}
           </div>
         )}
       </button>
@@ -95,30 +103,34 @@ const AccountDropdown = () => {
               <div className="flex items-center">
                 <div className="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
                   {account?.profile_picture_url ? (
-                    <img 
-                      src={account.profile_picture_url} 
-                      alt={account.name || "User"} 
-                      className="w-full h-full object-cover"
-                    />
+                    <Avatar className="w-full h-full">
+                      <AvatarImage
+                        src={account?.profile_picture_url}
+                        alt={account?.name}
+                      />
+                      <AvatarFallback className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        {account?.name?.[0]?.toUpperCase() ||
+                          account?.username?.[0]?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                   ) : (
                     <PiUserCircleDuotone size={48} />
                   )}
                 </div>
                 <div className="ml-3 text-left">
-                  <p className="font-medium text-gray-800">
-                    {account?.name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {account?.username}
-                  </p>
+                  <p className="font-medium text-gray-800">{account?.name}</p>
+                  <p className="text-sm text-gray-500">{account?.username}</p>
                 </div>
               </div>
               {account.platformName && (
                 <div>
-                  {React.createElement(socialMedia(account.platformName)?.icon, {
-                    size: 24,
-                    color: socialMedia(account.platformName)?.color
-                  })}
+                  {React.createElement(
+                    socialMedia(account.platformName)?.icon,
+                    {
+                      size: 24,
+                      color: socialMedia(account.platformName)?.color,
+                    }
+                  )}
                 </div>
               )}
             </div>

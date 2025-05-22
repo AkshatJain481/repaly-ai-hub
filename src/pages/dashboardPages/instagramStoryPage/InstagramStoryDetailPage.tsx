@@ -28,12 +28,12 @@ const InstagramStoryDetailPage = () => {
   return (
     <div className="flex flex-col gap-0 h-full p-2">
       {/* Back button */}
-      <Link to={"/dashboard/instagram/story"}>
+      <Link to={"/dashboard/instagram/story"} className="w-fit">
         <Button
           variant="ghost"
-          className="text-gray-600 text-md w-fit font-normal px-0"
+          className="text-gray-500 text-lg w-fit font-bold px-4"
         >
-          <BiChevronLeft className="h-5 w-5 mr-1" />
+          <BiChevronLeft className="h-8 w-8 mr-1" />
           Back to all posts
         </Button>
       </Link>
@@ -57,12 +57,18 @@ const InstagramStoryDetailPage = () => {
                     : "automate"
                 }
               >
-                <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger value="automate" className="flex items-center gap-2 font-bold">
+                <TabsList className="w-full grid grid-cols-2 space-x-2">
+                  <TabsTrigger
+                    value="automate"
+                    className="flex items-center gap-2 font-bold"
+                  >
                     <HiOutlineLightningBolt className="h-5 w-5" />
                     Automate
                   </TabsTrigger>
-                  <TabsTrigger value="analytics" className="flex items-center gap-2 font-bold">
+                  <TabsTrigger
+                    value="analytics"
+                    className="flex items-center gap-2 font-bold"
+                  >
                     <IoStatsChart className="h-5 w-5" />
                     Analytics
                   </TabsTrigger>

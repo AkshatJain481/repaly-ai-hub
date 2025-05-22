@@ -1,9 +1,8 @@
-
 import { useStoryAutomationMutation } from "../../apis/automation";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Button } from "@/components/ui/button";
+import { Button } from "./button";
 import { HiOutlineLightningBolt } from "react-icons/hi";
 import StoryTagManagement from "./StoryTagManagement";
 
@@ -12,7 +11,7 @@ const InstagramStoryAutomateTab = () => {
   const { storyDetails } = useSelector(
     (state: RootState) => state.storyAutomation
   );
-  
+
   const applyAutomation = async () => {
     const { error } = await storyAutomation(storyDetails?.story_id || "");
 
@@ -31,26 +30,29 @@ const InstagramStoryAutomateTab = () => {
 
   return (
     <div className="relative">
-      {/* Add padding at the bottom to prevent content from being hidden under sticky button */}
-      <div className="bg-white p-4 border-2 border-solid border-gray-200 rounded-xl gap-4">
-        {/* Tabs List positioned at the top right */}
-
-        <div className="text-3xl font-bold">
-          <p className="bg-gradient-to-r from-[#9b87f5] to-[#3e83f6] bg-clip-text text-transparent">
+      {/* Main Content */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 transition-colors duration-200 space-y-6">
+        <div className="text-2xl font-semibold">
+          <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
             Response Settings
-          </p>
+          </span>
         </div>
-        {/* Main Content */}
         <StoryTagManagement />
       </div>
+
       {/* Sticky Button Container */}
-      <div className="fixed bottom-[3%] right-[10%] flex justify-center z-[999] pointer-events-none">
+      <div className="fixed bottom-6 right-6 z-[999]">
         <Button
-          className="min-w-[200px] bg-purple-600 hover:bg-purple-400 text-white px-4 py-2 rounded border-2 border-solid border-purple-600 font-medium shadow-lg pointer-events-auto"
+          className={`
+            min-w-[200px] px-4 py-2 text-sm font-medium text-white bg-purple-600 dark:bg-purple-500 border border-purple-600 dark:border-purple-500 rounded-lg
+            hover:bg-purple-700 dark:hover:bg-purple-600 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none
+            transition-colors shadow-lg flex items-center gap-2
+            ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+          `}
           onClick={applyAutomation}
           disabled={isLoading}
         >
-          <HiOutlineLightningBolt className="h-5 w-5 mr-2" />
+          <HiOutlineLightningBolt className="w-5 h-5" />
           {isLoading ? "Applying..." : "Apply Automation"}
         </Button>
       </div>

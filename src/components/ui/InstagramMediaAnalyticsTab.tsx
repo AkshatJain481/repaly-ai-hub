@@ -1,5 +1,7 @@
-
-import { useGetMediaAnalyticsQuery, useGetMediaGraphAnalyticsQuery } from "@/apis/instagram";
+import {
+  useGetMediaAnalyticsQuery,
+  useGetMediaGraphAnalyticsQuery,
+} from "@/apis/instagram";
 import Loading from "../common/Loading";
 import {
   FiShoppingCart,
@@ -124,9 +126,7 @@ const InstagramMediaAnalyticsTab = () => {
           refetchAnalytics();
           refetchGraphAnalytics();
         }}
-        className="bg-transparent text-gray-600 hover:text-gray-800 transition duration-200 
-                   font-bold border-2 border-solid border-gray-300 bg-white py-2 px-4 rounded-md
-                   flex items-center gap-2"
+        className="bg-transparent text-gray-500 hover:text-gray-300 transition duration-200 font-bold border-2 border-solid border-gray-300 dark:bg-gray-900 py-2 px-4 rounded-md flex items-center gap-2"
       >
         <BiRefresh
           style={{
@@ -145,9 +145,7 @@ const InstagramMediaAnalyticsTab = () => {
         <Loading />
       ) : (
         <>
-          <div
-            className="flex flex-col md:flex-row gap-6 items-center md:items-stretch"
-          >
+          <div className="flex flex-col md:flex-row gap-6 items-center md:items-stretch">
             {/* Automated replies overview */}
             <InstagramMediaReplyAnalytics
               totalReplies={analyticsData?.comment_by_us || 0}
@@ -155,10 +153,7 @@ const InstagramMediaAnalyticsTab = () => {
             />
 
             {/* Pie Chart */}
-            <div
-              className="rounded-md p-6 bg-white border-2 border-solid border-gray-200
-                       w-full md:w-1/2 flex items-center justify-center"
-            >
+            <div className="rounded-md p-6 dark:bg-gray-900 border-2 border-solid border-gray-200 w-full md:w-1/2 flex items-center justify-center">
               {analyticsData?.comment_by_us ? (
                 <PieChart
                   data={pieChartData}
@@ -166,9 +161,7 @@ const InstagramMediaAnalyticsTab = () => {
                   customColors={pieChartColors}
                 />
               ) : (
-                <p
-                  className="font-bold text-xl text-center text-gray-500"
-                >
+                <p className="font-bold text-xl text-center text-gray-500">
                   There is no analytics data available for this post!
                 </p>
               )}
@@ -177,12 +170,8 @@ const InstagramMediaAnalyticsTab = () => {
 
           {/* Line Chart */}
           {isLineChartDataEmpty ? (
-            <div
-              className="flex items-center justify-center h-[200px] border-2 border-solid border-gray-200 rounded-lg"
-            >
-              <p
-                className="font-bold text-xl text-center text-gray-500"
-              >
+            <div className="flex items-center justify-center h-[200px] border-2 border-solid border-gray-200 rounded-lg">
+              <p className="font-bold text-xl text-center text-gray-500">
                 There is no analytics data available for this post!
               </p>
             </div>

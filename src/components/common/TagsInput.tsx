@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { X } from "lucide-react";
 
@@ -37,21 +36,22 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 
   return (
     <div
-      className="flex flex-wrap gap-2 rounded-md border border-input p-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+      className="flex flex-wrap gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 text-sm transition-colors duration-200 focus-within:ring-2 focus-within:ring-purple-500 dark:focus:ring-purple-400 focus-within:ring-offset-2 focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900 mt-2"
       onClick={focusInput}
     >
       {tags.map((tag) => (
         <div
           key={tag}
-          className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-primary"
+          className="flex items-center gap-1 rounded-full bg-purple-100 dark:bg-purple-900/50 px-3 py-1.5 text-purple-600 dark:text-purple-300 border border-purple-300 dark:border-purple-600"
         >
-          <span>{tag}</span>
-          <button 
-            type="button" 
+          <span className="text-sm font-medium">{tag}</span>
+          <button
+            type="button"
             onClick={() => handleRemove(tag)}
-            className="ml-1 rounded-full hover:bg-primary/20 p-1"
+            className="ml-1 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 p-1 transition-colors"
+            aria-label={`Remove ${tag} tag`}
           >
-            <X className="h-3 w-3" />
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       ))}
@@ -62,7 +62,7 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={tags.length ? "Add more tags..." : "Add tags..."}
-        className="flex-grow border-none bg-transparent outline-none placeholder:text-muted-foreground"
+        className="flex-grow border-none bg-transparent outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 focus:ring-0 transition-colors"
       />
     </div>
   );

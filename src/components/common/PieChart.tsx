@@ -1,4 +1,3 @@
-
 import { useMemo } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
@@ -61,6 +60,10 @@ const PieChart: React.FC<PieChartProps> = ({
       toolbar: {
         show: false,
       },
+      background: "transparent",
+      foreColor: document.documentElement.classList.contains("dark")
+        ? "#e5e7eb"
+        : "#1f2937",
     },
     labels,
     colors,
@@ -68,7 +71,13 @@ const PieChart: React.FC<PieChartProps> = ({
       position: "bottom",
       horizontalAlign: "center",
       fontSize: "14px",
+      fontWeight: 500,
       show: showLegend,
+      labels: {
+        colors: document.documentElement.classList.contains("dark")
+          ? "#e5e7eb"
+          : "#1f2937",
+      },
     },
     plotOptions: {
       pie: {
@@ -79,6 +88,11 @@ const PieChart: React.FC<PieChartProps> = ({
             total: {
               show: true,
               label: "Total",
+              fontSize: "16px",
+              fontWeight: 600,
+              color: document.documentElement.classList.contains("dark")
+                ? "#e5e7eb"
+                : "#1f2937",
               formatter: () => `${total}`,
             },
           },
@@ -92,6 +106,10 @@ const PieChart: React.FC<PieChartProps> = ({
       },
       style: {
         fontSize: "12px",
+        fontWeight: 500,
+        colors: document.documentElement.classList.contains("dark")
+          ? ["#e5e7eb"]
+          : ["#1f2937"],
       },
     },
     tooltip: {
@@ -99,6 +117,12 @@ const PieChart: React.FC<PieChartProps> = ({
         formatter: function (val: number) {
           return `${val} (${((val / total) * 100).toFixed(1)}%)`;
         },
+      },
+      theme: document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light",
+      style: {
+        fontSize: "12px",
       },
     },
     responsive: [
@@ -117,46 +141,48 @@ const PieChart: React.FC<PieChartProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center w-full gap-4">
-      <div className="w-full">
-        {title && (
-          <h3 className="text-lg font-medium text-center mb-4">
-            {title}
-          </h3>
-        )}
+    <div className="flex flex-col items-center w-full gap-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 transition-colors duration-200">
+      {title && (
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          {title}
+        </h3>
+      )}
 
-        <div style={{ height }}>
-          <Chart
-            options={chartOptions}
-            series={values}
-            type="donut"
-            height="100%"
-          />
-        </div>
-
-        {showTable && (
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {filteredData.map((item, index) => (
-              <div
-                key={index}
-                className="flex justify-between p-2 bg-gray-50 border-l-4 rounded-md"
-                style={{ borderLeftColor: colors[index] }}
-              >
-                <span className="font-medium">{item.label}:</span>
-                <span>
-                  {item.value} ({((item.value / total) * 100).toFixed(1)}%)
-                </span>
-              </div>
-            ))}
-            <div
-              className="flex justify-between p-2 bg-gray-200 font-semibold rounded-md col-span-2"
-            >
-              <span>Total:</span>
-              <span>{total}</span>
-            </div>
-          </div>
-        )}
+      <div className="w-full" style={{ height }}>
+        <Chart
+          options={chartOptions}
+          series={values}
+          type="donut"
+          height="100%"
+        />
       </div>
+
+      {showTable && (
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {filteredData.map((item, index) => (
+            <div
+              key={index}
+              className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border-l-4"
+              style={{ borderLeftColor: colors[index] }}
+            >
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                {item.label}:
+              </span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                {item.value} ({((item.value / total) * 100).toFixed(1)}%)
+              </span>
+            </div>
+          ))}
+          <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-600 rounded-lg font-semibold col-span-1 sm:col-span-2">
+            <span className="text-sm text-gray-900 dark:text-gray-100">
+              Total:
+            </span>
+            <span className="text-sm text-gray-900 dark:text-gray-100">
+              {total}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

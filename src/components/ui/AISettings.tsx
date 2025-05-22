@@ -1,4 +1,3 @@
-// components/AIEnabledInteractions.tsx
 import { useState } from "react";
 import * as Switch from "@radix-ui/react-switch";
 import CustomResponseSection from "./CustomResponseSection";
@@ -32,21 +31,23 @@ const FormField = ({
   ) => void;
   type?: "input" | "textarea";
 }) => (
-  <div className="space-y-1">
-    <p className="text-sm text-gray-500">{label}</p>
+  <div className="space-y-2">
+    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      {label}
+    </label>
     {type === "textarea" ? (
       <textarea
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full p-2 border border-gray-300 rounded-md resize-y text-sm"
+        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors resize-y min-h-[80px] text-sm"
       />
     ) : (
       <input
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full p-2 border border-gray-300 rounded-md text-sm"
+        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors text-sm"
       />
     )}
   </div>
@@ -83,18 +84,18 @@ const InquiriesForm = ({
   };
 
   return (
-    <div className="p-4 bg-white rounded-md shadow-sm border border-purple-200">
-      <div className="flex items-center justify-between mb-4">
-        <p className="font-bold flex gap-2 items-center text-purple-600">
-          <FaQuestionCircle />
+    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-purple-200 dark:border-purple-700 transition-colors duration-200">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2 text-lg font-semibold text-purple-600 dark:text-purple-300">
+          <FaQuestionCircle className="w-5 h-5" />
           Inquiries
-        </p>
+        </div>
         <Switch.Root
           checked={isOpen}
           onCheckedChange={toggleSwitch}
-          className="w-[44px] h-[24px] bg-gray-300 data-[state=checked]:bg-purple-600 rounded-full relative transition-colors duration-200"
+          className="w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full relative data-[state=checked]:bg-purple-600 dark:data-[state=checked]:bg-purple-500 transition-colors duration-200"
         >
-          <Switch.Thumb className="block w-[20px] h-[20px] bg-white rounded-full transition-transform duration-200 translate-x-1 data-[state=checked]:translate-x-[20px]" />
+          <Switch.Thumb className="block w-5 h-5 bg-white rounded-full transition-transform duration-200 translate-x-0.5 data-[state=checked]:translate-x-6" />
         </Switch.Root>
       </div>
 
@@ -131,12 +132,14 @@ const AIEnabledInteractions = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="shadow-lg border border-gray-200 p-6 rounded-lg">
-      <h2 className="text-lg font-bold mb-6">AI-Enabled Interactions</h2>
+    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 transition-colors duration-200">
+      <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+        AI-Enabled Interactions
+      </h2>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <CustomResponseSection
-          icon={<FaCheck />}
+          icon={<FaCheck className="w-5 h-5" />}
           title="Positive Comments"
           mode={positiveEnabled}
           setMode={(payload) => dispatch(setPositiveEnabled(payload))}
@@ -144,7 +147,7 @@ const AIEnabledInteractions = () => {
         />
 
         <CustomResponseSection
-          icon={<FaExclamationTriangle />}
+          icon={<FaExclamationTriangle className="w-5 h-5" />}
           title="Negative Comments"
           mode={negativeEnabled}
           setMode={(payload) => dispatch(setNegativeEnabled(payload))}
@@ -152,7 +155,7 @@ const AIEnabledInteractions = () => {
         />
 
         <CustomResponseSection
-          icon={<FaUserTag />}
+          icon={<FaUserTag className="w-5 h-5" />}
           title="Leads / Potential Buyers"
           mode={leadsEnabled}
           setMode={(payload) => dispatch(setLeadsEnabled(payload))}

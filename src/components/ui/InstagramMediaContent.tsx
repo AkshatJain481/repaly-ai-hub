@@ -1,16 +1,18 @@
-
 import { useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BiComment } from "react-icons/bi";
+import { PiUserCircleDuotone } from "react-icons/pi";
+import { FiSend } from "react-icons/fi";
+import { FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { getFormattedDate } from "@/utils/commonFunctions";
+import { MdVolumeUp, MdVolumeOff } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  BsHeart, BsHeartFill, BsBookmark, BsVolumeUp, BsVolumeMute 
-} from "react-icons/bs";
-import { BiMessageRoundedDetail, BiSend, BiArrowBack, BiUserCircle } from "react-icons/bi";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { BsArrowLeft } from "react-icons/bs";
 
+// MessageBubble Component
 const MessageBubble = ({
   content,
   isSent = true,
@@ -21,20 +23,22 @@ const MessageBubble = ({
   timestamp?: string;
 }) => {
   return (
-    <div className={`flex ${isSent ? "justify-end" : "justify-start"} mb-2 w-full`}>
-      <div 
-        className={`max-w-[70%] ${isSent ? "bg-blue-500" : "bg-gray-700"} text-white px-3 py-2 rounded-xl relative`}
+    <div
+      className={`flex ${isSent ? "justify-end" : "justify-start"} mb-2 w-full`}
+    >
+      <div
+        className={`max-w-[70%] px-3 py-2 rounded-xl relative ${
+          isSent ? "bg-blue-500" : "bg-gray-700 dark:bg-gray-600"
+        } text-white`}
       >
         <p className="text-sm">{content}</p>
-        <p className="text-xs text-white/70 text-right mt-1">
-          {timestamp}
-        </p>
+        <p className="text-xs text-white/70 text-right mt-1">{timestamp}</p>
       </div>
     </div>
   );
 };
 
-// Comment Item Component
+// CommentItem Component
 const CommentItem = ({
   username,
   content,
@@ -50,63 +54,68 @@ const CommentItem = ({
 }) => {
   return (
     <div className="flex gap-3 w-full px-4 py-2 items-center">
-      <Avatar className="h-12 w-12">
-        <AvatarImage src={userImgUrl} alt={username} />
-        <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
+      <Avatar className="w-12 h-12">
+        <AvatarFallback>
+          <PiUserCircleDuotone className="w-12 h-12 text-white/60" />
+        </AvatarFallback>
+        <AvatarImage
+          src={userImgUrl}
+          className="w-12 h-12 rounded-full object-cover"
+        />
       </Avatar>
       <div className="flex-1">
         <div className="flex items-center gap-2">
-          <p className="font-bold text-sm text-white/90 truncate max-w-[120px]">
+          <p className="font-bold text-sm text-white/90 max-w-[120px] truncate">
             {username}
           </p>
-          <p className="text-xs text-white/60 whitespace-nowrap">
-            {timestamp}
-          </p>
+          <p className="text-xs text-white/60 whitespace-nowrap">{timestamp}</p>
         </div>
-
-        <p className="text-sm text-white/90 mt-0.5">
-          {content}
-        </p>
+        <p className="text-sm text-white/90 mt-0.5">{content}</p>
         {!isReply && (
           <div className="flex gap-4 mt-1">
-            <p className="text-xs text-white/60 cursor-pointer">Reply</p>
-            <p className="text-xs text-white/60 cursor-pointer">See translation</p>
+            <p className="text-xs text-white/60 cursor-pointer hover:text-white/80">
+              Reply
+            </p>
+            <p className="text-xs text-white/60 cursor-pointer hover:text-white/80">
+              See translation
+            </p>
           </div>
         )}
       </div>
-      <BsHeart className="text-white/60 cursor-pointer h-5 w-5" />
+      <AiOutlineHeart className="w-5 h-5 text-white/60 cursor-pointer hover:text-white/80" />
     </div>
   );
 };
 
-// Comment Popup Component
+// InstagramDMPopup Component
 const MotionDiv = motion.div;
-
 const InstagramDMPopup = () => {
   const { responseDM } = useSelector((state: RootState) => state.automation);
 
   return (
     <AnimatePresence>
       <MotionDiv
-        className="absolute top-8 bottom-0 left-0 right-0 bg-black z-[1000]"
+        className="absolute top-1 bottom-6 left-0 right-0 bg-black dark:bg-gray-900 z-[1000]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
         {/* Header */}
-        <div className="py-3 px-4 border-b border-gray-800 flex items-center justify-between">
+        <div className="py-3 px-4 border-b border-gray-800 dark:border-gray-700 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <BiArrowBack className="text-white h-5 w-5 cursor-pointer" />
-            <Avatar className="h-10 w-10">
-              <AvatarFallback><BiUserCircle className="h-10 w-10" /></AvatarFallback>
+            <BsArrowLeft className="w-5 h-5 text-white cursor-pointer hover:text-white/80" />
+            <Avatar className="w-10 h-10">
+              <AvatarFallback>
+                <PiUserCircleDuotone className="w-10 h-10 text-white/60" />
+              </AvatarFallback>
             </Avatar>
             <div>
               <p className="text-white font-semibold">Test User</p>
-              <p className="text-white/70 text-xs">Active 2h ago</p>
+              <p className="text-xs text-white/70">Active 2h ago</p>
             </div>
           </div>
-          <BiSend className="text-white h-5 w-5 cursor-pointer" />
+          <FiSend className="w-5 h-5 text-white cursor-pointer hover:text-white/80" />
         </div>
 
         {/* Messages Section */}
@@ -128,22 +137,23 @@ const InstagramDMPopup = () => {
           </div>
         </div>
 
-        {/* Message Input Section - Simplified */}
-        <div className="p-4 border-t border-white/20 flex items-center gap-3 absolute bottom-0 w-full">
+        {/* Message Input Section */}
+        <div className="p-4 border-t border-white/20 dark:border-gray-700 flex items-center gap-3 absolute bottom-0 w-full">
           <div className="flex-1 relative">
-            <Input
-              readOnly={true}
+            <input
+              readOnly
               placeholder="Message..."
-              className="bg-white/10 border-none rounded-full text-white placeholder:text-white/60 focus:shadow-none"
+              className="w-full bg-white/10 dark:bg-gray-800 text-white placeholder-white/60 rounded-full px-4 py-2 focus:outline-none"
             />
           </div>
-          <BiSend className="text-blue-500 cursor-pointer h-5 w-5" />
+          <FiSend className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-400" />
         </div>
       </MotionDiv>
     </AnimatePresence>
   );
 };
 
+// InstagramCommentPopup Component
 const InstagramCommentPopup = () => {
   const { tags, responseComment } = useSelector(
     (state: RootState) => state.automation
@@ -155,21 +165,20 @@ const InstagramCommentPopup = () => {
   return (
     <AnimatePresence>
       <MotionDiv
-        className="absolute bottom-0 left-0 right-0 bg-black rounded-t-3xl z-[1000]"
+        className="absolute bottom-6 left-0 right-0 bg-black dark:bg-gray-900 rounded-t-3xl z-[1000]"
         initial={{ y: "100%" }}
-        animate={{ y: 0 }}
+        animate={{ y: 10 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
       >
         {/* Header */}
-        <div className="py-3 border-b border-gray-800 flex items-center justify-center flex-col gap-2">
-          <div className="w-[40px] h-[2px] bg-gray-400"></div>
+        <div className="py-3 border-b border-gray-800 dark:border-gray-700 flex flex-col items-center gap-2">
+          <div className="w-10 h-0.5 bg-gray-400 dark:bg-gray-500"></div>
           <p className="text-white font-semibold">Comments</p>
         </div>
 
         {/* Comment List Section */}
         <div className="max-h-[60vh] overflow-y-auto py-2">
-          {/* Original comment using the first tag */}
           {latestTag && (
             <CommentItem
               username="test_user"
@@ -177,8 +186,6 @@ const InstagramCommentPopup = () => {
               timestamp="Just now"
             />
           )}
-
-          {/* Reply comment */}
           {responseComment && (
             <div className="pl-6 mt-1">
               <CommentItem
@@ -193,22 +200,29 @@ const InstagramCommentPopup = () => {
         </div>
 
         {/* Comment Input Section */}
-        <div className="p-3 border-t border-white/20 flex items-center gap-3">
-          <Avatar className="h-12 w-12">
-            <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Your avatar"} />
-            <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
+        <div className="p-3 border-t border-white/20 dark:border-gray-700 flex items-center gap-3">
+          <Avatar className="w-12 h-12">
+            <AvatarFallback>
+              <PiUserCircleDuotone className="w-12 h-12 text-white/60" />
+            </AvatarFallback>
+            <AvatarImage
+              src={activeAccount?.profile_picture_url}
+              className="w-12 h-12 rounded-full object-cover"
+            />
           </Avatar>
-
-          <div className="flex-1 p-2 rounded-full bg-white/10">
-            <p className="text-white/60 text-sm">Start the conversation...</p>
+          <div className="flex-1 p-2 rounded-full bg-white/10 dark:bg-gray-800">
+            <p className="text-sm text-white/60">Start the conversation...</p>
           </div>
-          <p className="text-blue-400 font-semibold text-sm cursor-pointer">Send</p>
+          <p className="text-blue-400 font-semibold text-sm cursor-pointer hover:text-blue-300">
+            Send
+          </p>
         </div>
       </MotionDiv>
     </AnimatePresence>
   );
 };
 
+// InstagramMediaContent Component
 const InstagramMediaContent = ({ tab }: { tab: string }) => {
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const { activeAccount } = useSelector((state: RootState) => state.user);
@@ -223,14 +237,14 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
         return (
           <img
             src={mediaDetails?.media_url}
-            alt={mediaDetails?.caption || "Instagram post"}
-            className="object-cover w-full max-h-[586px]"
+            alt={mediaDetails?.caption}
+            className="w-full max-h-[586px] object-cover"
             onDoubleClick={() => setIsLiked(!isLiked)}
           />
         );
       case "VIDEO":
         return (
-          <div 
+          <div
             className="relative rounded-lg"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -238,8 +252,8 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
           >
             <img
               src={mediaDetails?.thumbnail_url || mediaDetails?.media_url}
-              alt={mediaDetails?.caption || "Instagram video"}
-              className="object-cover w-full"
+              alt={mediaDetails?.caption}
+              className="w-full max-h-[586px] object-cover"
             />
             {isHovering && (
               <video
@@ -247,7 +261,7 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
                 autoPlay
                 loop
                 muted={isMuted}
-                className="absolute top-0 left-0 w-full"
+                className="absolute top-0 left-0 w-full h-full object-cover"
               />
             )}
           </div>
@@ -259,66 +273,71 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
 
   return (
     <>
-      <div className="absolute bottom-12 right-10px flex flex-col gap-4 z-20">
-        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsLiked(!isLiked)}>
+      {/* Action Icons */}
+      <div className="absolute bottom-12 right-2.5 flex flex-col gap-4 z-20">
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onClick={() => setIsLiked(!isLiked)}
+        >
           {isLiked ? (
-            <BsHeartFill className="h-7 w-7 text-red-500 filter drop-shadow-md transition-all duration-200" />
+            <AiFillHeart className="w-7 h-7 text-red-500 drop-shadow-md transition-all duration-200" />
           ) : (
-            <BsHeart className="h-7 w-7 text-white filter drop-shadow-md transition-all duration-200" />
+            <AiOutlineHeart className="w-7 h-7 text-white drop-shadow-md transition-all duration-200" />
           )}
-          <p className="text-white text-xs mt-1 text-shadow">
+          <p className="text-white text-xs mt-1 drop-shadow-md">
             {mediaDetails?.like_count}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <BiMessageRoundedDetail className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
-          <p className="text-white text-xs mt-1 text-shadow">
+          <BiComment className="w-6 h-6 text-white drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 drop-shadow-md">
             {mediaDetails?.comments_count}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <BiSend className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
-          <p className="text-white text-xs mt-1 text-shadow">
+          <FiSend className="w-6 h-6 text-white drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 drop-shadow-md">
             {mediaDetails?.shares}
           </p>
         </div>
         <div className="flex flex-col items-center cursor-pointer">
-          <BsBookmark className="h-6 w-6 text-white filter drop-shadow-md transition-all duration-200" />
-          <p className="text-white text-xs mt-1 text-shadow">
+          <FaRegBookmark className="w-6 h-6 text-white drop-shadow-md transition-all duration-200" />
+          <p className="text-white text-xs mt-1 drop-shadow-md">
             {mediaDetails?.saved}
           </p>
         </div>
-        <div className="flex flex-col items-center cursor-pointer" onClick={() => setIsMuted(!isMuted)}>
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onClick={() => setIsMuted(!isMuted)}
+        >
           {isMuted ? (
-            <BsVolumeMute className="h-4 w-4 text-white cursor-pointer" />
+            <MdVolumeOff className="w-6 h-6 text-white cursor-pointer" />
           ) : (
-            <BsVolumeUp className="h-4 w-4 text-white cursor-pointer" />
+            <MdVolumeUp className="w-6 h-6 text-white cursor-pointer" />
           )}
         </div>
       </div>
 
       {/* Post Caption and Account */}
-      <div className="absolute bottom-12 left-5 flex items-center gap-2 z-10">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={activeAccount?.profile_picture_url} alt={activeAccount?.username || "Profile"} />
-          <AvatarFallback><BiUserCircle className="h-12 w-12" /></AvatarFallback>
+      <div className="absolute bottom-20 left-5 flex items-center gap-2 z-10">
+        <Avatar className="w-12 h-12">
+          <AvatarFallback>
+            <PiUserCircleDuotone className="w-12 h-12 text-white/60" />
+          </AvatarFallback>
+          <AvatarImage
+            src={activeAccount?.profile_picture_url}
+            className="w-12 h-12 rounded-full object-cover"
+          />
         </Avatar>
-
         <div className="flex flex-col">
-          <p className="font-bold text-sm text-white text-shadow">
+          <p className="font-bold text-sm text-white drop-shadow-md">
             {activeAccount?.username || "User Name"}
           </p>
-
           <div className="relative pr-14">
             <div
-              className={`text-xs text-white/90 text-shadow relative overflow-hidden transition-all ${
-                isCaptionExpanded ? "max-h-[500px]" : "max-h-[2.8em]"
+              className={`text-xs text-white/90 drop-shadow-md transition-all duration-300 ${
+                isCaptionExpanded ? "" : "line-clamp-2"
               }`}
-              style={{
-                WebkitLineClamp: isCaptionExpanded ? "unset" : 2,
-                WebkitBoxOrient: "vertical",
-                display: "-webkit-box",
-              }}
             >
               {mediaDetails?.caption}
               {isCaptionExpanded && (
@@ -327,10 +346,9 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
                 </p>
               )}
             </div>
-
             <p
+              className="text-xs text-white mt-1 drop-shadow-md cursor-pointer hover:underline"
               onClick={() => setIsCaptionExpanded(!isCaptionExpanded)}
-              className="text-xs mt-1 text-shadow text-white cursor-pointer hover:underline transition-colors"
             >
               {isCaptionExpanded ? "less" : "more"}
             </p>
@@ -340,12 +358,14 @@ const InstagramMediaContent = ({ tab }: { tab: string }) => {
 
       {/* Post Content Area */}
       <div
-        className={`${isCaptionExpanded ? "opacity-70" : "opacity-100"} flex items-center bg-gray-900 justify-center w-full h-[586px]`}
+        className={`flex items-center justify-center w-full h-[586px] bg-gray-900 dark:bg-gray-800 ${
+          isCaptionExpanded ? "opacity-70" : "opacity-100"
+        }`}
       >
         {renderMediaContent()}
       </div>
 
-      {/* Live Demo */}
+      {/* Popups */}
       {tab === "comments" ? (
         <InstagramCommentPopup />
       ) : (

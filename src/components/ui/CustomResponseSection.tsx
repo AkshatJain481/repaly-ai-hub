@@ -1,32 +1,50 @@
-
 import { useState } from "react";
+import * as Switch from "@radix-ui/react-switch";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { AIResponseSettings } from "@/utils/interfaces";
 import { FaWandMagicSparkles, FaRegFaceSmileBeam } from "react-icons/fa6";
 import { RiEditBoxLine, RiBriefcase2Fill } from "react-icons/ri";
 import { ImScissors } from "react-icons/im";
 import { FaRegLaughSquint } from "react-icons/fa";
 import { FiInfo } from "react-icons/fi";
+import { cn } from "@/lib/utils";
 
 const RESPONSE_MODES = [
   {
     key: "ai_enabled",
     label: "AI Response",
-    icon: <FaWandMagicSparkles />,
+    icon: <FaWandMagicSparkles className="w-4 h-4" />,
     color: "purple",
   },
   {
     key: "custom",
     label: "Custom",
-    icon: <RiEditBoxLine />,
-    color: "blue",
+    icon: <RiEditBoxLine className="w-4 h-4" />,
+    color: "purple",
   },
 ];
 
 const TONES = [
-  { key: "friendly", label: "Friendly", icon: <FaRegFaceSmileBeam /> },
-  { key: "professional", label: "Professional", icon: <RiBriefcase2Fill /> },
-  { key: "humorous", label: "Humorous", icon: <FaRegLaughSquint /> },
-  { key: "concise", label: "Concise", icon: <ImScissors /> },
+  {
+    key: "friendly",
+    label: "Friendly",
+    icon: <FaRegFaceSmileBeam className="w-4 h-4" />,
+  },
+  {
+    key: "professional",
+    label: "Professional",
+    icon: <RiBriefcase2Fill className="w-4 h-4" />,
+  },
+  {
+    key: "humorous",
+    label: "Humorous",
+    icon: <FaRegLaughSquint className="w-4 h-4" />,
+  },
+  {
+    key: "concise",
+    label: "Concise",
+    icon: <ImScissors className="w-4 h-4" />,
+  },
 ];
 
 const EXAMPLE_RESPONSES: Record<string, Record<string, string>> = {
@@ -75,14 +93,13 @@ const ModeButton = ({
 }) => (
   <button
     className={`
-      px-4 py-2 font-bold rounded-lg transition-colors
-      ${isActive ? `bg-${color}-200 text-${color}-600` : 'bg-transparent text-gray-600'}
-      border border-gray-200
-      hover:${isActive ? `bg-${color}-100` : 'bg-gray-100'}
+      px-4 py-2 text-sm font-medium rounded-lg transition-colors
+      ${isActive ? `bg-${color}-100 dark:bg-${color}-900/50 text-${color}-600 dark:text-${color}-300 border-${color}-300 dark:border-${color}-600` : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600"}
+      border hover:bg-${color}-200 dark:hover:bg-${color}-800/50
     `}
     onClick={onClick}
   >
-    <span className="flex items-center gap-1">
+    <span className="flex items-center gap-2">
       {icon} {label}
     </span>
   </button>
@@ -101,13 +118,13 @@ const ToneButton = ({
 }) => (
   <button
     className={`
-      mt-4 px-4 py-2 font-bold rounded-lg transition-colors
-      ${isActive ? 'bg-gray-100' : 'bg-transparent'} text-gray-600
-      hover:bg-gray-100
+      px-4 py-2 text-sm font-medium rounded-lg transition-colors
+      ${isActive ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100" : "bg-transparent text-gray-600 dark:text-gray-300"}
+      hover:bg-gray-200 dark:hover:bg-gray-600
     `}
     onClick={onClick}
   >
-    <span className="flex items-center gap-1">
+    <span className="flex items-center gap-2">
       {icon} {label}
     </span>
   </button>
@@ -124,7 +141,7 @@ const ExampleResponse = ({
 }) => (
   <p
     className={`
-      text-${color}-500 text-md mt-2 p-3 rounded-md bg-${color}-50
+      text-${color}-600 dark:text-${color}-300 text-sm p-3 rounded-lg bg-${color}-50 dark:bg-${color}-900/30
     `}
   >
     {EXAMPLE_RESPONSES[title][response] || response}
@@ -143,133 +160,142 @@ const CustomResponseSection = ({
   mode: AIResponseSettings;
   setMode: (mode: AIResponseSettings) => void;
   color: string;
-}) => {
+  }) => {
+  
+  
   const [isEditable, setIsEditable] = useState(false);
   const isOpen = mode.responseMode !== "leave_comment";
-  const [tooltipVisible, setTooltipVisible] = useState(false);
-  
+
   return (
-    <div className={`p-4 bg-white rounded-md shadow-sm mb-4 border border-${color}-200`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className={`font-bold text-${color}-600 flex items-center`}>
-          <span className={`mr-2 text-${color}-500`}>{icon}</span>
+    <div
+      className={cn(`p-6 bg-white dark:bg-gray-800 rounded-xl border-solid shadow-lg border border-${color}-200 dark:border-${color}-700 transition-colors duration-200 mb-6`)}
+    >
+      <div className="flex items-center justify-between mb-6">
+        <div
+          className={`text-lg font-semibold text-${color}-600 dark:text-${color}-300 flex items-center gap-2`}
+        >
+          {icon}
           {title}
         </div>
-        <div className="relative inline-flex items-center">
-          <input
-            type="checkbox"
-            checked={isOpen}
-            onChange={() => {
-              const newMode =
-                mode.responseMode === "leave_comment"
-                  ? "ai_enabled"
-                  : "leave_comment";
-
-              setMode({
-                responseMode: newMode,
-                response: newMode === "ai_enabled" ? "friendly" : "",
-              });
-            }}
-            className="sr-only"
-          />
-          <div
-            className={`block w-14 h-8 rounded-full ${
-              isOpen ? `bg-${color}-600` : "bg-gray-300"
-            } transition-colors duration-200`}
-          >
-            <div
-              className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ${
-                isOpen ? "transform translate-x-6" : ""
-              }`}
-            ></div>
-          </div>
-        </div>
+        <Switch.Root
+          checked={isOpen}
+          onCheckedChange={() => {
+            const newMode =
+              mode.responseMode === "leave_comment"
+                ? "ai_enabled"
+                : "leave_comment";
+            setMode({
+              responseMode: newMode,
+              response: newMode === "ai_enabled" ? "friendly" : "",
+            });
+          }}
+          className="w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full relative data-[state=checked]:bg-purple-600 dark:data-[state=checked]:bg-purple-500 transition-colors duration-200"
+        >
+          <Switch.Thumb className="block w-5 h-5 bg-white rounded-full transition-transform duration-200 translate-x-0.5 data-[state=checked]:translate-x-6" />
+        </Switch.Root>
       </div>
 
-      <div className="flex gap-4 flex-col sm:flex-row sm:items-center">
-        {mode.responseMode !== "leave_comment" &&
-          RESPONSE_MODES.map(({ key, label, icon, color }) => (
-            <ModeButton
-              key={key}
-              isActive={mode.responseMode === key}
-              label={label}
-              icon={icon}
-              color={color}
-              onClick={() =>
-                setMode({
-                  responseMode: key as any,
-                  response: key === "ai_enabled" ? "friendly" : "",
-                })
-              }
-            />
-          ))}
-      </div>
-
-      {mode.responseMode === "ai_enabled" && (
-        <>
-          <p className="text-gray-600 mt-4">Response Tone :</p>
-          <div className="flex gap-4 flex-wrap">
-            {TONES.map(({ key, label, icon }) => (
-              <ToneButton
+      {isOpen && (
+        <div className="space-y-6">
+          <div className="flex flex-wrap gap-4">
+            {RESPONSE_MODES.map(({ key, label, icon, color }) => (
+              <ModeButton
                 key={key}
-                isActive={mode.response === key}
+                isActive={mode.responseMode === key}
                 label={label}
                 icon={icon}
-                onClick={() => setMode({ ...mode, response: key })}
+                color={color}
+                onClick={() =>
+                  setMode({
+                    responseMode: key as any,
+                    response: key === "ai_enabled" ? "friendly" : "",
+                  })
+                }
               />
             ))}
           </div>
 
-          <div className="mt-4 flex items-center gap-2">
-            <div className="relative">
-              <FiInfo 
-                onMouseEnter={() => setTooltipVisible(true)}
-                onMouseLeave={() => setTooltipVisible(false)}
-                className="cursor-pointer"
+          {mode.responseMode === "ai_enabled" && (
+            <>
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Response Tone:
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {TONES.map(({ key, label, icon }) => (
+                  <ToneButton
+                    key={key}
+                    isActive={mode.response === key}
+                    label={label}
+                    icon={icon}
+                    onClick={() => setMode({ ...mode, response: key })}
+                  />
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Tooltip.Provider>
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <button className="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                        <FiInfo className="w-4 h-4" />
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        className="bg-gray-800 dark:bg-gray-900 text-white text-xs p-2 rounded-md shadow-lg max-w-xs"
+                        side="top"
+                        sideOffset={4}
+                      >
+                        This response will be different for each comment and
+                        will be AI-generated.
+                        <Tooltip.Arrow className="fill-gray-800 dark:fill-gray-900" />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Example Response:
+                </span>
+              </div>
+              <ExampleResponse
+                response={mode.response}
+                color={color}
+                title={title}
               />
-              {tooltipVisible && (
-                <div className="absolute bottom-full mb-2 left-0 bg-black text-white text-xs p-2 rounded whitespace-nowrap">
-                  This response will be different for each comment and will be AI generated
-                </div>
-              )}
-            </div>
-            <span>Example Response:</span>
-          </div>
-          <ExampleResponse
-            response={mode.response}
-            color={color}
-            title={title}
-          />
-        </>
-      )}
-
-      {mode.responseMode === "custom" && (
-        <>
-          <button
-            className="mt-4 bg-transparent text-gray-600 border border-gray-200 font-bold px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center gap-1"
-            onClick={() => setIsEditable(!isEditable)}
-          >
-            <RiEditBoxLine />
-            {isEditable ? "Done" : "Edit"}
-          </button>
-
-          {isEditable ? (
-            <textarea
-              className="mt-4 w-full p-2 border border-gray-300 rounded-md text-sm min-h-[80px] resize-y"
-              placeholder={`Enter your custom response for ${title}`}
-              value={mode.response}
-              onChange={(e) => setMode({ ...mode, response: e.target.value })}
-            />
-          ) : (
-            <ExampleResponse
-              response={
-                mode.response || `Enter your custom response for ${title}`
-              }
-              title={title}
-              color={color}
-            />
+            </>
           )}
-        </>
+
+          {mode.responseMode === "custom" && (
+            <>
+              <button
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 transition-colors"
+                onClick={() => setIsEditable(!isEditable)}
+              >
+                <RiEditBoxLine className="w-4 h-4" />
+                {isEditable ? "Done" : "Edit"}
+              </button>
+
+              {isEditable ? (
+                <textarea
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors resize-y min-h-[80px] text-sm"
+                  placeholder={`Enter your custom response for ${title}`}
+                  value={mode.response}
+                  onChange={(e) =>
+                    setMode({ ...mode, response: e.target.value })
+                  }
+                />
+              ) : (
+                <ExampleResponse
+                  response={
+                    mode.response || `Enter your custom response for ${title}`
+                  }
+                  title={title}
+                  color={color}
+                />
+              )}
+            </>
+          )}
+        </div>
       )}
     </div>
   );

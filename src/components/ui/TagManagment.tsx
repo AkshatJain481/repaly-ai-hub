@@ -30,7 +30,6 @@ const TagManagement = () => {
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>("");
-
   const [loadingComment, setLoadingComment] = useState<boolean>(false);
   const [loadingDM, setLoadingDM] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -123,34 +122,34 @@ const TagManagement = () => {
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col gap-6 p-4 md:p-6 bg-gray-50 dark:bg-gray-900">
       <ConfirmationPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         message={popupMessage}
         onConfirm={handleConfirmEdit}
       />
-      <div className="flex flex-col md:flex-row gap-4 w-full">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Add/Edit Tag Form */}
-        <div className="bg-white rounded-lg shadow-md w-full md:w-1/2 xl:w-2/3 p-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">
-              {editingId !== null
-                ? "Edit Tag and Response"
-                : "Add New Tag and Response"}
-            </h2>
-          </div>
-          <div className="mt-4">
-            <div className="flex flex-col gap-2">
-              <p className="text-lg font-medium mb-2">Suggested Tags</p>
-              <div className="flex flex-wrap gap-2 h-[70px] overflow-y-auto w-full items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 w-full lg:w-2/3 transition-colors duration-200">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+            {editingId !== null
+              ? "Edit Tag and Response"
+              : "Add New Tag and Response"}
+          </h2>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Suggested Tags
+              </label>
+              <div className="flex flex-wrap gap-2 max-h-20 overflow-y-auto bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
                 {isTagsLoading ? (
-                  <BarLoader color="#6B46C1" width="100%" />
+                  <BarLoader color="#8B5CF6" width="100%" />
                 ) : (
                   generatedTags?.map((tag: string, index: number) => (
                     <span
                       key={index}
-                      className="px-3 py-1 text-md text-purple-600 bg-purple-100 border border-purple-300 rounded-full cursor-pointer hover:bg-purple-200"
+                      className="px-3 py-1 text-sm font-medium text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50 border border-purple-300 dark:border-purple-600 rounded-full cursor-pointer hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
                       onClick={() => {
                         if (tags.includes(tag)) {
                           dispatch(setTags(tags.filter((t) => t !== tag)));
@@ -164,142 +163,153 @@ const TagManagement = () => {
                   ))
                 )}
               </div>
-              <TagsInput
-                tags={tags}
-                setTags={(payload) => dispatch(setTags(payload))}
-              />
-              <div className="flex justify-between items-center mt-4 mb-2">
-                <p className="text-gray-700">Comment Response</p>
+            </div>
+            <TagsInput
+              tags={tags}
+              setTags={(payload) => dispatch(setTags(payload))}
+            />
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Comment Response
+                </label>
                 <button
-                  className={`flex items-center gap-2 text-gray-700 font-bold text-lg hover:bg-gray-100 px-3 py-1 rounded-md ${
+                  className={`flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 transition-colors ${
                     !tags.length ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                   onClick={() => handleAIResponse("comment")}
                   disabled={!tags.length}
                 >
                   {loadingComment ? (
-                    <span>Thinking...</span>
+                    <span>Generating...</span>
                   ) : (
                     <>
-                      <FaWandMagicSparkles />
-                      Ask AI
+                      <FaWandMagicSparkles className="w-4 h-4" />
+                      Generate with AI
                     </>
                   )}
                 </button>
               </div>
               <textarea
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-y min-h-[60px]"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors resize-y min-h-[80px]"
                 placeholder="Write your response for comments here..."
                 value={responseComment}
                 onChange={(e) => dispatch(setResponseComment(e.target.value))}
               />
-              <div
-                className={`flex justify-between items-center mt-4 mb-2 ${
-                  mode ? "block" : "hidden"
-                }`}
-              >
-                <p className="text-gray-700">DM Response</p>
+            </div>
+            <div className={`${mode ? "" : "invisible"}`}>
+              <div className="flex justify-between items-center mb-3">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  DM Response
+                </label>
                 <button
-                  className={`flex items-center gap-2 text-gray-700 font-bold text-lg hover:bg-gray-100 px-3 py-1 rounded-md ${
+                  className={`flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 transition-colors ${
                     !tags.length ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                   onClick={() => handleAIResponse("dm")}
                   disabled={!tags.length}
                 >
                   {loadingDM ? (
-                    <span>Thinking...</span>
+                    <span>Generating...</span>
                   ) : (
                     <>
-                      <FaWandMagicSparkles />
-                      Ask AI
+                      <FaWandMagicSparkles className="w-4 h-4" />
+                      Generate with AI
                     </>
                   )}
                 </button>
               </div>
               <textarea
-                className={`w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-y min-h-[60px] ${
-                  mode ? "block" : "hidden"
-                }`}
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors resize-y min-h-[80px]"
                 placeholder="Write your response for DMs here..."
                 value={responseDM}
                 onChange={(e) => dispatch(setResponseDM(e.target.value))}
               />
-              <Tabs.Root
-                value={mode ? "comment+dm" : "comment-only"}
-                onValueChange={(value) => {
-                  dispatch(setResponseDM(""));
-                  dispatch(setMode(value === "comment+dm"));
-                }}
-                className="mt-4 w-full"
-              >
-                <Tabs.List className="flex w-full bg-gray-100 rounded-xl p-1 border-2 border-gray-200">
-                  <Tabs.Trigger
-                    value="comment-only"
-                    className="flex-1 text-center py-2 font-bold text-gray-700 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:rounded-lg"
-                  >
-                    Comment Only
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    value="comment+dm"
-                    className="flex-1 text-center py-2 font-bold text-gray-700 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:rounded-lg"
-                  >
-                    Comment + DM
-                  </Tabs.Trigger>
-                </Tabs.List>
-              </Tabs.Root>
-              <button
-                className="mt-4 w-full bg-gray-100 text-gray-600 px-4 py-2 rounded-md border-2 border-gray-200 font-medium hover:bg-gray-200 flex items-center justify-center gap-2"
-                onClick={handleAddOrUpdate}
-              >
-                <FiPlus size={20} />
-                {editingId ? "Update Tag/Value" : "Add Tag/Value"}
-              </button>
             </div>
+            <Tabs.Root
+              value={mode ? "comment+dm" : "comment-only"}
+              onValueChange={(value) => {
+                dispatch(setResponseDM(""));
+                dispatch(setMode(value === "comment+dm"));
+              }}
+              className="mt-4"
+            >
+              <Tabs.List className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1 border border-gray-200 dark:border-gray-600">
+                <Tabs.Trigger
+                  value="comment-only"
+                  className="flex-1 text-center py-2 text-sm font-medium text-gray-600 dark:text-gray-300 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 data-[state=active]:rounded-md transition-colors"
+                >
+                  Comment Only
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="comment+dm"
+                  className="flex-1 text-center py-2 text-sm font-medium text-gray-600 dark:text-gray-300 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 data-[state=active]:rounded-md transition-colors"
+                >
+                  Comment + DM
+                </Tabs.Trigger>
+              </Tabs.List>
+            </Tabs.Root>
+            <button
+              className="w-full bg-purple-600 dark:bg-purple-500 text-white py-2.5 rounded-lg font-medium hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors flex items-center justify-center gap-2"
+              onClick={handleAddOrUpdate}
+            >
+              <FiPlus className="w-5 h-5" />
+              {editingId !== null
+                ? "Update Tag & Response"
+                : "Add Tag & Response"}
+            </button>
           </div>
         </div>
 
         {/* Tags List */}
-        <div className="bg-white rounded-lg shadow-md w-full md:w-1/2 xl:w-1/3 p-6">
-          <h2 className="text-2xl font-bold">Tags List</h2>
-          <div className="mt-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 w-full lg:w-1/3 transition-colors duration-200">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+            Tags List
+          </h2>
+          <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr>
-                  <th className="text-left p-3 text-gray-500 font-medium w-2/3">
+                <tr className="border-b border-gray-200 dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                     Tags
                   </th>
-                  <th className="text-left p-3 text-gray-500 font-medium w-1/3">
+                  <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {fields?.map((tag, index) => (
-                  <tr key={index} className="border-t">
-                    <td className="p-3 font-bold w-2/3">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-200 dark:border-gray-700"
+                  >
+                    <td className="py-4 px-4">
                       <div className="flex flex-wrap gap-2">
                         {tag?.tags?.map((tag, idx) => (
                           <span
                             key={idx}
-                            className="px-2 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-full"
+                            className="px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className="p-6 w-1/3">
-                      <div className="flex gap-4">
-                        <FaRegEdit
+                    <td className="py-4 px-4">
+                      <div className="flex gap-3">
+                        <button
                           onClick={() => startEditing(tag, index)}
-                          size={20}
-                          className="cursor-pointer text-gray-600 hover:text-gray-800"
-                        />
-                        <FiTrash2
-                          size={20}
+                          className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                        >
+                          <FaRegEdit className="w-5 h-5" />
+                        </button>
+                        <button
                           onClick={() => dispatch(removeField(index))}
-                          className="cursor-pointer text-gray-600 hover:text-gray-800"
-                        />
+                          className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                        >
+                          <FiTrash2 className="w-5 h-5" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -309,7 +319,7 @@ const TagManagement = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

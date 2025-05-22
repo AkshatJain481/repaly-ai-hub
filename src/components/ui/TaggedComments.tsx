@@ -1,4 +1,3 @@
-
 import CommentCard from "../common/CommentCard";
 
 interface TaggedCommentsProps {
@@ -7,9 +6,9 @@ interface TaggedCommentsProps {
 
 const TaggedComments = ({ comments }: TaggedCommentsProps) => {
   return (
-    <div className="flex flex-col gap-4 mt-4">
+    <div className="flex flex-col gap-6 p-4">
       {comments && comments.length > 0 ? (
-        comments?.map((comment, idx) => (
+        comments.map((comment, idx) => (
           <CommentCard
             key={idx}
             username={comment[0]}
@@ -20,8 +19,8 @@ const TaggedComments = ({ comments }: TaggedCommentsProps) => {
           />
         ))
       ) : (
-        <div className="bg-white rounded-md p-4 shadow-sm text-center text-lg text-gray-500 font-bold flex justify-center items-center flex-col h-[50vh]">
-          No tagged comments found.
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-600 text-center text-lg font-semibold text-gray-500 dark:text-gray-400 flex justify-center items-center flex-col h-[50vh] transition-colors duration-200">
+          No tagged comments found
         </div>
       )}
     </div>
