@@ -6,6 +6,7 @@ import AutoDMs from "./AutoDMs";
 import PricingSection from "./PricingSection";
 import TestimonialSection from "./TestimonialSection";
 import GetStartedSection from "./GetStartedSection";
+import HowItWorks from "./HowItWorks";
 
 const HomePage = () => {
   return (
@@ -19,6 +20,7 @@ const HomePage = () => {
       <Element name="product">
         <AutoRepliesSection />
         <AutoDMs />
+        <HowItWorks />
       </Element>
       <Element name="pricing">
         <PricingSection />
