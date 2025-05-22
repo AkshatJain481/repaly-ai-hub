@@ -1,4 +1,3 @@
-
 import { Link as ScrollLink } from "react-scroll";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
@@ -57,9 +56,7 @@ const Navbar = () => {
         <ThemeToggle />
         <LoginDrawer
           triggerButton={
-            <Button
-              className="px-4 xl:px-8 py-4 rounded-full font-bold transition-all hover:translate-y-[-2px] hover:shadow-lg"
-            >
+            <Button className="px-4 xl:px-8 py-4 rounded-full font-bold transition-all hover:translate-y-[-2px] hover:shadow-lg">
               Get Started
             </Button>
           }

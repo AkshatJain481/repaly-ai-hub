@@ -1,4 +1,3 @@
-
 import { getFormattedDate } from "@/utils/commonFunctions";
 import { PlatformAccount } from "@/utils/interfaces";
 import { getOAuthLink } from "@/apis/oauthLink";
@@ -34,17 +33,17 @@ const AccountManager = () => {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountIndex, setAccountIndex] = useState<number | null>(null);
-  
+
   const OpenConfirmationPopup = (accountIndex: number) => {
     setIsOpen(true);
     setAccountIndex(accountIndex);
   };
-  
+
   const ClosePopup = () => {
     setIsOpen(false);
     setAccountIndex(null);
   };
-  
+
   const DeleteAccount = async () => {
     if (accountIndex === null) return;
     try {
@@ -58,7 +57,7 @@ const AccountManager = () => {
   };
 
   const handleAddAccount = (platformName: string) => {
-    window.location.href = getOAuthLink(platformName.toLocaleLowerCase());
+    window.location.href = getOAuthLink(platformName.toLowerCase());
   };
 
   const handleSelectAccount = (account: PlatformAccount) => {
@@ -67,24 +66,24 @@ const AccountManager = () => {
 
   const renderSocialMediaIcons = () => {
     return (
-      <>
+      <div className="flex flex-wrap gap-4 justify-center">
         {socialMediaPlatforms.map((platform) => (
           <div key={platform.name} className="flex-shrink-0">
             <div
               onClick={() =>
                 platform.name === "Instagram" && handleAddAccount(platform.name)
               }
-              className={`w-[60px] h-[60px] rounded-lg flex flex-col items-center justify-center transition-all duration-300 cursor-pointer hover:scale-105 p-3`}
+              className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110 hover:shadow-lg p-3 bg-opacity-10 border-2`}
               style={{
                 backgroundColor: `rgba(${parseInt(platform.color.slice(1, 3), 16)}, ${parseInt(platform.color.slice(3, 5), 16)}, ${parseInt(platform.color.slice(5, 7), 16)}, 0.1)`,
-                borderColor: platform.color
+                borderColor: platform.color,
               }}
             >
               <div
-                className={`text-3xl mb-1`}
-                style={{ 
+                className="text-3xl mb-1"
+                style={{
                   color: platform.color,
-                  filter: platform.name === "Instagram" ? "none" : "blur(4px)"
+                  filter: platform.name === "Instagram" ? "none" : "blur(4px)",
                 }}
               >
                 {platform.icon && <platform.icon />}
@@ -92,35 +91,35 @@ const AccountManager = () => {
             </div>
           </div>
         ))}
-      </>
+      </div>
     );
   };
 
   if (!userAccounts.length) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-4 flex-col">
-        <div className="p-8 rounded-xl bg-white border border-gray-200 shadow-sm transition-all duration-300">
-          <div className="w-40 h-40 mx-auto mb-6 rounded-full bg-[#c9c1f9] opacity-20 flex items-center justify-center">
-            <Users size="5rem" className="text-[#9b87f5] opacity-80" />
+        <div className="p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg transition-all duration-300">
+          <div className="w-40 h-40 mx-auto mb-6 rounded-full bg-[#c9c1f9] dark:bg-[#4b3b9b] opacity-20 flex items-center justify-center">
+            <Users
+              size="5rem"
+              className="text-[#9b87f5] dark:text-[#c9c1f9] opacity-80"
+            />
           </div>
-          <h2 className="text-lg font-bold text-center mb-2">
+          <h2 className="text-xl font-bold text-center mb-2 text-gray-900 dark:text-gray-100">
             Connect your accounts
           </h2>
-          <p className="text-center mb-8 text-gray-600">
+          <p className="text-center mb-8 text-gray-600 dark:text-gray-400">
             Link your social media accounts to start automating your content and
             engagement.
           </p>
-
-          <div className="flex flex-wrap gap-4 justify-center mb-6">
-            {renderSocialMediaIcons()}
-          </div>
+          {renderSocialMediaIcons()}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container py-8 px-4 overflow-auto max-h-[90vh]">
+    <div className="container py-8 px-4 max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
       <ConfirmationPopup
         loading={isDeleteAccountLoading || isGetAccountsLoading}
         isOpen={isOpen}
@@ -128,10 +127,8 @@ const AccountManager = () => {
         message="Are you sure you want to delete your account?"
         onConfirm={DeleteAccount}
       />
-      <div className="mb-8 p-6 rounded-lg bg-white shadow-sm border border-gray-200">
-        <div className="flex flex-wrap gap-5 justify-center">
-          {renderSocialMediaIcons()}
-        </div>
+      <div className="mb-8 p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+        {renderSocialMediaIcons()}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -143,8 +140,10 @@ const AccountManager = () => {
           return (
             <Card
               key={`${account.platformName}-${account.id}`}
-              className={`relative overflow-hidden bg-white rounded-xl border-2 transition-all duration-300 hover:shadow-md hover:translate-y-[-4px] cursor-pointer mb-4 h-full ${
-                activeAccount?.id === account.id ? `border-[${platform?.color}]` : 'border-gray-200'
+              className={`relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer h-full ${
+                activeAccount?.id === account.id
+                  ? `border-[${platform?.color}]`
+                  : "border-gray-200 dark:border-gray-700"
               }`}
               onClick={() => {
                 handleSelectAccount(account);
@@ -153,16 +152,25 @@ const AccountManager = () => {
                 }, 500);
               }}
             >
-              <div 
-                className="absolute top-0 left-0 w-full h-[10px]"
-                style={{ backgroundColor: platform?.color || "#9b87f5" }}
+              <div
+                className="absolute top-0 left-0 w-full h-2"
+                style={{
+                  background: platform?.color
+                    ? `linear-gradient(to right, ${platform.color}, ${platform.color}80)`
+                    : "linear-gradient(to right, #9b87f5, #9b87f580)",
+                }}
               />
-
-              <div className="absolute top-4 left-4 flex gap-2">
+              <div className="absolute top-4 left-4 flex gap-2 items-center">
                 {platform && (
                   <>
-                    <platform.icon style={{ color: platform.color }} className="h-5 w-5" />
-                    <span style={{ color: platform.color }} className="font-bold">
+                    <platform.icon
+                      style={{ color: platform.color }}
+                      className="h-6 w-6"
+                    />
+                    <span
+                      style={{ color: platform.color }}
+                      className="font-semibold text-sm"
+                    >
                       {platform?.name}
                     </span>
                   </>
@@ -170,33 +178,52 @@ const AccountManager = () => {
               </div>
 
               {activeAccount?.id === account.id && (
-                <div className="absolute flex justify-center items-center top-4 right-4 bg-blue-500 rounded-full p-1.5 h-6 w-6 shadow-md z-10">
+                <div className="absolute top-4 right-4 bg-blue-500 dark:bg-blue-600 rounded-full p-1.5 h-6 w-6 flex items-center justify-center shadow-md animate-pulse">
                   <Check className="text-white h-3 w-3" />
                 </div>
               )}
 
-              <CardContent className="pt-16 px-6 pb-3">
-                <div className="flex flex-col gap-3 items-center">
-                  <div className="relative mt-6 mx-auto w-24 h-24 rounded-full border-3 border-white bg-white shadow-md overflow-hidden">
+              <CardContent className="pt-16 pb-4 px-6 flex flex-col h-full">
+                <div className="flex flex-col items-center gap-4 flex-grow">
+                  <div className="relative mt-4 w-20 h-20 rounded-full border-3 border-white dark:border-gray-800 bg-white dark:bg-gray-800 shadow-lg overflow-hidden">
                     <Avatar className="w-full h-full">
-                      <AvatarFallback>{account?.name}</AvatarFallback>
-                      <AvatarImage src={account?.profile_picture_url} alt={account?.name} />
+                      <AvatarImage
+                        src={account?.profile_picture_url}
+                        alt={account?.name}
+                      />
+                      <AvatarFallback className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        {account?.name?.[0]?.toUpperCase() ||
+                          account?.username?.[0]?.toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
+                    <div
+                      className="absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1 shadow-sm"
+                      style={{
+                        border: `2px solid ${platform?.color || "#9b87f5"}`,
+                      }}
+                    >
+                      {platform?.icon && (
+                        <platform.icon
+                          style={{ color: platform?.color }}
+                          className="h-4 w-4"
+                        />
+                      )}
+                    </div>
                   </div>
 
                   <div className="text-center w-full">
-                    <h3 className="text-md font-semibold line-clamp-1 mb-1">
+                    <h3 className="text-lg font-bold line-clamp-1 mb-1 text-gray-900 dark:text-gray-100">
                       {account.name || account.username}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3 italic">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm italic">
                       @{account.username}
                     </p>
                   </div>
 
-                  <Separator />
+                  <Separator className="bg-gray-200 dark:bg-gray-700" />
 
-                  <div className="w-full flex justify-between">
-                    <div className="text-xs text-gray-600">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="text-xs text-gray-600 dark:text-gray-400">
                       <div className="flex items-center gap-1">
                         <span className="font-medium">Posts:</span>
                         <span>{account.media_count}</span>
@@ -207,12 +234,12 @@ const AccountManager = () => {
                       </div>
                     </div>
                     <div onClick={(e) => e.stopPropagation()}>
-                      <Button 
-                        variant="ghost" 
-                        className="p-1 h-auto text-red-500 hover:text-red-700"
+                      <Button
+                        variant="ghost"
+                        className="p-1 h-auto text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                         onClick={() => OpenConfirmationPopup(index)}
                       >
-                        <Trash2 size={26} />
+                        <Trash2 size={20} />
                       </Button>
                     </div>
                   </div>

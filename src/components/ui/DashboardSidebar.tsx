@@ -102,7 +102,10 @@ const DashboardSidebar = ({
           label={label}
           isExpanded={isMobile || isExpanded}
           isActive={isActive(path)}
-          onClick={() => navigate(path)}
+          onClick={() => {
+            navigate(path);
+            onClose();
+          }}
         />
       );
     });
@@ -116,7 +119,7 @@ const DashboardSidebar = ({
     <>
       {/* Sidebar Container For Desktop */}
       <div
-        className={`h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600 shadow-sm hidden md:block transition-all duration-300 ease-in-out ${
+        className={`h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-600 shadow-sm hidden md:block transition-all duration-300 ease-in-out ${
           isExpanded ? "w-60" : "w-16"
         }`}
       >
@@ -229,13 +232,8 @@ const DashboardSidebar = ({
         <div className="flex flex-col h-full p-4 gap-6">
           <div className="flex items-center justify-between">
             <Link to="/dashboard" className="flex items-center">
-              <img
-                src="/repaly-logo.png"
-                className="h-8 w-8 rounded-full"
-                alt="Repaly Logo"
-              />
               <span className="ml-2 font-semibold text-gray-800 dark:text-white">
-                Repaly
+                Repaly AI
               </span>
             </Link>
             <button
