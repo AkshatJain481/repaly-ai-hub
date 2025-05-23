@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,10 +10,10 @@ import {
   addEdge,
   Connection,
   Node,
-  Edge,
   NodeTypes,
   MarkerType,
   Panel,
+  Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -36,7 +35,7 @@ import MessageNode from "./nodes/MessageNode";
 import LoopNode from "./nodes/LoopNode";
 import RandomizerNode from "./nodes/RandomizerNode";
 import ConfirmationPopup from "../common/ConfirmationPopup";
-import { 
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -60,12 +59,11 @@ const FlowBuilder: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [nodeToDelete, setNodeToDelete] = useState<string | null>(null);
   const [affectedNodes, setAffectedNodes] = useState<string[]>([]);
-  const [pendingConnection, setPendingConnection] = useState<Connection | null>(null);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
@@ -132,25 +130,27 @@ const FlowBuilder: React.FC = () => {
   const onConnect = useCallback(
     (params: Connection) => {
       // If it's a button handle connection, update the params
-      if (params.sourceHandle && params.sourceHandle.startsWith('btn-')) {
+      if (params.sourceHandle && params.sourceHandle.startsWith("btn-")) {
         // This is a connection from a button
         // Allow the connection to proceed
       }
-      
+
       const edge = {
-        id: `${params.source}-${params.target}${params.sourceHandle ? `-${params.sourceHandle}` : ''}`,
+        id: `${params.source}-${params.target}${params.sourceHandle ? `-${params.sourceHandle}` : ""}`,
         source: params.source!,
         target: params.target!,
-        sourceHandle: params.sourceHandle,
-        targetHandle: params.targetHandle,
+        sourceHandle: params.sourceHandle || undefined,
+        targetHandle: params.targetHandle || undefined,
         type: "default",
         markerEnd: {
           type: MarkerType.ArrowClosed,
         },
       };
-      
+
       dispatch(addFlowEdge(edge));
-      setEdges((eds) => addEdge({...params, markerEnd: { type: MarkerType.ArrowClosed }}, eds));
+      setEdges((eds) =>
+        addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, eds)
+      );
     },
     [dispatch, setEdges]
   );
@@ -161,14 +161,14 @@ const FlowBuilder: React.FC = () => {
 
   const onConnectEnd = useCallback(
     (event: any) => {
-      const targetIsPane = event.target.classList.contains('react-flow__pane');
-      
+      const targetIsPane = event.target.classList.contains("react-flow__pane");
+
       if (targetIsPane && reactFlowWrapper.current) {
         // Get the position where the connection drag ended
         const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
         const x = event.clientX - left;
         const y = event.clientY - top;
-        
+
         setNewNodePosition({ x, y });
         setIsNodeSelectorOpen(true);
       }
@@ -335,25 +335,46 @@ const FlowBuilder: React.FC = () => {
             <DialogTitle>Add a Node</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
-            <Button onClick={() => handleAddNode("message")} className="bg-pink-500 hover:bg-pink-600">
+            <Button
+              onClick={() => handleAddNode("message")}
+              className="bg-pink-500 hover:bg-pink-600"
+            >
               Message
             </Button>
-            <Button onClick={() => handleAddNode("condition")} className="bg-blue-500 hover:bg-blue-600">
+            <Button
+              onClick={() => handleAddNode("condition")}
+              className="bg-blue-500 hover:bg-blue-600"
+            >
               Condition
             </Button>
-            <Button onClick={() => handleAddNode("action")} className="bg-orange-500 hover:bg-orange-600">
+            <Button
+              onClick={() => handleAddNode("action")}
+              className="bg-orange-500 hover:bg-orange-600"
+            >
               Action
             </Button>
-            <Button onClick={() => handleAddNode("delay")} className="bg-gray-500 hover:bg-gray-600">
+            <Button
+              onClick={() => handleAddNode("delay")}
+              className="bg-gray-500 hover:bg-gray-600"
+            >
               Delay
             </Button>
-            <Button onClick={() => handleAddNode("loop")} className="bg-teal-500 hover:bg-teal-600">
+            <Button
+              onClick={() => handleAddNode("loop")}
+              className="bg-teal-500 hover:bg-teal-600"
+            >
               Loop
             </Button>
-            <Button onClick={() => handleAddNode("randomizer")} className="bg-red-500 hover:bg-red-600">
+            <Button
+              onClick={() => handleAddNode("randomizer")}
+              className="bg-red-500 hover:bg-red-600"
+            >
               Randomizer
             </Button>
-            <Button onClick={() => handleAddNode("trigger")} className="bg-green-500 hover:bg-green-600">
+            <Button
+              onClick={() => handleAddNode("trigger")}
+              className="bg-green-500 hover:bg-green-600"
+            >
               Trigger
             </Button>
           </div>

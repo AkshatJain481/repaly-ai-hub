@@ -1,4 +1,3 @@
-
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { addNode, setCurrentFlow } from "@/redux/slices/flow.slice";
@@ -9,16 +8,10 @@ import {
   BiChevronRight,
   BiChevronLeft,
   BiMessageSquareDetail,
-  BiSquareRounded, // Replacement for BiButton
   BiRefresh, // Replacement for BiLoop
   BiShuffle,
 } from "react-icons/bi";
-import {
-  FiMessageSquare,
-  FiGitBranch,
-  FiZap,
-  FiClock,
-} from "react-icons/fi";
+import { FiMessageSquare, FiGitBranch, FiZap, FiClock } from "react-icons/fi";
 
 const FlowBuilderSidebar: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,7 +25,6 @@ const FlowBuilderSidebar: React.FC = () => {
       | "action"
       | "delay"
       | "message"
-      | "button"
       | "loop"
       | "randomizer"
   ) => {
@@ -52,50 +44,50 @@ const FlowBuilderSidebar: React.FC = () => {
       type: "trigger",
       icon: <FiZap className="w-5 h-5 text-green-500 dark:text-green-400" />,
       label: "Trigger",
-      description: "Start the automation flow"
+      description: "Start the automation flow",
     },
     {
       type: "message",
-      icon: <BiMessageSquareDetail className="w-5 h-5 text-pink-500 dark:text-pink-400" />,
+      icon: (
+        <BiMessageSquareDetail className="w-5 h-5 text-pink-500 dark:text-pink-400" />
+      ),
       label: "Message",
-      description: "Send a message to the user"
-    },
-    {
-      type: "button",
-      icon: <BiSquareRounded className="w-5 h-5 text-purple-500 dark:text-purple-400" />,
-      label: "Button",
-      description: "Add interactive buttons"
+      description: "Send a message to the user",
     },
     {
       type: "action",
-      icon: <FiMessageSquare className="w-5 h-5 text-orange-500 dark:text-orange-400" />,
+      icon: (
+        <FiMessageSquare className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+      ),
       label: "Action",
-      description: "Perform system actions"
+      description: "Perform system actions",
     },
     {
       type: "condition",
-      icon: <FiGitBranch className="w-5 h-5 text-blue-500 dark:text-blue-400" />,
+      icon: (
+        <FiGitBranch className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+      ),
       label: "Condition",
-      description: "Add conditional logic"
+      description: "Add conditional logic",
     },
     {
       type: "loop",
       icon: <BiRefresh className="w-5 h-5 text-teal-500 dark:text-teal-400" />,
       label: "Loop",
-      description: "Create looping flows"
+      description: "Create looping flows",
     },
     {
       type: "randomizer",
       icon: <BiShuffle className="w-5 h-5 text-red-500 dark:text-red-400" />,
       label: "Randomizer",
-      description: "Random selection for A/B testing"
+      description: "Random selection for A/B testing",
     },
     {
       type: "delay",
       icon: <FiClock className="w-5 h-5 text-gray-500 dark:text-gray-400" />,
       label: "Delay",
-      description: "Add time delay"
-    }
+      description: "Add time delay",
+    },
   ];
 
   return (
@@ -138,9 +130,7 @@ const FlowBuilderSidebar: React.FC = () => {
                 {nodeTypes.map((node) => (
                   <Button
                     key={node.type}
-                    onClick={() =>
-                      handleAddNode(node.type as any)
-                    }
+                    onClick={() => handleAddNode(node.type as any)}
                     title={node.description}
                     className="flex flex-col items-center gap-2 p-3 rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors text-xs font-medium"
                   >

@@ -1,9 +1,15 @@
-
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FlowNode {
   id: string;
-  type: 'trigger' | 'condition' | 'action' | 'delay' | 'message' | 'loop' | 'randomizer';
+  type:
+    | "trigger"
+    | "condition"
+    | "action"
+    | "delay"
+    | "message"
+    | "loop"
+    | "randomizer";
   position: { x: number; y: number };
   data: {
     label: string;
@@ -39,67 +45,64 @@ interface FlowState {
 
 // Mock API calls
 export const saveFlow = createAsyncThunk(
-  'flow/saveFlow',
+  "flow/saveFlow",
   async (flow: Flow) => {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const savedFlow = { ...flow, updatedAt: new Date().toISOString() };
-    
+
     // Store in localStorage as dummy API
-    const existingFlows = JSON.parse(localStorage.getItem('flows') || '[]');
+    const existingFlows = JSON.parse(localStorage.getItem("flows") || "[]");
     const flowIndex = existingFlows.findIndex((f: Flow) => f.id === flow.id);
-    
+
     if (flowIndex >= 0) {
       existingFlows[flowIndex] = savedFlow;
     } else {
       existingFlows.push(savedFlow);
     }
-    
-    localStorage.setItem('flows', JSON.stringify(existingFlows));
+
+    localStorage.setItem("flows", JSON.stringify(existingFlows));
     return savedFlow;
   }
 );
 
-export const loadFlows = createAsyncThunk(
-  'flow/loadFlows',
-  async () => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 300));
-    const flows = JSON.parse(localStorage.getItem('flows') || '[]');
-    return flows as Flow[];
-  }
-);
+export const loadFlows = createAsyncThunk("flow/loadFlows", async () => {
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  const flows = JSON.parse(localStorage.getItem("flows") || "[]");
+  return flows as Flow[];
+});
 
 // Create a new flow with initial nodes
 const createInitialFlow = (): Flow => {
   const id = `flow-${Date.now()}`;
   const triggerId = `trigger-${Date.now()}`;
   const messageId = `message-${Date.now() + 1}`;
-  
+
   return {
     id,
-    name: 'Untitled Flow',
+    name: "Untitled Flow",
     nodes: [
       // Initial trigger node
       {
         id: triggerId,
-        type: 'trigger',
+        type: "trigger",
         position: { x: 250, y: 100 },
         data: {
-          label: 'Trigger: Comment on Post',
-          config: { triggerType: 'comment', platform: 'instagram' },
+          label: "Trigger: Comment on Post",
+          config: { triggerType: "comment", platform: "instagram" },
         },
       },
       // Initial message node
       {
         id: messageId,
-        type: 'message',
+        type: "message",
         position: { x: 250, y: 250 },
         data: {
-          label: 'Send Message',
-          config: { messageType: 'text', content: 'Hello!', buttons: [] },
+          label: "Send Message",
+          config: { messageType: "text", content: "Hello!", buttons: [] },
         },
-      }
+      },
     ],
     edges: [
       // Connect trigger to message
@@ -107,8 +110,8 @@ const createInitialFlow = (): Flow => {
         id: `${triggerId}-${messageId}`,
         source: triggerId,
         target: messageId,
-        type: 'default',
-      }
+        type: "default",
+      },
     ],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -123,7 +126,7 @@ const initialState: FlowState = {
 };
 
 const flowSlice = createSlice({
-  name: 'flow',
+  name: "flow",
   initialState,
   reducers: {
     setCurrentFlow: (state, action: PayloadAction<Flow>) => {
@@ -132,47 +135,55 @@ const flowSlice = createSlice({
     updateFlowName: (state, action: PayloadAction<string>) => {
       state.currentFlow.name = action.payload;
     },
-    addNode: (state, action: PayloadAction<{ 
-      type: FlowNode['type']; 
-      position: { x: number; y: number } 
-    }>) => {
+    addNode: (
+      state,
+      action: PayloadAction<{
+        type: FlowNode["type"];
+        position: { x: number; y: number };
+      }>
+    ) => {
       const { type, position } = action.payload;
       const id = `${type}-${Date.now()}`;
-      
+
       let label = `${type.charAt(0).toUpperCase() + type.slice(1)} Node`;
       let config: Record<string, any> = {};
-      
+
       switch (type) {
-        case 'trigger':
-          label = 'Trigger: Comment on Post';
-          config = { triggerType: 'comment', platform: 'instagram' };
+        case "trigger":
+          label = "Trigger: Comment on Post";
+          config = { triggerType: "comment", platform: "instagram" };
           break;
-        case 'message':
-          label = 'Send Message';
-          config = { messageType: 'text', content: 'Hello!', buttons: [] };
+        case "message":
+          label = "Send Message";
+          config = { messageType: "text", content: "Hello!", buttons: [] };
           break;
-        case 'condition':
-          label = 'Check Condition';
-          config = { conditionType: 'has_tag', value: '' };
+        case "condition":
+          label = "Check Condition";
+          config = { conditionType: "has_tag", value: "" };
           break;
-        case 'action':
-          label = 'Perform Action';
-          config = { actionType: 'add_tag', value: '' };
+        case "action":
+          label = "Perform Action";
+          config = { actionType: "add_tag", value: "" };
           break;
-        case 'loop':
-          label = 'Loop Back';
-          config = { targetNodeId: '', maxIterations: 3 };
+        case "loop":
+          label = "Loop Back";
+          config = { targetNodeId: "", maxIterations: 3 };
           break;
-        case 'randomizer':
-          label = 'Random Selection';
-          config = { options: [{weight: 50, label: 'Option 1'}, {weight: 50, label: 'Option 2'}] };
+        case "randomizer":
+          label = "Random Selection";
+          config = {
+            options: [
+              { weight: 50, label: "Option 1" },
+              { weight: 50, label: "Option 2" },
+            ],
+          };
           break;
-        case 'delay':
-          label = 'Wait';
-          config = { duration: 5, unit: 'minutes' };
+        case "delay":
+          label = "Wait";
+          config = { duration: 5, unit: "minutes" };
           break;
       }
-      
+
       const newNode: FlowNode = {
         id,
         type,
@@ -184,68 +195,85 @@ const flowSlice = createSlice({
       };
       state.currentFlow.nodes.push(newNode);
     },
-    updateNode: (state, action: PayloadAction<{ id: string; updates: Partial<FlowNode['data']> }>) => {
+    updateNode: (
+      state,
+      action: PayloadAction<{ id: string; updates: Partial<FlowNode["data"]> }>
+    ) => {
       const { id, updates } = action.payload;
-      const node = state.currentFlow.nodes.find(n => n.id === id);
+      const node = state.currentFlow.nodes.find((n) => n.id === id);
       if (node) {
         node.data = { ...node.data, ...updates };
-        
+
         // If this is a message node with buttons, make sure each button has an ID
-        if (node.type === 'message' && node.data.config.buttons) {
-          node.data.config.buttons = node.data.config.buttons.map((button: any, index: number) => {
-            return {
-              ...button,
-              id: button.id || `${id}-btn-${index}`
-            };
-          });
+        if (node.type === "message" && node.data.config.buttons) {
+          node.data.config.buttons = node.data.config.buttons.map(
+            (button: any, index: number) => {
+              return {
+                ...button,
+                id: button.id || `${id}-btn-${index}`,
+              };
+            }
+          );
         }
       }
     },
     deleteNode: (state, action: PayloadAction<string>) => {
       const nodeId = action.payload;
-      
+
       // Check if this is the first trigger node (which shouldn't be deletable)
-      const nodeIndex = state.currentFlow.nodes.findIndex(n => n.id === nodeId);
+      const nodeIndex = state.currentFlow.nodes.findIndex(
+        (n) => n.id === nodeId
+      );
       const node = state.currentFlow.nodes[nodeIndex];
-      
-      if (node && node.type === 'trigger' && nodeIndex === 0) {
+
+      if (node && node.type === "trigger" && nodeIndex === 0) {
         return; // Don't delete the first trigger node
       }
-      
+
       // Find all downstream nodes (nodes connected to this node)
       const downstreamNodeIds = new Set<string>();
       const nodesToProcess = [nodeId];
-      
+
       while (nodesToProcess.length > 0) {
         const currentId = nodesToProcess.pop()!;
         downstreamNodeIds.add(currentId);
-        
+
         // Find edges where this node is the source
-        const outgoingEdges = state.currentFlow.edges.filter(e => e.source === currentId);
+        const outgoingEdges = state.currentFlow.edges.filter(
+          (e) => e.source === currentId
+        );
         for (const edge of outgoingEdges) {
           if (!downstreamNodeIds.has(edge.target)) {
             nodesToProcess.push(edge.target);
           }
         }
       }
-      
+
       // Remove all nodes in the downstream path
-      state.currentFlow.nodes = state.currentFlow.nodes.filter(n => !downstreamNodeIds.has(n.id));
-      
+      state.currentFlow.nodes = state.currentFlow.nodes.filter(
+        (n) => !downstreamNodeIds.has(n.id)
+      );
+
       // Remove all edges connected to deleted nodes
       state.currentFlow.edges = state.currentFlow.edges.filter(
-        e => !downstreamNodeIds.has(e.source) && !downstreamNodeIds.has(e.target)
+        (e) =>
+          !downstreamNodeIds.has(e.source) && !downstreamNodeIds.has(e.target)
       );
     },
     addEdge: (state, action: PayloadAction<FlowEdge>) => {
       state.currentFlow.edges.push(action.payload);
     },
     deleteEdge: (state, action: PayloadAction<string>) => {
-      state.currentFlow.edges = state.currentFlow.edges.filter(e => e.id !== action.payload);
+      state.currentFlow.edges = state.currentFlow.edges.filter(
+        (e) => e.id !== action.payload
+      );
     },
-    updateNodePosition: (state, action: PayloadAction<{ id: string; position: { x: number; y: number } }>) => {
+    updateNodePosition: (
+      state,
+      action: PayloadAction<{ id: string; position: { x: number; y: number } }>
+    ) => {
       const { id, position } = action.payload;
-      const node = state.currentFlow.nodes.find(n => n.id === id);
+      const node = state.currentFlow.nodes.find((n) => n.id === id);
       if (node) {
         node.position = position;
       }
@@ -263,7 +291,9 @@ const flowSlice = createSlice({
       .addCase(saveFlow.fulfilled, (state, action) => {
         state.loading = false;
         state.currentFlow = action.payload;
-        const existingIndex = state.savedFlows.findIndex(f => f.id === action.payload.id);
+        const existingIndex = state.savedFlows.findIndex(
+          (f) => f.id === action.payload.id
+        );
         if (existingIndex >= 0) {
           state.savedFlows[existingIndex] = action.payload;
         } else {
@@ -272,7 +302,7 @@ const flowSlice = createSlice({
       })
       .addCase(saveFlow.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to save flow';
+        state.error = action.error.message || "Failed to save flow";
       })
       .addCase(loadFlows.fulfilled, (state, action) => {
         state.savedFlows = action.payload;

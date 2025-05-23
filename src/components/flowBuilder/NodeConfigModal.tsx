@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
@@ -132,9 +131,7 @@ const NodeConfigModal: React.FC = () => {
           <Label htmlFor="platform">Platform</Label>
           <Select
             value={config.platform || "instagram"}
-            onValueChange={(value) =>
-              setConfig({ ...config, platform: value })
-            }
+            onValueChange={(value) => setConfig({ ...config, platform: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -229,17 +226,23 @@ const NodeConfigModal: React.FC = () => {
                 // and then update the config with the returned URL
                 // For now, we'll create a local URL for demonstration
                 const localUrl = URL.createObjectURL(file);
-                setConfig({ ...config, imageUrl: localUrl, fileName: file.name });
+                setConfig({
+                  ...config,
+                  imageUrl: localUrl,
+                  fileName: file.name,
+                });
               }
             }}
           />
           {config.imageUrl && (
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Selected: {config.fileName || "Image"}</p>
-              <img 
-                src={config.imageUrl} 
-                alt="Preview" 
-                className="mt-2 max-h-40 rounded-md" 
+              <p className="text-sm text-gray-500">
+                Selected: {config.fileName || "Image"}
+              </p>
+              <img
+                src={config.imageUrl}
+                alt="Preview"
+                className="mt-2 max-h-40 rounded-md"
               />
             </div>
           )}
@@ -258,13 +261,19 @@ const NodeConfigModal: React.FC = () => {
                 const file = e.target.files[0];
                 // In a real app, you would upload this file to your storage service
                 const localUrl = URL.createObjectURL(file);
-                setConfig({ ...config, audioUrl: localUrl, audioName: file.name });
+                setConfig({
+                  ...config,
+                  audioUrl: localUrl,
+                  audioName: file.name,
+                });
               }
             }}
           />
           {config.audioUrl && (
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Selected: {config.audioName || "Audio file"}</p>
+              <p className="text-sm text-gray-500">
+                Selected: {config.audioName || "Audio file"}
+              </p>
               <audio controls className="mt-2 w-full">
                 <source src={config.audioUrl} />
                 Your browser does not support the audio element.
@@ -286,13 +295,19 @@ const NodeConfigModal: React.FC = () => {
                 const file = e.target.files[0];
                 // In a real app, you would upload this file to your storage service
                 const localUrl = URL.createObjectURL(file);
-                setConfig({ ...config, videoUrl: localUrl, videoName: file.name });
+                setConfig({
+                  ...config,
+                  videoUrl: localUrl,
+                  videoName: file.name,
+                });
               }
             }}
           />
           {config.videoUrl && (
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Selected: {config.videoName || "Video file"}</p>
+              <p className="text-sm text-gray-500">
+                Selected: {config.videoName || "Video file"}
+              </p>
               <video controls className="mt-2 max-h-40 w-full">
                 <source src={config.videoUrl} />
                 Your browser does not support the video element.
@@ -314,17 +329,23 @@ const NodeConfigModal: React.FC = () => {
                 const file = e.target.files[0];
                 // In a real app, you would upload this file to your storage service
                 const localUrl = URL.createObjectURL(file);
-                setConfig({ ...config, imageUrl: localUrl, fileName: file.name });
+                setConfig({
+                  ...config,
+                  imageUrl: localUrl,
+                  fileName: file.name,
+                });
               }
             }}
           />
           {config.imageUrl && (
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Selected: {config.fileName || "Image"}</p>
-              <img 
-                src={config.imageUrl} 
-                alt="Preview" 
-                className="mt-2 max-h-40 rounded-md" 
+              <p className="text-sm text-gray-500">
+                Selected: {config.fileName || "Image"}
+              </p>
+              <img
+                src={config.imageUrl}
+                alt="Preview"
+                className="mt-2 max-h-40 rounded-md"
               />
             </div>
           )}
@@ -380,10 +401,10 @@ const NodeConfigModal: React.FC = () => {
                   }}
                 />
                 {img.url && (
-                  <img 
-                    src={img.url} 
-                    alt={`Gallery image ${index + 1}`} 
-                    className="h-10 w-10 object-cover rounded-md" 
+                  <img
+                    src={img.url}
+                    alt={`Gallery image ${index + 1}`}
+                    className="h-10 w-10 object-cover rounded-md"
                   />
                 )}
                 <Button
@@ -405,7 +426,10 @@ const NodeConfigModal: React.FC = () => {
               onClick={() => {
                 setConfig({
                   ...config,
-                  galleryImages: [...(config.galleryImages || []), { url: "", fileName: "" }],
+                  galleryImages: [
+                    ...(config.galleryImages || []),
+                    { url: "", fileName: "" },
+                  ],
                 });
               }}
               className="w-full mt-2"
@@ -482,10 +506,10 @@ const NodeConfigModal: React.FC = () => {
                     value={button.actionType || "send_message"}
                     onValueChange={(value) => {
                       const buttons = [...(config.buttons || [])];
-                      buttons[index] = { 
-                        ...buttons[index], 
-                        actionType: value, 
-                        id: `${selectedNodeId}-btn-${index}` 
+                      buttons[index] = {
+                        ...buttons[index],
+                        actionType: value,
+                        id: `${selectedNodeId}-btn-${index}`,
                       };
                       setConfig({ ...config, buttons });
                     }}
@@ -567,17 +591,18 @@ const NodeConfigModal: React.FC = () => {
         </Select>
       </div>
 
-      {config.conditionType === "has_tag" || config.conditionType === "missing_tag" ? (
-          <div>
-            <Label htmlFor="tag">Tag Name</Label>
-            <Input
-              id="tag"
-              value={config.tag || ""}
-              onChange={(e) => setConfig({ ...config, tag: e.target.value })}
-              placeholder="Enter tag name"
-            />
-          </div>
-        ) : null}
+      {config.conditionType === "has_tag" ||
+      config.conditionType === "missing_tag" ? (
+        <div>
+          <Label htmlFor="tag">Tag Name</Label>
+          <Input
+            id="tag"
+            value={config.tag || ""}
+            onChange={(e) => setConfig({ ...config, tag: e.target.value })}
+            placeholder="Enter tag name"
+          />
+        </div>
+      ) : null}
 
       {config.conditionType === "user_field" && (
         <>
