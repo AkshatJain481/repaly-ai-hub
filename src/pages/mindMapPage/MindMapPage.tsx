@@ -1,5 +1,9 @@
+
+import React from 'react';
+import FlowBuilder from '@/components/flowBuilder/FlowBuilder';
+
 const MindMapPage = () => {
-  return <div></div>;
+  return <FlowBuilder />;
 };
 
 export default MindMapPage;
