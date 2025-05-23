@@ -1,12 +1,29 @@
+import { Handle, Position } from "@xyflow/react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { openConfigModal } from "@/redux/slices/flowUI.slice";
+import {
+  MessageSquare,
+  Image,
+  MessageCircle,
+  Film,
+  FileText,
+  Layout,
+} from "lucide-react";
 
-import React from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/redux/store';
-import { openConfigModal } from '@/redux/slices/flowUI.slice';
-import { MessageSquare, Image, MessageCircle, Film, FileText, Layout } from 'lucide-react';
-
-const MessageNode: React.FC<NodeProps> = ({ data, id }) => {
+const MessageNode = ({
+  data,
+  id,
+}: {
+  data: {
+    config: {
+      messageType: string;
+      content: string;
+      buttons: { text: string }[];
+    };
+  };
+  id: string;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleNodeClick = () => {
@@ -14,26 +31,26 @@ const MessageNode: React.FC<NodeProps> = ({ data, id }) => {
   };
 
   const messageTypeIcon = () => {
-    const messageType = data?.config?.messageType || 'text';
+    const messageType = data?.config?.messageType || "text";
     switch (messageType) {
-      case 'image':
+      case "image":
         return <Image size={16} className="mr-1.5" />;
-      case 'audio':
+      case "audio":
         return <MessageCircle size={16} className="mr-1.5" />;
-      case 'video':
+      case "video":
         return <Film size={16} className="mr-1.5" />;
-      case 'card':
+      case "card":
         return <FileText size={16} className="mr-1.5" />;
-      case 'gallery':
+      case "gallery":
         return <Layout size={16} className="mr-1.5" />;
-      case 'text':
+      case "text":
       default:
         return <MessageSquare size={16} className="mr-1.5" />;
     }
   };
 
   return (
-    <div 
+    <div
       className="bg-pink-500 text-white p-4 rounded-lg border-2 border-pink-600 min-w-[170px] cursor-pointer hover:bg-pink-600 transition-colors"
       onClick={handleNodeClick}
     >
@@ -41,25 +58,28 @@ const MessageNode: React.FC<NodeProps> = ({ data, id }) => {
         {messageTypeIcon()}
         <span>Message</span>
       </div>
-      <div className="text-xs">{data?.config?.content || 'Hello, world!'}</div>
-      
-      {data?.config?.messageType !== 'text' && (
+      <div className="text-xs">{data?.config?.content || "Hello, world!"}</div>
+
+      {data?.config?.messageType !== "text" && (
         <div className="mt-2 bg-pink-600 p-2 rounded-md text-xs">
           <span className="text-pink-300">Type: </span>
-          {data?.config?.messageType || 'text'}
+          {data?.config?.messageType || "text"}
         </div>
       )}
-      
+
       {data?.config?.buttons && data?.config?.buttons.length > 0 && (
         <div className="mt-2 space-y-2">
           {data?.config?.buttons.map((button: any, index: number) => (
-            <div key={index} className="bg-pink-600 p-2 rounded-md text-xs flex items-center">
+            <div
+              key={index}
+              className="bg-pink-600 p-2 rounded-md text-xs flex items-center"
+            >
               <span>{button.text || `Button ${index + 1}`}</span>
             </div>
           ))}
         </div>
       )}
-      
+
       <Handle
         type="target"
         position={Position.Top}

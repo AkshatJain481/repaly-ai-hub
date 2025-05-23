@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -48,8 +47,8 @@ const FlowBuilder: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { currentFlow } = useSelector((state: RootState) => state.flow);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   // Sync Redux state with React Flow state
   useEffect(() => {

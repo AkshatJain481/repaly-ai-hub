@@ -1,12 +1,22 @@
+import { Handle, Position } from "@xyflow/react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { openConfigModal } from "@/redux/slices/flowUI.slice";
+import { RefreshCcw } from "lucide-react";
 
-import React from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/redux/store';
-import { openConfigModal } from '@/redux/slices/flowUI.slice';
-import { RefreshCcw } from 'lucide-react';
-
-const LoopNode: React.FC<NodeProps> = ({ data, id }) => {
+const LoopNode = ({
+  data,
+  id,
+}: {
+  data: {
+    label: string;
+    config: {
+      targetNodeId: string;
+      maxIterations: number;
+    };
+  };
+  id: string;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleNodeClick = () => {
@@ -14,7 +24,7 @@ const LoopNode: React.FC<NodeProps> = ({ data, id }) => {
   };
 
   return (
-    <div 
+    <div
       className="bg-teal-500 text-white p-4 rounded-lg border-2 border-teal-600 min-w-[160px] cursor-pointer hover:bg-teal-600 transition-colors"
       onClick={handleNodeClick}
     >
@@ -22,17 +32,19 @@ const LoopNode: React.FC<NodeProps> = ({ data, id }) => {
         <RefreshCcw size={16} className="mr-1.5" />
         <span>Loop</span>
       </div>
-      <div className="text-xs">{String(data?.label || 'Loop Back')}</div>
-      
+      <div className="text-xs">{String(data?.label || "Loop Back")}</div>
+
       <div className="mt-2 bg-teal-600 p-2 rounded-md text-xs">
         <div>
-          <span className="text-teal-300">Target:</span> {data?.config?.targetNodeId || 'None selected'}
+          <span className="text-teal-300">Target:</span>{" "}
+          {data?.config?.targetNodeId || "None selected"}
         </div>
         <div>
-          <span className="text-teal-300">Max iterations:</span> {data?.config?.maxIterations || 'Unlimited'}
+          <span className="text-teal-300">Max iterations:</span>{" "}
+          {data?.config?.maxIterations || "Unlimited"}
         </div>
       </div>
-      
+
       <Handle
         type="target"
         position={Position.Top}
