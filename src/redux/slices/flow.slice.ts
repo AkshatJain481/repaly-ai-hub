@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 export interface FlowNode {
   id: string;
-  type: 'trigger' | 'condition' | 'action' | 'delay';
+  type: 'trigger' | 'condition' | 'action' | 'delay' | 'message' | 'button' | 'loop' | 'randomizer';
   position: { x: number; y: number };
   data: {
     label: string;
@@ -92,16 +92,58 @@ const flowSlice = createSlice({
     updateFlowName: (state, action: PayloadAction<string>) => {
       state.currentFlow.name = action.payload;
     },
-    addNode: (state, action: PayloadAction<{ type: FlowNode['type']; position: { x: number; y: number } }>) => {
+    addNode: (state, action: PayloadAction<{ 
+      type: FlowNode['type']; 
+      position: { x: number; y: number } 
+    }>) => {
       const { type, position } = action.payload;
       const id = `${type}-${Date.now()}`;
+      
+      let label = `${type.charAt(0).toUpperCase() + type.slice(1)} Node`;
+      let config: Record<string, any> = {};
+      
+      switch (type) {
+        case 'trigger':
+          label = 'Trigger: Comment on Post';
+          config = { triggerType: 'comment', platform: 'instagram', contentId: '' };
+          break;
+        case 'message':
+          label = 'Send Message';
+          config = { messageType: 'text', content: 'Hello!', buttons: [] };
+          break;
+        case 'button':
+          label = 'Button: Click me';
+          config = { text: 'Click me', actionType: 'send_message' };
+          break;
+        case 'condition':
+          label = 'Check Condition';
+          config = { conditionType: 'has_tag', value: '' };
+          break;
+        case 'action':
+          label = 'Perform Action';
+          config = { actionType: 'add_tag', value: '' };
+          break;
+        case 'loop':
+          label = 'Loop Back';
+          config = { targetNodeId: '', maxIterations: 3 };
+          break;
+        case 'randomizer':
+          label = 'Random Selection';
+          config = { options: [{weight: 50, label: 'Option 1'}, {weight: 50, label: 'Option 2'}] };
+          break;
+        case 'delay':
+          label = 'Wait';
+          config = { duration: 5, unit: 'minutes' };
+          break;
+      }
+      
       const newNode: FlowNode = {
         id,
         type,
         position,
         data: {
-          label: `${type.charAt(0).toUpperCase() + type.slice(1)} Node`,
-          config: {},
+          label,
+          config,
         },
       };
       state.currentFlow.nodes.push(newNode);

@@ -1,16 +1,17 @@
+
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ReactFlow,
-  Node,
-  Edge,
-  Connection,
   useNodesState,
   useEdgesState,
   Controls,
   Background,
   MiniMap,
   addEdge,
+  Node,
+  Edge,
+  Connection,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -27,24 +28,32 @@ import TriggerNode from "./nodes/TriggerNode";
 import ConditionNode from "./nodes/ConditionNode";
 import ActionNode from "./nodes/ActionNode";
 import DelayNode from "./nodes/DelayNode";
+import MessageNode from "./nodes/MessageNode";
+import ButtonNode from "./nodes/ButtonNode";
+import LoopNode from "./nodes/LoopNode";
+import RandomizerNode from "./nodes/RandomizerNode";
 
 const nodeTypes = {
   trigger: TriggerNode,
   condition: ConditionNode,
   action: ActionNode,
   delay: DelayNode,
+  message: MessageNode,
+  button: ButtonNode,
+  loop: LoopNode,
+  randomizer: RandomizerNode,
 };
 
 const FlowBuilder: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { currentFlow } = useSelector((state: RootState) => state.flow);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   // Sync Redux state with React Flow state
   useEffect(() => {
-    const flowNodes: Node[] = currentFlow.nodes.map((node) => ({
+    const flowNodes = currentFlow.nodes.map((node) => ({
       id: node.id,
       type: node.type,
       position: node.position,
@@ -54,7 +63,7 @@ const FlowBuilder: React.FC = () => {
   }, [currentFlow.nodes, setNodes]);
 
   useEffect(() => {
-    const flowEdges: Edge[] = currentFlow.edges.map((edge) => ({
+    const flowEdges = currentFlow.edges.map((edge) => ({
       id: edge.id,
       source: edge.source,
       target: edge.target,
@@ -121,6 +130,14 @@ const FlowBuilder: React.FC = () => {
                     return "#f59e0b";
                   case "delay":
                     return "#6b7280";
+                  case "message":
+                    return "#ec4899"; // Pink for message nodes
+                  case "button":
+                    return "#8b5cf6"; // Purple for button nodes
+                  case "loop":
+                    return "#14b8a6"; // Teal for loop nodes
+                  case "randomizer":
+                    return "#f43f5e"; // Red for randomizer nodes
                   default:
                     return "#e5e7eb";
                 }
