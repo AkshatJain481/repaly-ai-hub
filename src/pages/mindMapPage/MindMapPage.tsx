@@ -1,5 +1,4 @@
-
-import FlowBuilder from '@/components/flowBuilder/FlowBuilder';
+import FlowBuilder from "@/components/flowBuilder/FlowBuilder";
 
 const MindMapPage = () => {
   return <FlowBuilder />;

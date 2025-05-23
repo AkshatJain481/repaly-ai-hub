@@ -1,20 +1,20 @@
-
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { addNode, setCurrentFlow } from '@/redux/slices/flow.slice';
-import { toggleSidebar } from '@/redux/slices/flowUI.slice';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { X, Plus, MessageSquare, GitBranch, Zap, Clock } from 'lucide-react';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { addNode, setCurrentFlow } from "@/redux/slices/flow.slice";
+import { toggleSidebar } from "@/redux/slices/flowUI.slice";
+import { Button } from "../ui/button";
+import * as Accordion from "@radix-ui/react-accordion";
+import { BiChevronRight, BiChevronLeft } from "react-icons/bi";
+import { FiMessageSquare, FiGitBranch, FiZap, FiClock } from "react-icons/fi";
 
 const FlowBuilderSidebar: React.FC = () => {
   const dispatch = useDispatch();
   const { sidebarCollapsed } = useSelector((state: RootState) => state.flowUI);
   const { savedFlows } = useSelector((state: RootState) => state.flow);
 
-  const handleAddNode = (type: 'trigger' | 'condition' | 'action' | 'delay') => {
+  const handleAddNode = (
+    type: "trigger" | "condition" | "action" | "delay"
+  ) => {
     const position = {
       x: Math.random() * 400 + 100,
       y: Math.random() * 400 + 100,
@@ -26,109 +26,135 @@ const FlowBuilderSidebar: React.FC = () => {
     dispatch(setCurrentFlow(flow));
   };
 
-  if (sidebarCollapsed) {
-    return (
-      <div className="w-12 bg-white border-r border-gray-200 p-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => dispatch(toggleSidebar())}
-          className="w-8 h-8"
-        >
-          <Plus size={16} />
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div className="w-80 bg-white border-r border-gray-200 p-4 overflow-y-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Flow Builder</h2>
+    <div
+      className={`transition-all duration-300 ease-in-out text-nowrap ${
+        sidebarCollapsed ? "w-12" : "w-80"
+      } bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600 p-2 overflow-hidden`}
+    >
+      {sidebarCollapsed ? (
         <Button
-          variant="ghost"
-          size="icon"
+          size={"icon"}
           onClick={() => dispatch(toggleSidebar())}
-          className="w-8 h-8"
+          className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors"
+          aria-label="Expand sidebar"
         >
-          <X size={16} />
+          <BiChevronRight className="w-6 h-6" />
         </Button>
-      </div>
-
-      <div className="space-y-4">
-        <Card className="p-4">
-          <h3 className="text-sm font-medium mb-3">Add Nodes</h3>
-          <div className="grid grid-cols-2 gap-2">
+      ) : (
+        <div className="p-2 overflow-y-auto h-full">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Flow Builder
+            </h2>
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleAddNode('trigger')}
-              className="flex items-center gap-2 h-auto p-3 flex-col"
+              size={"icon"}
+              onClick={() => dispatch(toggleSidebar())}
+              className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors"
+              aria-label="Collapse sidebar"
             >
-              <Zap size={20} className="text-green-500" />
-              <span className="text-xs">Trigger</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleAddNode('condition')}
-              className="flex items-center gap-2 h-auto p-3 flex-col"
-            >
-              <GitBranch size={20} className="text-blue-500" />
-              <span className="text-xs">Condition</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleAddNode('action')}
-              className="flex items-center gap-2 h-auto p-3 flex-col"
-            >
-              <MessageSquare size={20} className="text-orange-500" />
-              <span className="text-xs">Action</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleAddNode('delay')}
-              className="flex items-center gap-2 h-auto p-3 flex-col"
-            >
-              <Clock size={20} className="text-gray-500" />
-              <span className="text-xs">Delay</span>
+              <BiChevronLeft className="w-6 h-6" />
             </Button>
           </div>
-        </Card>
 
-        <Accordion type="single" collapsible>
-          <AccordionItem value="saved-flows">
-            <AccordionTrigger className="text-sm font-medium">
-              Saved Flows ({savedFlows.length})
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                {savedFlows.map((flow) => (
+          <div className="space-y-4">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+                Add Nodes
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  {
+                    type: "trigger",
+                    icon: (
+                      <FiZap className="w-5 h-5 text-green-500 dark:text-green-400" />
+                    ),
+                    label: "Trigger",
+                  },
+                  {
+                    type: "condition",
+                    icon: (
+                      <FiGitBranch className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                    ),
+                    label: "Condition",
+                  },
+                  {
+                    type: "action",
+                    icon: (
+                      <FiMessageSquare className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+                    ),
+                    label: "Action",
+                  },
+                  {
+                    type: "delay",
+                    icon: (
+                      <FiClock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    ),
+                    label: "Delay",
+                  },
+                ].map((node) => (
                   <Button
-                    key={flow.id}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleLoadFlow(flow)}
-                    className="w-full justify-start text-left h-auto p-2"
+                    key={node.type}
+                    onClick={() =>
+                      handleAddNode(
+                        node.type as
+                          | "trigger"
+                          | "condition"
+                          | "action"
+                          | "delay"
+                      )
+                    }
+                    className="flex flex-col items-center gap-2 p-3 rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors text-xs font-medium"
                   >
-                    <div>
-                      <div className="text-sm font-medium">{flow.name}</div>
-                      <div className="text-xs text-gray-500">
-                        {flow.nodes.length} nodes • {new Date(flow.updatedAt).toLocaleDateString()}
-                      </div>
-                    </div>
+                    {node.icon}
+                    <span>{node.label}</span>
                   </Button>
                 ))}
-                {savedFlows.length === 0 && (
-                  <p className="text-xs text-gray-500 p-2">No saved flows yet</p>
-                )}
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+            </div>
+
+            <Accordion.Root
+              type="single"
+              collapsible
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600"
+            >
+              <Accordion.Item value="saved-flows">
+                <Accordion.Trigger
+                  className="w-full flex items-center justify-between p-4 text-sm font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-xl focus:outline-none"
+                  aria-label="Toggle saved flows"
+                >
+                  Saved Flows ({savedFlows.length})
+                </Accordion.Trigger>
+                <Accordion.Content className="p-4">
+                  <div className="space-y-2">
+                    {savedFlows.length === 0 ? (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 p-2">
+                        No saved flows yet
+                      </p>
+                    ) : (
+                      savedFlows.map((flow) => (
+                        <Button
+                          key={flow.id}
+                          onClick={() => handleLoadFlow(flow)}
+                          className="w-full flex flex-col items-start p-2 rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 outline-none transition-colors text-left"
+                        >
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {flow.name}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {flow.nodes.length} nodes •{" "}
+                            {new Date(flow.updatedAt).toLocaleDateString()}
+                          </span>
+                        </Button>
+                      ))
+                    )}
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
