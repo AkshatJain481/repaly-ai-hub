@@ -6,6 +6,7 @@ import {
   FaWhatsapp,
   FaTelegram,
   FaFacebookMessenger,
+  FaSitemap,
 } from "react-icons/fa";
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { MdSlowMotionVideo } from "react-icons/md";
@@ -129,6 +130,11 @@ export const platformNavConfig: {
       label: "Story",
       icon: MdSlowMotionVideo,
       path: "/dashboard/instagram/story",
+    },
+    {
+      label: "Mind Maps",
+      icon: FaSitemap,
+      path: "/dashboard/instagram/mind-maps",
     },
   ],
 };

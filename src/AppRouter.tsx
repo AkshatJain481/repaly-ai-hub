@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InstagramExchangeCode from "@/pages/redirectionPages/exchangeCodePages/InstagramExchangeCode";
 import DefaultLayout from "@/components/layouts/DefaultLayout";
@@ -17,6 +16,7 @@ import AuthProtectedRoute from "./pages/protectedRoutes/AuthProtectedRoute";
 import { TokenExpiryWatcher } from "./hooks/useTokenExpiryWatcher";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import FacebookAuthentication from "./pages/redirectionPages/authenticationPages/FacebookAuthentication";
+import MindMapPage from "./pages/mindMapPage/MindMapPage";
 
 const AppRouter = () => {
   return (
@@ -41,6 +41,7 @@ const AppRouter = () => {
             <Route path="instagram">
               <Route path="media" element={<InstagramMediaPage />} />
               <Route path="story" element={<InstagramStoryPage />} />
+              <Route path="mind-maps" element={<MindMapPage />} />
             </Route>
           </Route>
 
