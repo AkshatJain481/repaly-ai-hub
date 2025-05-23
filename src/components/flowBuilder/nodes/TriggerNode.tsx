@@ -2,10 +2,11 @@
 import React from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
 import { openConfigModal } from '@/redux/slices/flowUI.slice';
 
 const TriggerNode: React.FC<NodeProps> = ({ data, id }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleNodeClick = () => {
     dispatch(openConfigModal(id));
@@ -17,7 +18,7 @@ const TriggerNode: React.FC<NodeProps> = ({ data, id }) => {
       onClick={handleNodeClick}
     >
       <div className="text-sm font-semibold mb-1">Trigger</div>
-      <div className="text-xs">{data.label}</div>
+      <div className="text-xs">{String(data?.label || 'Trigger Node')}</div>
       
       <Handle
         type="source"

@@ -5,17 +5,17 @@ import {
   ReactFlow,
   Node,
   Edge,
-  addEdge,
   Connection,
   useNodesState,
   useEdgesState,
   Controls,
   Background,
   MiniMap,
+  addEdge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import { RootState } from '@/redux/store';
+import { RootState, AppDispatch } from '@/redux/store';
 import { updateNodePosition, addEdge as addFlowEdge, loadFlows } from '@/redux/slices/flow.slice';
 import FlowBuilderSidebar from './FlowBuilderSidebar';
 import FlowBuilderToolbar from './FlowBuilderToolbar';
@@ -33,11 +33,11 @@ const nodeTypes = {
 };
 
 const FlowBuilder: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { currentFlow } = useSelector((state: RootState) => state.flow);
   
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
   // Sync Redux state with React Flow state
   useEffect(() => {
@@ -73,9 +73,10 @@ const FlowBuilder: React.FC = () => {
       type: 'default',
     };
     dispatch(addFlowEdge(edge));
-  }, [dispatch]);
+    setEdges((eds) => addEdge(params, eds));
+  }, [dispatch, setEdges]);
 
-  const onNodeDragStop = useCallback((event: any, node: Node) => {
+  const onNodeDragStop = useCallback((_: any, node: Node) => {
     dispatch(updateNodePosition({ id: node.id, position: node.position }));
   }, [dispatch]);
 

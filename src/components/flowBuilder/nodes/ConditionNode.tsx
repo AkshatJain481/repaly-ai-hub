@@ -2,10 +2,11 @@
 import React from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
 import { openConfigModal } from '@/redux/slices/flowUI.slice';
 
 const ConditionNode: React.FC<NodeProps> = ({ data, id }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleNodeClick = () => {
     dispatch(openConfigModal(id));
@@ -18,7 +19,7 @@ const ConditionNode: React.FC<NodeProps> = ({ data, id }) => {
     >
       <div className="transform -rotate-45">
         <div className="text-sm font-semibold mb-1">Condition</div>
-        <div className="text-xs">{data.label}</div>
+        <div className="text-xs">{String(data?.label || 'Condition Node')}</div>
       </div>
       
       <Handle

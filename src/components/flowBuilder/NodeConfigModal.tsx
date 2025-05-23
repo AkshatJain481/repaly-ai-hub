@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { RootState, AppDispatch } from '@/redux/store';
 import { updateNode } from '@/redux/slices/flow.slice';
 import { closeConfigModal } from '@/redux/slices/flowUI.slice';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,7 +16,7 @@ import {
 } from '@/components/ui/select';
 
 const NodeConfigModal: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { configModalOpen, selectedNodeId } = useSelector((state: RootState) => state.flowUI);
   const { currentFlow } = useSelector((state: RootState) => state.flow);
   

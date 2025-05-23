@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { RootState, AppDispatch } from '@/redux/store';
 import { saveFlow, updateFlowName, newFlow } from '@/redux/slices/flow.slice';
 import { openPreviewModal } from '@/redux/slices/flowUI.slice';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { Save, Eye, Plus, Undo, Redo, ZoomIn, ZoomOut } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const FlowBuilderToolbar: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { currentFlow, loading } = useSelector((state: RootState) => state.flow);
   const [flowName, setFlowName] = useState(currentFlow.name);
 

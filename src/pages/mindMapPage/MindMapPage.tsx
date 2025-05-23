@@ -1,5 +1,4 @@
 
-import React from 'react';
 import FlowBuilder from '@/components/flowBuilder/FlowBuilder';
 
 const MindMapPage = () => {
