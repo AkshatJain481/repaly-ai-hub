@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
@@ -33,17 +34,16 @@ const NodeConfigModal: React.FC = () => {
     : null;
 
   const [config, setConfig] = useState<Record<string, any>>({});
-  const [label, setLabel] = useState("");
 
   useEffect(() => {
     if (selectedNode) {
       setConfig(selectedNode.data.config || {});
-      setLabel(selectedNode.data.label || "");
     }
   }, [selectedNode]);
 
   const handleSave = () => {
     if (selectedNodeId) {
+      const label = generateLabel();
       dispatch(
         updateNode({
           id: selectedNodeId,
@@ -77,9 +77,6 @@ const NodeConfigModal: React.FC = () => {
         const messageType = config.messageType || "text";
         return `Send ${messageType.charAt(0).toUpperCase() + messageType.slice(1)} Message`;
 
-      case "button":
-        return `Button: ${config.text || "Click me"}`;
-
       case "condition":
         if (config.conditionType) {
           return `Check: ${config.conditionType}`;
@@ -105,7 +102,7 @@ const NodeConfigModal: React.FC = () => {
         return "Delay";
 
       default:
-        return label;
+        return selectedNode.data.label || "";
     }
   };
 
@@ -131,38 +128,24 @@ const NodeConfigModal: React.FC = () => {
       </div>
 
       {config.triggerType === "comment" && (
-        <>
-          <div>
-            <Label htmlFor="platform">Platform</Label>
-            <Select
-              value={config.platform || "instagram"}
-              onValueChange={(value) =>
-                setConfig({ ...config, platform: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="instagram">Instagram</SelectItem>
-                <SelectItem value="facebook">Facebook</SelectItem>
-                <SelectItem value="website">Website</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="contentId">Content ID/URL</Label>
-            <Input
-              id="contentId"
-              value={config.contentId || ""}
-              onChange={(e) =>
-                setConfig({ ...config, contentId: e.target.value })
-              }
-              placeholder="Post ID or URL"
-            />
-          </div>
-        </>
+        <div>
+          <Label htmlFor="platform">Platform</Label>
+          <Select
+            value={config.platform || "instagram"}
+            onValueChange={(value) =>
+              setConfig({ ...config, platform: value })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="instagram">Instagram</SelectItem>
+              <SelectItem value="facebook">Facebook</SelectItem>
+              <SelectItem value="website">Website</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       )}
 
       {config.triggerType === "story_reply" && (
@@ -232,45 +215,123 @@ const NodeConfigModal: React.FC = () => {
         </div>
       )}
 
-      {(config.messageType === "image" || config.messageType === "card") && (
+      {config.messageType === "image" && (
         <div>
-          <Label htmlFor="imageUrl">Image URL</Label>
+          <Label htmlFor="imageUpload">Upload Image</Label>
           <Input
-            id="imageUrl"
-            value={config.imageUrl || ""}
-            onChange={(e) => setConfig({ ...config, imageUrl: e.target.value })}
-            placeholder="https://example.com/image.jpg"
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                // In a real app, you would upload this file to your storage service
+                // and then update the config with the returned URL
+                // For now, we'll create a local URL for demonstration
+                const localUrl = URL.createObjectURL(file);
+                setConfig({ ...config, imageUrl: localUrl, fileName: file.name });
+              }
+            }}
           />
+          {config.imageUrl && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">Selected: {config.fileName || "Image"}</p>
+              <img 
+                src={config.imageUrl} 
+                alt="Preview" 
+                className="mt-2 max-h-40 rounded-md" 
+              />
+            </div>
+          )}
         </div>
       )}
 
       {config.messageType === "audio" && (
         <div>
-          <Label htmlFor="audioUrl">Audio URL</Label>
+          <Label htmlFor="audioUpload">Upload Audio</Label>
           <Input
-            id="audioUrl"
-            value={config.audioUrl || ""}
-            onChange={(e) => setConfig({ ...config, audioUrl: e.target.value })}
-            placeholder="https://example.com/audio.mp3"
+            id="audioUpload"
+            type="file"
+            accept="audio/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                // In a real app, you would upload this file to your storage service
+                const localUrl = URL.createObjectURL(file);
+                setConfig({ ...config, audioUrl: localUrl, audioName: file.name });
+              }
+            }}
           />
+          {config.audioUrl && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">Selected: {config.audioName || "Audio file"}</p>
+              <audio controls className="mt-2 w-full">
+                <source src={config.audioUrl} />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
         </div>
       )}
 
       {config.messageType === "video" && (
         <div>
-          <Label htmlFor="videoUrl">Video URL</Label>
+          <Label htmlFor="videoUpload">Upload Video</Label>
           <Input
-            id="videoUrl"
-            value={config.videoUrl || ""}
-            onChange={(e) => setConfig({ ...config, videoUrl: e.target.value })}
-            placeholder="https://example.com/video.mp4"
+            id="videoUpload"
+            type="file"
+            accept="video/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                // In a real app, you would upload this file to your storage service
+                const localUrl = URL.createObjectURL(file);
+                setConfig({ ...config, videoUrl: localUrl, videoName: file.name });
+              }
+            }}
           />
+          {config.videoUrl && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">Selected: {config.videoName || "Video file"}</p>
+              <video controls className="mt-2 max-h-40 w-full">
+                <source src={config.videoUrl} />
+                Your browser does not support the video element.
+              </video>
+            </div>
+          )}
         </div>
       )}
 
       {config.messageType === "card" && (
         <div>
-          <Label htmlFor="cardTitle">Card Title</Label>
+          <Label htmlFor="imageUpload">Upload Card Image</Label>
+          <Input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                // In a real app, you would upload this file to your storage service
+                const localUrl = URL.createObjectURL(file);
+                setConfig({ ...config, imageUrl: localUrl, fileName: file.name });
+              }
+            }}
+          />
+          {config.imageUrl && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">Selected: {config.fileName || "Image"}</p>
+              <img 
+                src={config.imageUrl} 
+                alt="Preview" 
+                className="mt-2 max-h-40 rounded-md" 
+              />
+            </div>
+          )}
+
+          <Label htmlFor="cardTitle" className="mt-3">
+            Card Title
+          </Label>
           <Input
             id="cardTitle"
             value={config.cardTitle || ""}
@@ -301,17 +362,30 @@ const NodeConfigModal: React.FC = () => {
             {(config.galleryImages || []).map((img: any, index: number) => (
               <div key={index} className="flex items-center gap-2">
                 <Input
-                  value={img.url || ""}
+                  type="file"
+                  accept="image/*"
                   onChange={(e) => {
-                    const updatedImages = [...(config.galleryImages || [])];
-                    updatedImages[index] = {
-                      ...updatedImages[index],
-                      url: e.target.value,
-                    };
-                    setConfig({ ...config, galleryImages: updatedImages });
+                    if (e.target.files && e.target.files[0]) {
+                      const file = e.target.files[0];
+                      // In a real app, you would upload this file to your storage service
+                      const localUrl = URL.createObjectURL(file);
+                      const updatedImages = [...(config.galleryImages || [])];
+                      updatedImages[index] = {
+                        ...updatedImages[index],
+                        url: localUrl,
+                        fileName: file.name,
+                      };
+                      setConfig({ ...config, galleryImages: updatedImages });
+                    }
                   }}
-                  placeholder={`Image ${index + 1} URL`}
                 />
+                {img.url && (
+                  <img 
+                    src={img.url} 
+                    alt={`Gallery image ${index + 1}`} 
+                    className="h-10 w-10 object-cover rounded-md" 
+                  />
+                )}
                 <Button
                   variant="destructive"
                   size="sm"
@@ -331,7 +405,7 @@ const NodeConfigModal: React.FC = () => {
               onClick={() => {
                 setConfig({
                   ...config,
-                  galleryImages: [...(config.galleryImages || []), { url: "" }],
+                  galleryImages: [...(config.galleryImages || []), { url: "", fileName: "" }],
                 });
               }}
               className="w-full mt-2"
@@ -408,7 +482,11 @@ const NodeConfigModal: React.FC = () => {
                     value={button.actionType || "send_message"}
                     onValueChange={(value) => {
                       const buttons = [...(config.buttons || [])];
-                      buttons[index] = { ...buttons[index], actionType: value };
+                      buttons[index] = { 
+                        ...buttons[index], 
+                        actionType: value, 
+                        id: `${selectedNodeId}-btn-${index}` 
+                      };
                       setConfig({ ...config, buttons });
                     }}
                   >
@@ -430,6 +508,7 @@ const NodeConfigModal: React.FC = () => {
                         Start Another Flow
                       </SelectItem>
                       <SelectItem value="goto_step">Go to Step</SelectItem>
+                      <SelectItem value="send_message">Send Message</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -462,96 +541,6 @@ const NodeConfigModal: React.FC = () => {
     </div>
   );
 
-  const renderButtonConfig = () => (
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor="text">Button Text</Label>
-        <Input
-          id="text"
-          value={config.text || ""}
-          onChange={(e) => setConfig({ ...config, text: e.target.value })}
-          placeholder="Enter button text"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="actionType">Action Type</Label>
-        <Select
-          value={config.actionType || "send_message"}
-          onValueChange={(value) => setConfig({ ...config, actionType: value })}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select action type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ai_response">AI Response</SelectItem>
-            <SelectItem value="open_website">Open Website</SelectItem>
-            <SelectItem value="perform_actions">Perform Actions</SelectItem>
-            <SelectItem value="condition">Check Condition</SelectItem>
-            <SelectItem value="randomizer">Random Selection</SelectItem>
-            <SelectItem value="smart_delay">Smart Delay</SelectItem>
-            <SelectItem value="start_flow">Start Another Flow</SelectItem>
-            <SelectItem value="goto_step">Go to Existing Step</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {config.actionType === "open_website" && (
-        <div>
-          <Label htmlFor="url">Website URL</Label>
-          <Input
-            id="url"
-            value={config.url || ""}
-            onChange={(e) => setConfig({ ...config, url: e.target.value })}
-            placeholder="https://example.com"
-          />
-        </div>
-      )}
-
-      {config.actionType === "goto_step" && (
-        <div>
-          <Label htmlFor="targetNodeId">Target Node</Label>
-          <Select
-            value={config.targetNodeId || ""}
-            onValueChange={(value) =>
-              setConfig({ ...config, targetNodeId: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select target node" />
-            </SelectTrigger>
-            <SelectContent>
-              {currentFlow.nodes.map((node) => (
-                <SelectItem key={node.id} value={node.id}>
-                  {node.data.label || node.id}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {config.actionType === "start_flow" && (
-        <div>
-          <Label htmlFor="flowId">Select Flow</Label>
-          <Select
-            value={config.flowId || ""}
-            onValueChange={(value) => setConfig({ ...config, flowId: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a flow" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* This would be populated with actual flows */}
-              <SelectItem value="flow1">Sample Flow 1</SelectItem>
-              <SelectItem value="flow2">Sample Flow 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-    </div>
-  );
-
   const renderConditionConfig = () => (
     <div className="space-y-4">
       <div>
@@ -578,8 +567,7 @@ const NodeConfigModal: React.FC = () => {
         </Select>
       </div>
 
-      {config.conditionType === "has_tag" ||
-        (config.conditionType === "missing_tag" && (
+      {config.conditionType === "has_tag" || config.conditionType === "missing_tag" ? (
           <div>
             <Label htmlFor="tag">Tag Name</Label>
             <Input
@@ -589,7 +577,7 @@ const NodeConfigModal: React.FC = () => {
               placeholder="Enter tag name"
             />
           </div>
-        ))}
+        ) : null}
 
       {config.conditionType === "user_field" && (
         <>
@@ -1151,22 +1139,8 @@ const NodeConfigModal: React.FC = () => {
         </DialogHeader>
 
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="nodeLabel">Node Label</Label>
-            <Input
-              id="nodeLabel"
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-              placeholder="Enter node label"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Suggested: {generateLabel()}
-            </p>
-          </div>
-
           {selectedNode?.type === "trigger" && renderTriggerConfig()}
           {selectedNode?.type === "message" && renderMessageConfig()}
-          {selectedNode?.type === "button" && renderButtonConfig()}
           {selectedNode?.type === "condition" && renderConditionConfig()}
           {selectedNode?.type === "action" && renderActionConfig()}
           {selectedNode?.type === "loop" && renderLoopConfig()}

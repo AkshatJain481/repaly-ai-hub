@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ReactFlow,
@@ -12,6 +13,8 @@ import {
   Node,
   Edge,
   NodeTypes,
+  MarkerType,
+  Panel,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -30,10 +33,16 @@ import ConditionNode from "./nodes/ConditionNode";
 import ActionNode from "./nodes/ActionNode";
 import DelayNode from "./nodes/DelayNode";
 import MessageNode from "./nodes/MessageNode";
-import ButtonNode from "./nodes/ButtonNode";
 import LoopNode from "./nodes/LoopNode";
 import RandomizerNode from "./nodes/RandomizerNode";
 import ConfirmationPopup from "../common/ConfirmationPopup";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const nodeTypes: NodeTypes = {
   trigger: TriggerNode,
@@ -41,7 +50,6 @@ const nodeTypes: NodeTypes = {
   action: ActionNode,
   delay: DelayNode,
   message: MessageNode,
-  button: ButtonNode,
   loop: LoopNode,
   randomizer: RandomizerNode,
 };
@@ -52,9 +60,14 @@ const FlowBuilder: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [nodeToDelete, setNodeToDelete] = useState<string | null>(null);
   const [affectedNodes, setAffectedNodes] = useState<string[]>([]);
+  const [pendingConnection, setPendingConnection] = useState<Connection | null>(null);
+  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
+  const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
 
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   // Initialize flow with a trigger and message node if empty
   useEffect(() => {
@@ -101,8 +114,13 @@ const FlowBuilder: React.FC = () => {
       id: edge.id,
       source: edge.source,
       target: edge.target,
+      sourceHandle: edge.sourceHandle,
+      targetHandle: edge.targetHandle,
       type: edge.type,
       label: edge.label,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
     }));
     setEdges(flowEdges);
   }, [currentFlow.edges]);
@@ -113,16 +131,49 @@ const FlowBuilder: React.FC = () => {
 
   const onConnect = useCallback(
     (params: Connection) => {
+      // If it's a button handle connection, update the params
+      if (params.sourceHandle && params.sourceHandle.startsWith('btn-')) {
+        // This is a connection from a button
+        // Allow the connection to proceed
+      }
+      
       const edge = {
-        id: `${params.source}-${params.target}`,
+        id: `${params.source}-${params.target}${params.sourceHandle ? `-${params.sourceHandle}` : ''}`,
         source: params.source!,
         target: params.target!,
+        sourceHandle: params.sourceHandle,
+        targetHandle: params.targetHandle,
         type: "default",
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
       };
+      
       dispatch(addFlowEdge(edge));
-      setEdges((eds) => addEdge(params, eds));
+      setEdges((eds) => addEdge({...params, markerEnd: { type: MarkerType.ArrowClosed }}, eds));
     },
     [dispatch, setEdges]
+  );
+
+  const onConnectStart = useCallback(() => {
+    // When a user starts a connection, we don't need to do anything specific yet
+  }, []);
+
+  const onConnectEnd = useCallback(
+    (event: any) => {
+      const targetIsPane = event.target.classList.contains('react-flow__pane');
+      
+      if (targetIsPane && reactFlowWrapper.current) {
+        // Get the position where the connection drag ended
+        const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+        const x = event.clientX - left;
+        const y = event.clientY - top;
+        
+        setNewNodePosition({ x, y });
+        setIsNodeSelectorOpen(true);
+      }
+    },
+    [reactFlowWrapper]
   );
 
   const onNodeDragStop = useCallback(
@@ -195,6 +246,20 @@ const FlowBuilder: React.FC = () => {
     setAffectedNodes([]);
   };
 
+  // Add new node from node selector
+  const handleAddNode = (type: string) => {
+    dispatch({
+      type: "flow/addNode",
+      payload: {
+        type,
+        position: newNodePosition,
+      },
+    });
+
+    // Close the node selector
+    setIsNodeSelectorOpen(false);
+  };
+
   return (
     <div className="h-screen flex bg-gray-50 dark:bg-gray-900">
       <FlowBuilderSidebar />
@@ -202,13 +267,15 @@ const FlowBuilder: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <FlowBuilderToolbar />
 
-        <div className="flex-1">
+        <div className="flex-1" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onConnectStart={onConnectStart}
+            onConnectEnd={onConnectEnd}
             onNodeDragStop={onNodeDragStop}
             nodeTypes={nodeTypes}
             fitView
@@ -230,8 +297,6 @@ const FlowBuilder: React.FC = () => {
                     return "#6b7280";
                   case "message":
                     return "#ec4899"; // Pink for message nodes
-                  case "button":
-                    return "#8b5cf6"; // Purple for button nodes
                   case "loop":
                     return "#14b8a6"; // Teal for loop nodes
                   case "randomizer":
@@ -242,6 +307,14 @@ const FlowBuilder: React.FC = () => {
               }}
             />
             <Background gap={20} />
+
+            {/* Add Panel for help */}
+            <Panel position="bottom-right">
+              <div className="bg-white dark:bg-gray-700 p-2 rounded shadow text-sm">
+                <p>Drag connections between nodes to create your flow</p>
+                <p>Drag to empty space to add a new node</p>
+              </div>
+            </Panel>
           </ReactFlow>
         </div>
       </div>
@@ -255,6 +328,37 @@ const FlowBuilder: React.FC = () => {
         title="Delete Node"
         message={`Are you sure you want to delete this node? This will also delete ${affectedNodes.length} connected node${affectedNodes.length !== 1 ? "s" : ""} that depend on it.`}
       />
+
+      <Dialog open={isNodeSelectorOpen} onOpenChange={setIsNodeSelectorOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add a Node</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4">
+            <Button onClick={() => handleAddNode("message")} className="bg-pink-500 hover:bg-pink-600">
+              Message
+            </Button>
+            <Button onClick={() => handleAddNode("condition")} className="bg-blue-500 hover:bg-blue-600">
+              Condition
+            </Button>
+            <Button onClick={() => handleAddNode("action")} className="bg-orange-500 hover:bg-orange-600">
+              Action
+            </Button>
+            <Button onClick={() => handleAddNode("delay")} className="bg-gray-500 hover:bg-gray-600">
+              Delay
+            </Button>
+            <Button onClick={() => handleAddNode("loop")} className="bg-teal-500 hover:bg-teal-600">
+              Loop
+            </Button>
+            <Button onClick={() => handleAddNode("randomizer")} className="bg-red-500 hover:bg-red-600">
+              Randomizer
+            </Button>
+            <Button onClick={() => handleAddNode("trigger")} className="bg-green-500 hover:bg-green-600">
+              Trigger
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

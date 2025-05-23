@@ -18,10 +18,10 @@ const MessageNode = ({
   id,
 }: {
   data: {
-    config: {
+    config?: {
       messageType?: string;
       content?: string;
-      buttons?: { text: string }[];
+      buttons?: { text: string; id: string }[];
     };
     onDelete?: (id: string) => void;
   };
@@ -78,6 +78,14 @@ const MessageNode = ({
               className="bg-pink-600 p-2 rounded-md text-xs flex items-center"
             >
               <span>{button.text || `Button ${index + 1}`}</span>
+              {/* Add a handle for each button so they can be connected to other nodes */}
+              <Handle
+                type="source"
+                position={Position.Right}
+                id={button.id || `btn-${index}`}
+                className="w-3 h-3 bg-white border-2 border-pink-500"
+                style={{ top: `calc(100% - ${(data?.config?.buttons?.length || 0) * 20 - index * 40 + 70}px)` }}
+              />
             </div>
           ))}
         </div>

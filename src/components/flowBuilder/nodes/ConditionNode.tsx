@@ -1,3 +1,4 @@
+
 import { Handle, Position } from "@xyflow/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -37,7 +38,9 @@ const ConditionNode = ({
         className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 transform -rotate-45"
         onClick={(e) => {
           e.stopPropagation();
-          if (data?.onDelete) data.onDelete(id);
+          if (data?.onDelete) {
+            data.onDelete(id);
+          }
         }}
       >
         <Trash2 size={16} className="text-white hover:text-red-300" />

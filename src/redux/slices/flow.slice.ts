@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 export interface FlowNode {
   id: string;
-  type: 'trigger' | 'condition' | 'action' | 'delay' | 'message' | 'button' | 'loop' | 'randomizer';
+  type: 'trigger' | 'condition' | 'action' | 'delay' | 'message' | 'loop' | 'randomizer';
   position: { x: number; y: number };
   data: {
     label: string;
@@ -15,6 +15,8 @@ export interface FlowEdge {
   id: string;
   source: string;
   target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
   type?: string;
   label?: string;
 }
@@ -85,7 +87,7 @@ const createInitialFlow = (): Flow => {
         position: { x: 250, y: 100 },
         data: {
           label: 'Trigger: Comment on Post',
-          config: { triggerType: 'comment', platform: 'instagram', contentId: '' },
+          config: { triggerType: 'comment', platform: 'instagram' },
         },
       },
       // Initial message node
@@ -143,15 +145,11 @@ const flowSlice = createSlice({
       switch (type) {
         case 'trigger':
           label = 'Trigger: Comment on Post';
-          config = { triggerType: 'comment', platform: 'instagram', contentId: '' };
+          config = { triggerType: 'comment', platform: 'instagram' };
           break;
         case 'message':
           label = 'Send Message';
           config = { messageType: 'text', content: 'Hello!', buttons: [] };
-          break;
-        case 'button':
-          label = 'Button: Click me';
-          config = { text: 'Click me', actionType: 'send_message' };
           break;
         case 'condition':
           label = 'Check Condition';
@@ -191,6 +189,16 @@ const flowSlice = createSlice({
       const node = state.currentFlow.nodes.find(n => n.id === id);
       if (node) {
         node.data = { ...node.data, ...updates };
+        
+        // If this is a message node with buttons, make sure each button has an ID
+        if (node.type === 'message' && node.data.config.buttons) {
+          node.data.config.buttons = node.data.config.buttons.map((button: any, index: number) => {
+            return {
+              ...button,
+              id: button.id || `${id}-btn-${index}`
+            };
+          });
+        }
       }
     },
     deleteNode: (state, action: PayloadAction<string>) => {

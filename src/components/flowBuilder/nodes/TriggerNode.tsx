@@ -1,3 +1,4 @@
+
 import { Handle, Position } from "@xyflow/react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -41,7 +42,9 @@ const TriggerNode = ({
           className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => {
             e.stopPropagation();
-            if (data?.onDelete) data.onDelete(id);
+            if (data?.onDelete) {
+              data.onDelete(id);
+            }
           }}
         >
           <Trash2 size={16} className="text-white hover:text-red-300" />
