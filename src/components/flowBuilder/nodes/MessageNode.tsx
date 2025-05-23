@@ -1,3 +1,4 @@
+
 import { Handle, Position } from "@xyflow/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -9,6 +10,7 @@ import {
   Film,
   FileText,
   Layout,
+  Trash2,
 } from "lucide-react";
 
 const MessageNode = ({
@@ -17,10 +19,11 @@ const MessageNode = ({
 }: {
   data: {
     config: {
-      messageType: string;
-      content: string;
-      buttons: { text: string }[];
+      messageType?: string;
+      content?: string;
+      buttons?: { text: string }[];
     };
+    onDelete?: (id: string) => void;
   };
   id: string;
 }) => {
@@ -51,7 +54,7 @@ const MessageNode = ({
 
   return (
     <div
-      className="bg-pink-500 text-white p-4 rounded-lg border-2 border-pink-600 min-w-[170px] cursor-pointer hover:bg-pink-600 transition-colors"
+      className="bg-pink-500 text-white p-4 rounded-lg border-2 border-pink-600 min-w-[170px] cursor-pointer hover:bg-pink-600 transition-colors group relative"
       onClick={handleNodeClick}
     >
       <div className="text-sm font-semibold mb-1 flex items-center">
@@ -79,6 +82,16 @@ const MessageNode = ({
           ))}
         </div>
       )}
+      
+      <div 
+        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (data?.onDelete) data.onDelete(id);
+        }}
+      >
+        <Trash2 size={16} className="text-white hover:text-red-300" />
+      </div>
 
       <Handle
         type="target"

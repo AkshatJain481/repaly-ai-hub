@@ -1,8 +1,9 @@
+
 import { Handle, Position } from "@xyflow/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { openConfigModal } from "@/redux/slices/flowUI.slice";
-import { Shuffle } from "lucide-react";
+import { Shuffle, Trash2 } from "lucide-react";
 
 const RandomizerNode = ({
   data,
@@ -11,11 +12,12 @@ const RandomizerNode = ({
   data: {
     label: string;
     config: {
-      options: { weight: number; label: string }[];
-      messageType: string;
-      content: string;
-      buttons: { text: string }[];
+      options?: { weight: number; label: string }[];
+      messageType?: string;
+      content?: string;
+      buttons?: { text: string }[];
     };
+    onDelete?: (id: string) => void;
   };
   id: string;
 }) => {
@@ -33,7 +35,7 @@ const RandomizerNode = ({
 
   return (
     <div
-      className="bg-rose-500 text-white p-4 rounded-lg border-2 border-rose-600 min-w-[170px] cursor-pointer hover:bg-rose-600 transition-colors"
+      className="bg-rose-500 text-white p-4 rounded-lg border-2 border-rose-600 min-w-[170px] cursor-pointer hover:bg-rose-600 transition-colors group relative"
       onClick={handleNodeClick}
     >
       <div className="text-sm font-semibold mb-1 flex items-center">
@@ -61,6 +63,16 @@ const RandomizerNode = ({
           </div>
         )}
       </div>
+      
+      <div 
+        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (data?.onDelete) data.onDelete(id);
+        }}
+      >
+        <Trash2 size={16} className="text-white hover:text-red-300" />
+      </div>
 
       <Handle
         type="target"
@@ -74,7 +86,9 @@ const RandomizerNode = ({
           type="source"
           position={Position.Bottom}
           style={{
-            left: `${(index + 1) * (100 / ((data.config.options?.length || 0) + 1))}%`,
+            left: `${
+              (index + 1) * (100 / ((data.config?.options?.length || 0) + 1))
+            }%`,
           }}
           className="w-3 h-3 bg-white border-2 border-rose-500"
         />

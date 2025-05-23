@@ -68,15 +68,53 @@ export const loadFlows = createAsyncThunk(
   }
 );
 
-const initialState: FlowState = {
-  currentFlow: {
-    id: '',
+// Create a new flow with initial nodes
+const createInitialFlow = (): Flow => {
+  const id = `flow-${Date.now()}`;
+  const triggerId = `trigger-${Date.now()}`;
+  const messageId = `message-${Date.now() + 1}`;
+  
+  return {
+    id,
     name: 'Untitled Flow',
-    nodes: [],
-    edges: [],
+    nodes: [
+      // Initial trigger node
+      {
+        id: triggerId,
+        type: 'trigger',
+        position: { x: 250, y: 100 },
+        data: {
+          label: 'Trigger: Comment on Post',
+          config: { triggerType: 'comment', platform: 'instagram', contentId: '' },
+        },
+      },
+      // Initial message node
+      {
+        id: messageId,
+        type: 'message',
+        position: { x: 250, y: 250 },
+        data: {
+          label: 'Send Message',
+          config: { messageType: 'text', content: 'Hello!', buttons: [] },
+        },
+      }
+    ],
+    edges: [
+      // Connect trigger to message
+      {
+        id: `${triggerId}-${messageId}`,
+        source: triggerId,
+        target: messageId,
+        type: 'default',
+      }
+    ],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  },
+  };
+};
+
+const initialState: FlowState = {
+  currentFlow: createInitialFlow(),
   savedFlows: [],
   loading: false,
   error: null,
@@ -157,8 +195,39 @@ const flowSlice = createSlice({
     },
     deleteNode: (state, action: PayloadAction<string>) => {
       const nodeId = action.payload;
-      state.currentFlow.nodes = state.currentFlow.nodes.filter(n => n.id !== nodeId);
-      state.currentFlow.edges = state.currentFlow.edges.filter(e => e.source !== nodeId && e.target !== nodeId);
+      
+      // Check if this is the first trigger node (which shouldn't be deletable)
+      const nodeIndex = state.currentFlow.nodes.findIndex(n => n.id === nodeId);
+      const node = state.currentFlow.nodes[nodeIndex];
+      
+      if (node && node.type === 'trigger' && nodeIndex === 0) {
+        return; // Don't delete the first trigger node
+      }
+      
+      // Find all downstream nodes (nodes connected to this node)
+      const downstreamNodeIds = new Set<string>();
+      const nodesToProcess = [nodeId];
+      
+      while (nodesToProcess.length > 0) {
+        const currentId = nodesToProcess.pop()!;
+        downstreamNodeIds.add(currentId);
+        
+        // Find edges where this node is the source
+        const outgoingEdges = state.currentFlow.edges.filter(e => e.source === currentId);
+        for (const edge of outgoingEdges) {
+          if (!downstreamNodeIds.has(edge.target)) {
+            nodesToProcess.push(edge.target);
+          }
+        }
+      }
+      
+      // Remove all nodes in the downstream path
+      state.currentFlow.nodes = state.currentFlow.nodes.filter(n => !downstreamNodeIds.has(n.id));
+      
+      // Remove all edges connected to deleted nodes
+      state.currentFlow.edges = state.currentFlow.edges.filter(
+        e => !downstreamNodeIds.has(e.source) && !downstreamNodeIds.has(e.target)
+      );
     },
     addEdge: (state, action: PayloadAction<FlowEdge>) => {
       state.currentFlow.edges.push(action.payload);
@@ -174,14 +243,7 @@ const flowSlice = createSlice({
       }
     },
     newFlow: (state) => {
-      state.currentFlow = {
-        id: `flow-${Date.now()}`,
-        name: 'Untitled Flow',
-        nodes: [],
-        edges: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      state.currentFlow = createInitialFlow();
     },
   },
   extraReducers: (builder) => {
@@ -206,6 +268,13 @@ const flowSlice = createSlice({
       })
       .addCase(loadFlows.fulfilled, (state, action) => {
         state.savedFlows = action.payload;
+        // If there are no saved flows, create a default one
+        if (state.savedFlows.length === 0) {
+          state.currentFlow = createInitialFlow();
+        } else if (!state.currentFlow.id) {
+          // If no current flow is selected, use the first saved flow
+          state.currentFlow = state.savedFlows[0];
+        }
       });
   },
 });
