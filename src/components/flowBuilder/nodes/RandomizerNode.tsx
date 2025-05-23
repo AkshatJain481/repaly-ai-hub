@@ -13,6 +13,12 @@ const RandomizerNode: React.FC<NodeProps> = ({ data, id }) => {
     dispatch(openConfigModal(id));
   };
 
+  // Type definition for option object
+  interface Option {
+    weight: number;
+    label: string;
+  }
+
   return (
     <div 
       className="bg-rose-500 text-white p-4 rounded-lg border-2 border-rose-600 min-w-[170px] cursor-pointer hover:bg-rose-600 transition-colors"
@@ -25,7 +31,7 @@ const RandomizerNode: React.FC<NodeProps> = ({ data, id }) => {
       <div className="text-xs">{String(data?.label || 'Random Selection')}</div>
       
       <div className="mt-2 space-y-2">
-        {data?.config?.options && data.config.options.map((option: any, index: number) => (
+        {data?.config?.options?.map((option: Option, index: number) => (
           <div key={index} className="bg-rose-600 p-2 rounded-md flex items-center justify-between text-xs">
             <span className="truncate max-w-[100px]">{option.label}</span>
             <span className="bg-rose-400 px-1.5 py-0.5 rounded-full text-white text-xs">
@@ -33,6 +39,12 @@ const RandomizerNode: React.FC<NodeProps> = ({ data, id }) => {
             </span>
           </div>
         ))}
+        
+        {(!data?.config?.options || data.config.options.length === 0) && (
+          <div className="bg-rose-600 p-2 rounded-md text-xs">
+            No options configured
+          </div>
+        )}
       </div>
       
       <Handle
@@ -40,16 +52,24 @@ const RandomizerNode: React.FC<NodeProps> = ({ data, id }) => {
         position={Position.Top}
         className="w-3 h-3 bg-white border-2 border-rose-500"
       />
-      {data?.config?.options && data.config.options.map((_, index: number) => (
+      {data?.config?.options?.map((_: Option, index: number) => (
         <Handle
           key={index}
           id={`out-${index}`}
           type="source"
           position={Position.Bottom}
-          style={{ left: `${(index + 1) * (100 / (data.config.options.length + 1))}%` }}
+          style={{ left: `${(index + 1) * (100 / ((data.config.options?.length || 0) + 1))}%` }}
           className="w-3 h-3 bg-white border-2 border-rose-500"
         />
       ))}
+      
+      {(!data?.config?.options || data.config.options.length === 0) && (
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          className="w-3 h-3 bg-white border-2 border-rose-500"
+        />
+      )}
     </div>
   );
 };

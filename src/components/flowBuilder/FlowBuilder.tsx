@@ -48,8 +48,8 @@ const FlowBuilder: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { currentFlow } = useSelector((state: RootState) => state.flow);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
   // Sync Redux state with React Flow state
   useEffect(() => {
@@ -57,7 +57,10 @@ const FlowBuilder: React.FC = () => {
       id: node.id,
       type: node.type,
       position: node.position,
-      data: node.data,
+      data: {
+        label: node.data.label,
+        config: node.data.config || {},
+      },
     }));
     setNodes(flowNodes);
   }, [currentFlow.nodes, setNodes]);

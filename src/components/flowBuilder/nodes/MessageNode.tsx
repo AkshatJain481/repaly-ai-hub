@@ -4,7 +4,7 @@ import { Handle, Position, NodeProps } from '@xyflow/react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { openConfigModal } from '@/redux/slices/flowUI.slice';
-import { MessageSquare, Image, Music, Video, CreditCard, Images } from 'lucide-react';
+import { MessageSquare, Image, MessageCircle, Film, FileText, Layout } from 'lucide-react';
 
 const MessageNode: React.FC<NodeProps> = ({ data, id }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,58 +14,49 @@ const MessageNode: React.FC<NodeProps> = ({ data, id }) => {
   };
 
   const messageTypeIcon = () => {
-    switch (data?.config?.messageType) {
+    const messageType = data?.config?.messageType || 'text';
+    switch (messageType) {
       case 'image':
-        return <Image size={14} className="mr-1" />;
+        return <Image size={16} className="mr-1.5" />;
       case 'audio':
-        return <Music size={14} className="mr-1" />;
+        return <MessageCircle size={16} className="mr-1.5" />;
       case 'video':
-        return <Video size={14} className="mr-1" />;
+        return <Film size={16} className="mr-1.5" />;
       case 'card':
-        return <CreditCard size={14} className="mr-1" />;
+        return <FileText size={16} className="mr-1.5" />;
       case 'gallery':
-        return <Images size={14} className="mr-1" />;
-      default: // text
-        return <MessageSquare size={14} className="mr-1" />;
+        return <Layout size={16} className="mr-1.5" />;
+      case 'text':
+      default:
+        return <MessageSquare size={16} className="mr-1.5" />;
     }
-  };
-
-  const renderPreview = () => {
-    const content = data?.config?.content || 'Message content';
-    const truncatedContent = content.length > 25 ? content.substring(0, 22) + '...' : content;
-    
-    return (
-      <div className="flex items-center text-xs">
-        {messageTypeIcon()}
-        <span>{truncatedContent}</span>
-      </div>
-    );
   };
 
   return (
     <div 
-      className="bg-pink-500 text-white p-4 rounded-lg border-2 border-pink-600 min-w-[180px] cursor-pointer hover:bg-pink-600 transition-colors"
+      className="bg-pink-500 text-white p-4 rounded-lg border-2 border-pink-600 min-w-[170px] cursor-pointer hover:bg-pink-600 transition-colors"
       onClick={handleNodeClick}
     >
-      <div className="text-sm font-semibold mb-1">Message</div>
-      <div className="text-xs">{String(data?.label || 'Send Message')}</div>
-      
-      <div className="mt-2 bg-pink-600 p-2 rounded-md">
-        {renderPreview()}
+      <div className="text-sm font-semibold mb-1 flex items-center">
+        {messageTypeIcon()}
+        <span>Message</span>
       </div>
+      <div className="text-xs">{data?.config?.content || 'Hello, world!'}</div>
       
-      {data?.config?.buttons && data.config.buttons.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
-          {data.config.buttons.slice(0, 2).map((button: any, index: number) => (
-            <div key={index} className="bg-pink-400 text-xs px-2 py-0.5 rounded-full">
-              {button.text}
+      {data?.config?.messageType !== 'text' && (
+        <div className="mt-2 bg-pink-600 p-2 rounded-md text-xs">
+          <span className="text-pink-300">Type: </span>
+          {data?.config?.messageType || 'text'}
+        </div>
+      )}
+      
+      {data?.config?.buttons && data?.config?.buttons.length > 0 && (
+        <div className="mt-2 space-y-2">
+          {data?.config?.buttons.map((button: any, index: number) => (
+            <div key={index} className="bg-pink-600 p-2 rounded-md text-xs flex items-center">
+              <span>{button.text || `Button ${index + 1}`}</span>
             </div>
           ))}
-          {data.config.buttons.length > 2 && (
-            <div className="bg-pink-400 text-xs px-2 py-0.5 rounded-full">
-              +{data.config.buttons.length - 2}
-            </div>
-          )}
         </div>
       )}
       

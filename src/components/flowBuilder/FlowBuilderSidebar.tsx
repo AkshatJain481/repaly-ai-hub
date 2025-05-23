@@ -9,8 +9,8 @@ import {
   BiChevronRight,
   BiChevronLeft,
   BiMessageSquareDetail,
-  BiButton,
-  BiLoop,
+  BiSquareRounded, // Replacement for BiButton
+  BiRefresh, // Replacement for BiLoop
   BiShuffle,
 } from "react-icons/bi";
 import {
@@ -62,7 +62,7 @@ const FlowBuilderSidebar: React.FC = () => {
     },
     {
       type: "button",
-      icon: <BiButton className="w-5 h-5 text-purple-500 dark:text-purple-400" />,
+      icon: <BiSquareRounded className="w-5 h-5 text-purple-500 dark:text-purple-400" />,
       label: "Button",
       description: "Add interactive buttons"
     },
@@ -80,7 +80,7 @@ const FlowBuilderSidebar: React.FC = () => {
     },
     {
       type: "loop",
-      icon: <BiLoop className="w-5 h-5 text-teal-500 dark:text-teal-400" />,
+      icon: <BiRefresh className="w-5 h-5 text-teal-500 dark:text-teal-400" />,
       label: "Loop",
       description: "Create looping flows"
     },
