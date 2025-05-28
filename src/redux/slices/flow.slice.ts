@@ -230,34 +230,14 @@ const flowSlice = createSlice({
         return; // Don't delete the first trigger node
       }
 
-      // Find all downstream nodes (nodes connected to this node)
-      const downstreamNodeIds = new Set<string>();
-      const nodesToProcess = [nodeId];
-
-      while (nodesToProcess.length > 0) {
-        const currentId = nodesToProcess.pop()!;
-        downstreamNodeIds.add(currentId);
-
-        // Find edges where this node is the source
-        const outgoingEdges = state.currentFlow.edges.filter(
-          (e) => e.source === currentId
-        );
-        for (const edge of outgoingEdges) {
-          if (!downstreamNodeIds.has(edge.target)) {
-            nodesToProcess.push(edge.target);
-          }
-        }
-      }
-
-      // Remove all nodes in the downstream path
+      // Remove only the selected node
       state.currentFlow.nodes = state.currentFlow.nodes.filter(
-        (n) => !downstreamNodeIds.has(n.id)
+        (n) => n.id !== nodeId
       );
 
-      // Remove all edges connected to deleted nodes
+      // Remove all edges connected to this node (both incoming and outgoing)
       state.currentFlow.edges = state.currentFlow.edges.filter(
-        (e) =>
-          !downstreamNodeIds.has(e.source) && !downstreamNodeIds.has(e.target)
+        (e) => e.source !== nodeId && e.target !== nodeId
       );
     },
     addEdge: (state, action: PayloadAction<FlowEdge>) => {
