@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import { saveFlow, updateFlowName, newFlow } from "@/redux/slices/flow.slice";
-import { openPreviewModal } from "@/redux/slices/flowUI.slice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Save, Eye, Plus, Undo, Redo, ZoomIn, ZoomOut } from "lucide-react";
+import { Save, Plus } from "lucide-react";
 import { toast } from "react-toastify";
 
 const FlowBuilderToolbar: React.FC = () => {
@@ -45,10 +44,6 @@ const FlowBuilderToolbar: React.FC = () => {
   const handleNewFlow = () => {
     dispatch(newFlow());
     setFlowName("Untitled Flow");
-  };
-
-  const handlePreview = () => {
-    dispatch(openPreviewModal());
   };
 
   return (

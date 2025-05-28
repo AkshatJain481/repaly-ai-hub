@@ -1,5 +1,4 @@
-
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FlowUIState {
   selectedNodeId: string | null;
@@ -16,7 +15,7 @@ const initialState: FlowUIState = {
 };
 
 const flowUISlice = createSlice({
-  name: 'flowUI',
+  name: "flowUI",
   initialState,
   reducers: {
     setSelectedNode: (state, action: PayloadAction<string | null>) => {

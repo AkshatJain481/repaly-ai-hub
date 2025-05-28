@@ -770,7 +770,7 @@ const NodeConfigModal: React.FC = () => {
       open={configModalOpen}
       onOpenChange={() => dispatch(closeConfigModal())}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[70vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             Configure {selectedNode?.type?.charAt(0).toUpperCase()}
