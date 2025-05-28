@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Plus, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 
 const NodeConfigModal: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -107,7 +107,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderTriggerConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="triggerType">Trigger Type</Label>
         <Select
           value={config.triggerType || ""}
@@ -121,59 +121,15 @@ const NodeConfigModal: React.FC = () => {
           <SelectContent>
             <SelectItem value="comment">User Comments on Post/Reel</SelectItem>
             <SelectItem value="story_reply">User Replies to Story</SelectItem>
-            <SelectItem value="form">Form Submission</SelectItem>
           </SelectContent>
         </Select>
       </div>
-
-      {config.triggerType === "comment" && (
-        <div>
-          <Label htmlFor="platform">Platform</Label>
-          <Select
-            value={config.platform || "instagram"}
-            onValueChange={(value) => setConfig({ ...config, platform: value })}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="instagram">Instagram</SelectItem>
-              <SelectItem value="facebook">Facebook</SelectItem>
-              <SelectItem value="website">Website</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {config.triggerType === "story_reply" && (
-        <div>
-          <Label htmlFor="storyId">Story ID (optional)</Label>
-          <Input
-            id="storyId"
-            value={config.storyId || ""}
-            onChange={(e) => setConfig({ ...config, storyId: e.target.value })}
-            placeholder="Story ID or leave blank for any story"
-          />
-        </div>
-      )}
-
-      {config.triggerType === "form" && (
-        <div>
-          <Label htmlFor="formId">Form ID</Label>
-          <Input
-            id="formId"
-            value={config.formId || ""}
-            onChange={(e) => setConfig({ ...config, formId: e.target.value })}
-            placeholder="Enter form identifier"
-          />
-        </div>
-      )}
     </div>
   );
 
   const renderMessageConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="messageType">Message Type</Label>
         <Select
           value={config.messageType || "text"}
@@ -189,31 +145,25 @@ const NodeConfigModal: React.FC = () => {
             <SelectItem value="image">Image</SelectItem>
             <SelectItem value="audio">Audio</SelectItem>
             <SelectItem value="video">Video</SelectItem>
-            <SelectItem value="card">Card</SelectItem>
-            <SelectItem value="gallery">Gallery</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {config.messageType === "text" && (
-        <div>
-          <Label htmlFor="content">Message Content</Label>
-          <div className="relative">
-            <textarea
-              id="content"
-              value={config.content || ""}
-              onChange={(e) =>
-                setConfig({ ...config, content: e.target.value })
-              }
-              placeholder="Enter your message"
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
-            />
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="content">Message Content</Label>
+        <div className="relative">
+          <textarea
+            id="content"
+            value={config.content || ""}
+            onChange={(e) => setConfig({ ...config, content: e.target.value })}
+            placeholder="Enter your message"
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+          />
         </div>
-      )}
+      </div>
 
       {config.messageType === "image" && (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="imageUpload">Upload Image</Label>
           <Input
             id="imageUpload"
@@ -250,7 +200,7 @@ const NodeConfigModal: React.FC = () => {
       )}
 
       {config.messageType === "audio" && (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="audioUpload">Upload Audio</Label>
           <Input
             id="audioUpload"
@@ -284,7 +234,7 @@ const NodeConfigModal: React.FC = () => {
       )}
 
       {config.messageType === "video" && (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="videoUpload">Upload Video</Label>
           <Input
             id="videoUpload"
@@ -317,139 +267,15 @@ const NodeConfigModal: React.FC = () => {
         </div>
       )}
 
-      {config.messageType === "card" && (
-        <div>
-          <Label htmlFor="imageUpload">Upload Card Image</Label>
-          <Input
-            id="imageUpload"
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files && e.target.files[0]) {
-                const file = e.target.files[0];
-                // In a real app, you would upload this file to your storage service
-                const localUrl = URL.createObjectURL(file);
-                setConfig({
-                  ...config,
-                  imageUrl: localUrl,
-                  fileName: file.name,
-                });
-              }
-            }}
-          />
-          {config.imageUrl && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Selected: {config.fileName || "Image"}
-              </p>
-              <img
-                src={config.imageUrl}
-                alt="Preview"
-                className="mt-2 max-h-40 rounded-md"
-              />
-            </div>
-          )}
-
-          <Label htmlFor="cardTitle" className="mt-3">
-            Card Title
-          </Label>
-          <Input
-            id="cardTitle"
-            value={config.cardTitle || ""}
-            onChange={(e) =>
-              setConfig({ ...config, cardTitle: e.target.value })
-            }
-            placeholder="Enter card title"
-          />
-
-          <Label htmlFor="cardDescription" className="mt-3">
-            Card Description
-          </Label>
-          <Input
-            id="cardDescription"
-            value={config.cardDescription || ""}
-            onChange={(e) =>
-              setConfig({ ...config, cardDescription: e.target.value })
-            }
-            placeholder="Enter card description"
-          />
-        </div>
-      )}
-
-      {config.messageType === "gallery" && (
-        <div>
-          <Label>Gallery Images</Label>
-          <div className="space-y-3 mt-2">
-            {(config.galleryImages || []).map((img: any, index: number) => (
-              <div key={index} className="flex items-center gap-2">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      const file = e.target.files[0];
-                      // In a real app, you would upload this file to your storage service
-                      const localUrl = URL.createObjectURL(file);
-                      const updatedImages = [...(config.galleryImages || [])];
-                      updatedImages[index] = {
-                        ...updatedImages[index],
-                        url: localUrl,
-                        fileName: file.name,
-                      };
-                      setConfig({ ...config, galleryImages: updatedImages });
-                    }
-                  }}
-                />
-                {img.url && (
-                  <img
-                    src={img.url}
-                    alt={`Gallery image ${index + 1}`}
-                    className="h-10 w-10 object-cover rounded-md"
-                  />
-                )}
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => {
-                    const updatedImages = [...(config.galleryImages || [])];
-                    updatedImages.splice(index, 1);
-                    setConfig({ ...config, galleryImages: updatedImages });
-                  }}
-                >
-                  <X size={16} />
-                </Button>
-              </div>
-            ))}
-
-            <Button
-              variant="outline"
-              onClick={() => {
-                setConfig({
-                  ...config,
-                  galleryImages: [
-                    ...(config.galleryImages || []),
-                    { url: "", fileName: "" },
-                  ],
-                });
-              }}
-              className="w-full mt-2"
-            >
-              <Plus size={16} className="mr-1" />
-              Add Image
-            </Button>
-          </div>
-        </div>
-      )}
-
       <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-2 space-y-2">
           <Label>Buttons</Label>
           <Button
             variant="outline"
             size="sm"
             onClick={() => {
               const buttons = [...(config.buttons || [])];
-              buttons.push({ text: "New Button", actionType: "send_message" });
+              buttons.push({ text: "New Button", actionType: "ai_response" });
               setConfig({ ...config, buttons });
             }}
           >
@@ -479,7 +305,7 @@ const NodeConfigModal: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor={`button-${index}-text`} className="text-xs">
                     Button Text
                   </Label>
@@ -498,12 +324,12 @@ const NodeConfigModal: React.FC = () => {
                   />
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor={`button-${index}-action`} className="text-xs">
                     Action Type
                   </Label>
                   <Select
-                    value={button.actionType || "send_message"}
+                    value={button.actionType || "ai_response"}
                     onValueChange={(value) => {
                       const buttons = [...(config.buttons || [])];
                       buttons[index] = {
@@ -523,22 +349,12 @@ const NodeConfigModal: React.FC = () => {
                       <SelectItem value="perform_actions">
                         Perform Actions
                       </SelectItem>
-                      <SelectItem value="condition">Check Condition</SelectItem>
-                      <SelectItem value="randomizer">
-                        Random Selection
-                      </SelectItem>
-                      <SelectItem value="smart_delay">Smart Delay</SelectItem>
-                      <SelectItem value="start_flow">
-                        Start Another Flow
-                      </SelectItem>
-                      <SelectItem value="goto_step">Go to Step</SelectItem>
-                      <SelectItem value="send_message">Send Message</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {button.actionType === "open_website" && (
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor={`button-${index}-url`} className="text-xs">
                       Website URL
                     </Label>
@@ -567,7 +383,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderConditionConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="conditionType">Condition Type</Label>
         <Select
           value={config.conditionType || ""}
@@ -593,7 +409,7 @@ const NodeConfigModal: React.FC = () => {
 
       {config.conditionType === "has_tag" ||
       config.conditionType === "missing_tag" ? (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="tag">Tag Name</Label>
           <Input
             id="tag"
@@ -606,7 +422,7 @@ const NodeConfigModal: React.FC = () => {
 
       {config.conditionType === "user_field" && (
         <>
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="fieldName">Field Name</Label>
             <Input
               id="fieldName"
@@ -618,7 +434,7 @@ const NodeConfigModal: React.FC = () => {
             />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="operator">Operator</Label>
             <Select
               value={config.operator || "eq"}
@@ -639,7 +455,7 @@ const NodeConfigModal: React.FC = () => {
             </Select>
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="value">Value</Label>
             <Input
               id="value"
@@ -652,7 +468,7 @@ const NodeConfigModal: React.FC = () => {
       )}
 
       {config.conditionType === "is_subscribed" && (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="sequenceId">Sequence</Label>
           <Select
             value={config.sequenceId || ""}
@@ -676,7 +492,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderActionConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="actionType">Action Type</Label>
         <Select
           value={config.actionType || ""}
@@ -694,39 +510,18 @@ const NodeConfigModal: React.FC = () => {
           <SelectContent>
             <SelectItem value="add_tag">Add Tag</SelectItem>
             <SelectItem value="remove_tag">Remove Tag</SelectItem>
-            <SelectItem value="set_user_field">Set User Field</SelectItem>
-            <SelectItem value="clear_user_field">Clear User Field</SelectItem>
-            <SelectItem value="delete_contact">Delete Contact</SelectItem>
-            <SelectItem value="set_bot_field">Set Bot Field</SelectItem>
-            <SelectItem value="subscribe_sequence">
-              Subscribe to Sequence
-            </SelectItem>
-            <SelectItem value="unsubscribe_sequence">
-              Unsubscribe from Sequence
-            </SelectItem>
-            <SelectItem value="make_request">Make External Request</SelectItem>
-            <SelectItem value="log_conversion">Log Conversion Event</SelectItem>
-            <SelectItem value="pause_automations">
-              Pause All Automations
-            </SelectItem>
             <SelectItem value="mark_open">Mark Conversation as Open</SelectItem>
             <SelectItem value="mark_closed">
               Mark Conversation as Closed
             </SelectItem>
-            <SelectItem value="assign_conversation">
-              Assign Conversation
-            </SelectItem>
-            <SelectItem value="notify_assignees">Notify Assignees</SelectItem>
-            <SelectItem value="set_instagram_optin">
-              Set Instagram Opt-in
-            </SelectItem>
+            <SelectItem value="notify_me">Notify Me</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {(config.actionType === "add_tag" ||
         config.actionType === "remove_tag") && (
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="tagName">Tag Name</Label>
           <Input
             id="tagName"
@@ -737,188 +532,8 @@ const NodeConfigModal: React.FC = () => {
         </div>
       )}
 
-      {(config.actionType === "set_user_field" ||
-        config.actionType === "clear_user_field") && (
-        <>
-          <div>
-            <Label htmlFor="fieldName">Field Name</Label>
-            <Input
-              id="fieldName"
-              value={config.fieldName || ""}
-              onChange={(e) =>
-                setConfig({ ...config, fieldName: e.target.value })
-              }
-              placeholder="Enter field name"
-            />
-          </div>
-
-          {config.actionType === "set_user_field" && (
-            <div>
-              <Label htmlFor="fieldValue">Field Value</Label>
-              <Input
-                id="fieldValue"
-                value={config.fieldValue || ""}
-                onChange={(e) =>
-                  setConfig({ ...config, fieldValue: e.target.value })
-                }
-                placeholder="Enter field value"
-              />
-            </div>
-          )}
-        </>
-      )}
-
-      {(config.actionType === "subscribe_sequence" ||
-        config.actionType === "unsubscribe_sequence") && (
-        <div>
-          <Label htmlFor="sequenceId">Sequence</Label>
-          <Select
-            value={config.sequenceId || ""}
-            onValueChange={(value) =>
-              setConfig({ ...config, sequenceId: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select sequence" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* This would be populated with actual sequences */}
-              <SelectItem value="seq1">Sequence 1</SelectItem>
-              <SelectItem value="seq2">Sequence 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {config.actionType === "make_request" && (
-        <>
-          <div>
-            <Label htmlFor="requestUrl">Request URL</Label>
-            <Input
-              id="requestUrl"
-              value={config.requestUrl || ""}
-              onChange={(e) =>
-                setConfig({ ...config, requestUrl: e.target.value })
-              }
-              placeholder="https://api.example.com/endpoint"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="requestMethod">Method</Label>
-            <Select
-              value={config.requestMethod || "GET"}
-              onValueChange={(value) =>
-                setConfig({ ...config, requestMethod: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="GET">GET</SelectItem>
-                <SelectItem value="POST">POST</SelectItem>
-                <SelectItem value="PUT">PUT</SelectItem>
-                <SelectItem value="DELETE">DELETE</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="requestHeaders">Headers (JSON)</Label>
-            <textarea
-              id="requestHeaders"
-              value={config.requestHeaders || "{}"}
-              onChange={(e) =>
-                setConfig({ ...config, requestHeaders: e.target.value })
-              }
-              placeholder='{"Content-Type": "application/json"}'
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[80px]"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="requestBody">Body (JSON)</Label>
-            <textarea
-              id="requestBody"
-              value={config.requestBody || "{}"}
-              onChange={(e) =>
-                setConfig({ ...config, requestBody: e.target.value })
-              }
-              placeholder='{"key": "value"}'
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[80px]"
-            />
-          </div>
-        </>
-      )}
-
-      {config.actionType === "log_conversion" && (
-        <>
-          <div>
-            <Label htmlFor="conversionName">Conversion Name</Label>
-            <Input
-              id="conversionName"
-              value={config.conversionName || ""}
-              onChange={(e) =>
-                setConfig({ ...config, conversionName: e.target.value })
-              }
-              placeholder="Enter conversion name"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="conversionValue">Value</Label>
-            <Input
-              id="conversionValue"
-              type="number"
-              value={config.conversionValue || ""}
-              onChange={(e) =>
-                setConfig({ ...config, conversionValue: e.target.value })
-              }
-              placeholder="Enter value"
-            />
-          </div>
-        </>
-      )}
-
-      {config.actionType === "pause_automations" && (
-        <div>
-          <Label htmlFor="pauseDuration">Duration (hours)</Label>
-          <Input
-            id="pauseDuration"
-            type="number"
-            value={config.pauseDuration || "24"}
-            onChange={(e) =>
-              setConfig({ ...config, pauseDuration: e.target.value })
-            }
-            placeholder="Enter duration in hours"
-          />
-        </div>
-      )}
-
-      {config.actionType === "assign_conversation" && (
-        <div>
-          <Label htmlFor="assigneeId">Assignee</Label>
-          <Select
-            value={config.assigneeId || ""}
-            onValueChange={(value) =>
-              setConfig({ ...config, assigneeId: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select team member" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* This would be populated with actual team members */}
-              <SelectItem value="user1">Team Member 1</SelectItem>
-              <SelectItem value="user2">Team Member 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {config.actionType === "notify_assignees" && (
-        <div>
+      {config.actionType === "notify_me" && (
+        <div className="space-y-2">
           <Label htmlFor="notificationMessage">Notification Message</Label>
           <Input
             id="notificationMessage"
@@ -935,7 +550,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderLoopConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="targetNodeId">Target Node</Label>
         <Select
           value={config.targetNodeId || ""}
@@ -956,7 +571,7 @@ const NodeConfigModal: React.FC = () => {
         </Select>
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="maxIterations">Max Iterations (0 for unlimited)</Label>
         <Input
           id="maxIterations"
@@ -973,7 +588,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderRandomizerConfig = () => (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2 space-y-2">
         <Label>Options</Label>
         <Button
           variant="outline"
@@ -1022,7 +637,7 @@ const NodeConfigModal: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor={`option-${index}-label`}>Label</Label>
                 <Input
                   id={`option-${index}-label`}
@@ -1039,7 +654,7 @@ const NodeConfigModal: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor={`option-${index}-weight`}>Weight (%)</Label>
                 <Input
                   id={`option-${index}-weight`}
@@ -1082,7 +697,7 @@ const NodeConfigModal: React.FC = () => {
 
   const renderDelayConfig = () => (
     <div className="space-y-4">
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="duration">Duration</Label>
         <Input
           id="duration"
@@ -1093,7 +708,7 @@ const NodeConfigModal: React.FC = () => {
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="unit">Unit</Label>
         <Select
           value={config.unit || "minutes"}

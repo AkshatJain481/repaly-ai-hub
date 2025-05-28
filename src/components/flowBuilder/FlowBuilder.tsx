@@ -4,7 +4,6 @@ import {
   ReactFlow,
   useNodesState,
   useEdgesState,
-  Controls,
   Background,
   MiniMap,
   addEdge,
@@ -35,13 +34,6 @@ import MessageNode from "./nodes/MessageNode";
 import LoopNode from "./nodes/LoopNode";
 import RandomizerNode from "./nodes/RandomizerNode";
 import ConfirmationPopup from "../common/ConfirmationPopup";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
 const nodeTypes: NodeTypes = {
   trigger: TriggerNode,
@@ -59,8 +51,6 @@ const FlowBuilder: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [nodeToDelete, setNodeToDelete] = useState<string | null>(null);
   const [affectedNodes, setAffectedNodes] = useState<string[]>([]);
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
-  const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -159,23 +149,6 @@ const FlowBuilder: React.FC = () => {
     // When a user starts a connection, we don't need to do anything specific yet
   }, []);
 
-  const onConnectEnd = useCallback(
-    (event: any) => {
-      const targetIsPane = event.target.classList.contains("react-flow__pane");
-
-      if (targetIsPane && reactFlowWrapper.current) {
-        // Get the position where the connection drag ended
-        const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
-        const x = event.clientX - left;
-        const y = event.clientY - top;
-
-        setNewNodePosition({ x, y });
-        setIsNodeSelectorOpen(true);
-      }
-    },
-    [reactFlowWrapper]
-  );
-
   const onNodeDragStop = useCallback(
     (_: any, node: Node) => {
       dispatch(updateNodePosition({ id: node.id, position: node.position }));
@@ -246,22 +219,8 @@ const FlowBuilder: React.FC = () => {
     setAffectedNodes([]);
   };
 
-  // Add new node from node selector
-  const handleAddNode = (type: string) => {
-    dispatch({
-      type: "flow/addNode",
-      payload: {
-        type,
-        position: newNodePosition,
-      },
-    });
-
-    // Close the node selector
-    setIsNodeSelectorOpen(false);
-  };
-
   return (
-    <div className="h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="h-[calc(100vh-60px)] flex bg-gray-50 dark:bg-gray-900">
       <FlowBuilderSidebar />
 
       <div className="flex-1 flex flex-col">
@@ -275,14 +234,11 @@ const FlowBuilder: React.FC = () => {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onConnectStart={onConnectStart}
-            onConnectEnd={onConnectEnd}
             onNodeDragStop={onNodeDragStop}
             nodeTypes={nodeTypes}
             fitView
             className="bg-gray-100 dark:bg-gray-800"
-            deleteKeyCode={null} // Disable default delete key behavior
           >
-            <Controls className="bg-white dark:bg-gray-700" />
             <MiniMap
               className="bg-white dark:bg-gray-700"
               nodeColor={(node) => {
@@ -312,7 +268,7 @@ const FlowBuilder: React.FC = () => {
             <Panel position="bottom-right">
               <div className="bg-white dark:bg-gray-700 p-2 rounded shadow text-sm">
                 <p>Drag connections between nodes to create your flow</p>
-                <p>Drag to empty space to add a new node</p>
+                {/* <p>Drag to empty space to add a new node</p> */}
               </div>
             </Panel>
           </ReactFlow>
@@ -328,58 +284,6 @@ const FlowBuilder: React.FC = () => {
         title="Delete Node"
         message={`Are you sure you want to delete this node? This will also delete ${affectedNodes.length} connected node${affectedNodes.length !== 1 ? "s" : ""} that depend on it.`}
       />
-
-      <Dialog open={isNodeSelectorOpen} onOpenChange={setIsNodeSelectorOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Add a Node</DialogTitle>
-          </DialogHeader>
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              onClick={() => handleAddNode("message")}
-              className="bg-pink-500 hover:bg-pink-600"
-            >
-              Message
-            </Button>
-            <Button
-              onClick={() => handleAddNode("condition")}
-              className="bg-blue-500 hover:bg-blue-600"
-            >
-              Condition
-            </Button>
-            <Button
-              onClick={() => handleAddNode("action")}
-              className="bg-orange-500 hover:bg-orange-600"
-            >
-              Action
-            </Button>
-            <Button
-              onClick={() => handleAddNode("delay")}
-              className="bg-gray-500 hover:bg-gray-600"
-            >
-              Delay
-            </Button>
-            <Button
-              onClick={() => handleAddNode("loop")}
-              className="bg-teal-500 hover:bg-teal-600"
-            >
-              Loop
-            </Button>
-            <Button
-              onClick={() => handleAddNode("randomizer")}
-              className="bg-red-500 hover:bg-red-600"
-            >
-              Randomizer
-            </Button>
-            <Button
-              onClick={() => handleAddNode("trigger")}
-              className="bg-green-500 hover:bg-green-600"
-            >
-              Trigger
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

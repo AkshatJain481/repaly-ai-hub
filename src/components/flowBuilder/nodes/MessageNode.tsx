@@ -1,4 +1,3 @@
-
 import { Handle, Position } from "@xyflow/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -75,23 +74,21 @@ const MessageNode = ({
           {data?.config?.buttons.map((button: any, index: number) => (
             <div
               key={index}
-              className="bg-pink-600 p-2 rounded-md text-xs flex items-center"
+              className="bg-pink-600 p-2 rounded-md text-xs flex items-center justify-between relative"
             >
               <span>{button.text || `Button ${index + 1}`}</span>
-              {/* Add a handle for each button so they can be connected to other nodes */}
               <Handle
                 type="source"
                 position={Position.Right}
                 id={button.id || `btn-${index}`}
-                className="w-3 h-3 bg-white border-2 border-pink-500"
-                style={{ top: `calc(100% - ${(data?.config?.buttons?.length || 0) * 20 - index * 40 + 70}px)` }}
+                className="w-3 h-3 bg-white border-2 border-pink-500 absolute right-1 top-1/2 -translate-y-1/2"
               />
             </div>
           ))}
         </div>
       )}
-      
-      <div 
+
+      <div
         className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
         onClick={(e) => {
           e.stopPropagation();
@@ -106,11 +103,13 @@ const MessageNode = ({
         position={Position.Top}
         className="w-3 h-3 bg-white border-2 border-pink-500"
       />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        className="w-3 h-3 bg-white border-2 border-pink-500"
-      />
+      {!(data?.config?.buttons && data?.config?.buttons.length > 0) && (
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          className="w-3 h-3 bg-white border-2 border-pink-500"
+        />
+      )}
     </div>
   );
 };
